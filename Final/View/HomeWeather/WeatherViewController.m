@@ -8,47 +8,12 @@
 
 #import "WeatherViewController.h"
 #import "SelectLocController.h"
-#import "DailyView.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-
+//weather
 #import "WeatherData.h"
 #import "HeWeather.h"
-
-////basic of weather
-//#import "Basic.h"
-//#import "Update.h"
-
-//#import "Weather.h"
-//
-////HourlyForecast
-//#import "HourlyForecast.h"
-//#import "WindInHour.h"
-//
-////DailyForecast
-//#import "DailyForecast.h"
-//#import "CondDLY.h"
-//#import "WindDLY.h"
-//#import "TmpDLY.h"
-//#import "AstroDLY.h"
-//
-////suggestion
-//#import "Suggestion.h"
-//#import "Drsg.h"
-//#import "Flu.h"
-//#import "Sport.h"
-//#import "Comf.h"
-//#import "Trav.h"
-//#import "Cw.h"
-//#import "Uv.h"
-//
-////aqi
-//#import "Aqi.h"
-//
-////now
-//#import "NowWeather.h"
-//#import "CondInNow.h"
-//#import "WindInNow.h"
+#import "DailyView.h"
 
 //tools
 #import "DateCompare.h"
@@ -169,7 +134,7 @@ static SystemSoundID shakeSound = 0;
 //    NSString *today = [formatter stringFromDate:currentDate];//今天的字符串 备用
     NSString *SinceThatDay = [DateCompare intervalSinceNow:@"2015-08-27 20:00"];
     
-    welcome.text = [NSString stringWithFormat:@"在一起%@天了,加油！！",SinceThatDay];
+    welcome.text = [NSString stringWithFormat:@"%@天了,加油！！",SinceThatDay];
     welcome.textColor = [UIColor whiteColor];
     
     [self.view addSubview:welcome];

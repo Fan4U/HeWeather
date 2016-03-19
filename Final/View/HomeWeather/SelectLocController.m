@@ -13,13 +13,16 @@
 
 //citiesModel
 #import "CitiesModel.h"
-#import "Province.h"
-#import "Cities.h"
+//#import "Province.h"
+//#import "Cities.h"
 //weather data
 #import "WeatherData.h"
 
 #import "Masonry.h"
 #import "YYTool.h"
+
+//locdata
+#import "HeWeather.h"
 
 //codelist
 #define codeList [[NSBundle mainBundle] pathForResource:@"cityID.json" ofType:nil]
@@ -32,12 +35,13 @@
 //picker for choose location
 @property (nonatomic, strong)UIPickerView *locPicker;
 @property (nonatomic, assign)int provinceIndex;
-@property (nonatomic, strong)CitiesModel *cityModel;
+//@property (nonatomic, strong)CitiesModel *cityModel;
 
 //buttons
 @property (nonatomic, strong)UIButton *ok;
 @property (nonatomic, strong)UIButton *back;
 
+@property (nonatomic, strong)CitiesModel *citiesModelInSel;
 @end
 
 @implementation SelectLocController
@@ -49,6 +53,14 @@
 
     [self setupPickerView];
     [self setupBtns];
+}
+
+- (CitiesModel *)citiesModelInSel{
+    if (!_citiesModelInSel) {
+        CitiesModel *model = [YYTool listToModel:codeList];
+        _citiesModelInSel = model;
+    }
+    return _citiesModelInSel;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -90,11 +102,11 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
     
-    CitiesModel *model = [YYTool listToModel:codeList];
+//    CitiesModel *model = [YYTool listToModel:codeList];
     if (component == 0 ) {
-        return model.province.count;
+        return self.citiesModelInSel.province.count;
     }else{
-        Province *pro = model.province[self.provinceIndex];
+        Province *pro = self.citiesModelInSel.province[self.provinceIndex];
         return pro.cities.count;
     }
 }
@@ -102,11 +114,11 @@
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
 
 
-    CitiesModel *model = [YYTool listToModel:codeList];
+//    CitiesModel *model = [YYTool listToModel:codeList];
     if (component == 0) {
-        return model.province[row].proName;
+        return self.citiesModelInSel.province[row].proName;
     }else{
-        return model.province[self.provinceIndex].cities[row].cityName;
+        return self.citiesModelInSel.province[self.provinceIndex].cities[row].cityName;
     }
 }
 

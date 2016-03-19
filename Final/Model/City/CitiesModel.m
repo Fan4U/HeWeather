@@ -7,7 +7,30 @@
 //
 
 #import "CitiesModel.h"
-#import "Province.h"
+
+
+@implementation Cities
+
++ (NSDictionary *)modelCustomPropertyMapper{
+    return @{@"cityName" : @"市名",
+             @"cityCode" : @"编码"};
+}
+
+@end
+
+@implementation Province
+
++ (NSDictionary *)modelCustomPropertyMapper{
+    return @{@"cities" : @"市",
+             @"proName" : @"省"};
+}
+
++ (NSDictionary *)modelContainerPropertyGenericClass{
+    return @{@"cities" : [Cities class]};
+}
+@end
+
+
 @implementation CitiesModel
 
 + (NSDictionary *)modelCustomPropertyMapper{

@@ -7,13 +7,26 @@
 //
 
 #import <Foundation/Foundation.h>
-@class Province;;
+
+@interface Cities : NSObject
+
+@property (nonatomic, copy)NSString *cityName;
+@property (nonatomic, copy)NSString *cityCode;
+
+@end
+
+
+
+@interface Province : NSObject
+
+@property (nonatomic, copy)NSString *proName;
+@property (nonatomic, strong)NSArray<Cities *> *cities;
+
+@end
+
+
 @interface CitiesModel : NSObject
 
 @property (nonatomic, strong)NSArray<Province *> *province;
-
-+ (NSDictionary *)modelContainerPropertyGenericClass;
-
-+ (NSDictionary *)modelCustomPropertyMapper;
 
 @end

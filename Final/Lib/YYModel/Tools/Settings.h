@@ -14,7 +14,7 @@
 //初始化
 + (void)initializePlist;
 
-//修改城市 。。只能用拼音
+//修改城市
 + (BOOL)CitySettingsWillModified:(NSString *)cityID;
 
 @end
