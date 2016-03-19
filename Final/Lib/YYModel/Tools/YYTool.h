@@ -10,7 +10,7 @@
 @class HeWeather,CitiesModel;
 @interface YYTool : NSObject
 
-+ (HeWeather *)jsonToModel:(NSString *)file;
++ (HeWeather *)jsonToModel;
 
 + (CitiesModel *)listToModel:(NSString *)file;
 //

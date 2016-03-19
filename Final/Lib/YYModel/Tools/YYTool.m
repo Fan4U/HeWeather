@@ -14,13 +14,13 @@
 //codelist
 #define codeList [[NSBundle mainBundle] pathForResource:@"cityID.json" ofType:nil]
 //文件路径
-#define path [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"weather.json"]
+#define jsonPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"weather.json"]
 
 @implementation YYTool
 
-+ (HeWeather *)jsonToModel:(NSString *)file{
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        NSData *data = [[NSData alloc] initWithContentsOfFile:file];
++ (HeWeather *)jsonToModel{
+    if ([[NSFileManager defaultManager] fileExistsAtPath:jsonPath]) {
+        NSData *data = [[NSData alloc] initWithContentsOfFile:jsonPath];
         return [HeWeather modelWithJSON:data];
     }else{
         [WeatherData requestDataFromHEserver];

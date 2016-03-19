@@ -40,7 +40,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
                
         //YYModel转模型
-        HeWeather *heWeather = [YYTool jsonToModel:filePath];
+        HeWeather *heWeather = [YYTool jsonToModel];
         //取出时间字符串
         NSString *updateTimeStr = heWeather.weather[0].basic.update.loc;
         
@@ -51,11 +51,10 @@
         //这里也是没有办法 不知道数据更新的间隔 先设置成20小时 如果20小时没更新数据就重新获取数据
         if (hoursFromLastUpdate > 3) {
             NSLog(@"已经过去3小时 尝试更新数据");
-            [self requestDataFromHEserver];//重新获取并保存json
-                                //循环一次 再load本句 这次应该会直接return最新的data应该不会执行if语句 结果会无限循环。。因为服务器数据不是准时更新 所以写死3小时
+            [self requestDataFromHEserver];//重新获取并保存json 看是不是大于三小时
         }
     }else{
-        NSLog(@"%s----->本地没有Json，尝试更新数据",__func__);
+        NSLog(@"%s----->本地没有Json，更新数据",__func__);
         [self requestDataFromHEserver];
     }
 }

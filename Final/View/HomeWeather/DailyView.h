@@ -10,9 +10,7 @@
 @class HeWeather;
 
 @interface DailyView : UIView
-//data
 @property (nonatomic, strong)HeWeather *myWeather;
-
 //day1
 @property (weak, nonatomic) IBOutlet UILabel *titleDay1;
 @property (weak, nonatomic) IBOutlet UILabel *minDay1;

@@ -33,6 +33,9 @@
 // RGB颜色
 #define Color(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
 
+#define ScreenW [UIScreen mainScreen].bounds.size.width
+#define ScreenH [UIScreen mainScreen].bounds.size.height
+
 static SystemSoundID shakeSound = 0;
 
 @interface WeatherViewController () <RoundViewDelegate,CNPGridMenuDelegate>
@@ -62,7 +65,13 @@ static SystemSoundID shakeSound = 0;
 @property (nonatomic, weak)UIImageView *ssIcon;
 
 //grid
-@property (nonatomic, strong) CNPGridMenu *gridMenu;
+@property (nonatomic, weak)CNPGridMenu *gridMenu;
+
+//weather data
+@property (nonatomic, strong)HeWeather *weatherDataInMain;
+
+//round View
+@property (nonatomic, weak)RoundView *myRoundView;
 
 @end
 
@@ -82,32 +91,20 @@ static SystemSoundID shakeSound = 0;
   
 }
 
-//- (Weather *)weathers{
-//    if (!_weathers) {
-//
-//        NSMutableArray *arrM = [NSMutableArray array];
-//        HeWeather *MyWeather = [YYTool jsonToModel:jsonPath];
-//
-//        
-//        
-//        NSMutableArray *arrM =[NSMutableArray array];
-//        for
-//    }
-//    
-//}
+-(HeWeather *)weatherDataInMain{
+    if (!_weatherDataInMain) {
+        _weatherDataInMain = [YYTool jsonToModel];
+    }
+    return _weatherDataInMain;
+}
 
 - (BOOL)canBecomeFirstResponder{
     return YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self setLabels];
-    });
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self SetupRoundView];
-    });
-    
+    [self setLabels];
+    [self SetupRoundView];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -151,19 +148,14 @@ static SystemSoundID shakeSound = 0;
     
 }
 
-#pragma mark - 设置主要控件
-- (void)setLabels{
 
-//取数据
-    HeWeather *MyWeather = [YYTool jsonToModel:jsonPath];
-    NSLog(@"%s----->%@",__func__,MyWeather);
-    
+- (void)setLabels{
 
 #pragma mark - 温度label 也是约束的对照点
     NSMutableAttributedString *text = [NSMutableAttributedString new];
     //设置富文本 ----温度
     {
-        NSMutableAttributedString *one = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@° %@",MyWeather.weather[0].nowWeather.tmpInNow,MyWeather.weather[0].nowWeather.condInNow.txtInNow]];
+        NSMutableAttributedString *one = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@° %@",self.weatherDataInMain.weather[0].nowWeather.tmpInNow,self.weatherDataInMain.weather[0].nowWeather.condInNow.txtInNow]];
         one.font = [UIFont systemFontOfSize:30.0];
         one.color = [UIColor blackColor];
         YYTextShadow *shadow = [YYTextShadow new];
@@ -197,7 +189,7 @@ static SystemSoundID shakeSound = 0;
     NSMutableAttributedString *text1 = [NSMutableAttributedString new];
     //设置富文本 ----城市名称的
     {
-        NSMutableAttributedString *two = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",MyWeather.weather[0].basic.city]];
+        NSMutableAttributedString *two = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",self.weatherDataInMain.weather[0].basic.city]];
         two.font = [UIFont boldSystemFontOfSize:45];
         two.color = [UIColor blackColor];
         YYTextShadow *shadow = [YYTextShadow new];
@@ -225,7 +217,7 @@ static SystemSoundID shakeSound = 0;
     
 #pragma mark - 天气状态图
     
-    UIImageView *imgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",MyWeather.weather[0].nowWeather.condInNow.codeInNow]]];
+    UIImageView *imgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",self.weatherDataInMain.weather[0].nowWeather.condInNow.codeInNow]]];
     imgV.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showGridMenu)];
     [imgV addGestureRecognizer:tap];
@@ -285,15 +277,23 @@ static SystemSoundID shakeSound = 0;
 #pragma mark - 7days Label
     
     DailyView *tmpDailyView = [DailyView loadFromNib];
-    tmpDailyView.myWeather = MyWeather;
+    tmpDailyView.myWeather = self.weatherDataInMain;
     
     _dailyView = tmpDailyView;
-    _dailyView.frame = CGRectMake(10, 300, 300, 115);
-    
+    _dailyView.translatesAutoresizingMaskIntoConstraints = NO;
+//    _dailyView.backgroundColor = [UIColor redColor];
+
     [self.view addSubview:_dailyView];
+    
+    [_dailyView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(ScreenW, ScreenH / 4));
+        make.bottom.equalTo(self.view).offset(- 55);
+        make.left.equalTo(self.view);
+    }];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.7 animations:^{
+            [UIView animateWithDuration:1.2 animations:^{
                 _dailyView.titleDay1.alpha = 1;
                 _dailyView.minDay1.alpha = 1;
                 _dailyView.maxDay1.alpha = 1;
@@ -302,7 +302,7 @@ static SystemSoundID shakeSound = 0;
         });
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.7 animations:^{
+            [UIView animateWithDuration:1.2 animations:^{
                 _dailyView.titleDay2.alpha = 1;
                 _dailyView.minDay2.alpha = 1;
                 _dailyView.maxDay2.alpha = 1;
@@ -311,7 +311,7 @@ static SystemSoundID shakeSound = 0;
         });
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.7 animations:^{
+            [UIView animateWithDuration:1.2 animations:^{
                 _dailyView.titleDay3.alpha = 1;
                 _dailyView.minDay3.alpha = 1;
                 _dailyView.maxDay3.alpha = 1;
@@ -320,7 +320,7 @@ static SystemSoundID shakeSound = 0;
         });
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.7 animations:^{
+            [UIView animateWithDuration:1.2 animations:^{
                 _dailyView.titleDay4.alpha = 1;
                 _dailyView.minDay4.alpha = 1;
                 _dailyView.maxDay4.alpha = 1;
@@ -329,7 +329,7 @@ static SystemSoundID shakeSound = 0;
         });
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.7 animations:^{
+            [UIView animateWithDuration:1.2 animations:^{
                 _dailyView.titleDay5.alpha = 1;
                 _dailyView.minDay5.alpha = 1;
                 _dailyView.maxDay5.alpha = 1;
@@ -338,7 +338,7 @@ static SystemSoundID shakeSound = 0;
         });
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.7 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.7 animations:^{
+            [UIView animateWithDuration:1.2 animations:^{
                 _dailyView.titleDay6.alpha = 1;
                 _dailyView.minDay6.alpha = 1;
                 _dailyView.maxDay6.alpha = 1;
@@ -366,7 +366,7 @@ static SystemSoundID shakeSound = 0;
 #pragma mark - 风向Label
     NSMutableAttributedString *textofNowWindDir = [NSMutableAttributedString new];
     {
-        NSMutableAttributedString *tmpDir = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@:%@级",MyWeather.weather[0].nowWeather.windInNow.dirInNow,MyWeather.weather[0].nowWeather.windInNow.scInNow]];
+        NSMutableAttributedString *tmpDir = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@:%@级",self.weatherDataInMain.weather[0].nowWeather.windInNow.dirInNow,self.weatherDataInMain.weather[0].nowWeather.windInNow.scInNow]];
         tmpDir.font = [UIFont boldSystemFontOfSize:15.0];
         tmpDir.color = [UIColor blackColor];
         YYTextShadow *shadow = [YYTextShadow new];
@@ -403,7 +403,7 @@ static SystemSoundID shakeSound = 0;
 #pragma mark - 湿度Label
     NSMutableAttributedString *textofHumidity = [NSMutableAttributedString new];
     {
-        NSMutableAttributedString *tmpHumidity = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"湿度:%@%%",MyWeather.weather[0].nowWeather.humInNow]];
+        NSMutableAttributedString *tmpHumidity = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"湿度:%@%%",self.weatherDataInMain.weather[0].nowWeather.humInNow]];
         tmpHumidity.font = [UIFont boldSystemFontOfSize:15.0];
         tmpHumidity.color = [UIColor blackColor];
         YYTextShadow *shadow = [YYTextShadow new];
@@ -440,7 +440,7 @@ static SystemSoundID shakeSound = 0;
 #pragma mark - 日出Label
     NSMutableAttributedString *textofSunRise = [NSMutableAttributedString new];
     {
-        NSString *tmp1 = [NSString stringWithFormat:@"%@",MyWeather.weather[0].dailyForecast[0].astroDLY.sr];
+        NSString *tmp1 = [NSString stringWithFormat:@"%@",self.weatherDataInMain.weather[0].dailyForecast[0].astroDLY.sr];
         NSString *tmp2 = [tmp1 substringFromIndex:1];
         NSMutableAttributedString *tmpSunRise = [[NSMutableAttributedString alloc] initWithString:tmp2];
         tmpSunRise.font = [UIFont boldSystemFontOfSize:15.0];
@@ -479,7 +479,7 @@ static SystemSoundID shakeSound = 0;
 #pragma mark - 日落Label
     NSMutableAttributedString *textofSunSet = [NSMutableAttributedString new];
     {
-        NSMutableAttributedString *tmpSunSet = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",MyWeather.weather[0].dailyForecast[0].astroDLY.ss]];
+        NSMutableAttributedString *tmpSunSet = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",self.weatherDataInMain.weather[0].dailyForecast[0].astroDLY.ss]];
         tmpSunSet.font = [UIFont boldSystemFontOfSize:15.0];
         tmpSunSet.color = [UIColor blackColor];
         YYTextShadow *shadow = [YYTextShadow new];
@@ -561,12 +561,10 @@ static SystemSoundID shakeSound = 0;
 
 #pragma mark - 轮播
 - (void)SetupRoundView{
-    //suggestion
-    // 服务器返回的生活建议不稳定 经常有空字典 没有办法
-    HeWeather *MyWeather = [YYTool jsonToModel:jsonPath];
-    if (MyWeather.weather[0].suggestion != nil)
+
+    if (self.weatherDataInMain.weather[0].suggestion != nil)
     {
-        RoundView * round = [[RoundView alloc]initWithFrame:CGRectMake(0, 429, 320, 44)];
+        RoundView * round = [[RoundView alloc]initWithFrame:CGRectMake(10, ScreenH - 44, ScreenW - 20, 44)];
         [round setLableFont:[UIFont systemFontOfSize:13.0]];
         [round setLableColor:[UIColor blackColor]];
         
@@ -574,41 +572,40 @@ static SystemSoundID shakeSound = 0;
         
         NSMutableArray *tmpTitles = [NSMutableArray array];
         //  有多少加多少
-        if (MyWeather.weather[0].suggestion.drsg.txt != nil) {
-            [tmpTitles addObject:MyWeather.weather[0].suggestion.drsg.txt];
+        if (self.weatherDataInMain.weather[0].suggestion.drsg.txt != nil) {
+            [tmpTitles addObject:self.weatherDataInMain.weather[0].suggestion.drsg.txt];
         }
-        if (MyWeather.weather[0].suggestion.comf.txt != nil) {
-            [tmpTitles addObject:MyWeather.weather[0].suggestion.comf.txt];
+        if (self.weatherDataInMain.weather[0].suggestion.comf.txt != nil) {
+            [tmpTitles addObject:self.weatherDataInMain.weather[0].suggestion.comf.txt];
         }
-        if (MyWeather.weather[0].suggestion.cw.txt != nil) {
-            [tmpTitles addObject:MyWeather.weather[0].suggestion.cw.txt];
+        if (self.weatherDataInMain.weather[0].suggestion.cw.txt != nil) {
+            [tmpTitles addObject:self.weatherDataInMain.weather[0].suggestion.cw.txt];
         }
-        if (MyWeather.weather[0].suggestion.flu.txt != nil) {
-            [tmpTitles addObject:MyWeather.weather[0].suggestion.flu.txt];
+        if (self.weatherDataInMain.weather[0].suggestion.flu.txt != nil) {
+            [tmpTitles addObject:self.weatherDataInMain.weather[0].suggestion.flu.txt];
         }
-        if (MyWeather.weather[0].suggestion.sport.txt != nil) {
-            [tmpTitles addObject:MyWeather.weather[0].suggestion.sport.txt];
+        if (self.weatherDataInMain.weather[0].suggestion.sport.txt != nil) {
+            [tmpTitles addObject:self.weatherDataInMain.weather[0].suggestion.sport.txt];
         }
-        if (MyWeather.weather[0].suggestion.trav.txt != nil) {
-            [tmpTitles addObject:MyWeather.weather[0].suggestion.trav.txt];
+        if (self.weatherDataInMain.weather[0].suggestion.trav.txt != nil) {
+            [tmpTitles addObject:self.weatherDataInMain.weather[0].suggestion.trav.txt];
         }
-        if (MyWeather.weather[0].suggestion.uv.txt != nil) {
-            [tmpTitles addObject:MyWeather.weather[0].suggestion.uv.txt];
+        if (self.weatherDataInMain.weather[0].suggestion.uv.txt != nil) {
+            [tmpTitles addObject:self.weatherDataInMain.weather[0].suggestion.uv.txt];
         }
         NSArray *titlesArr = [tmpTitles copy];
         
         round.titles = titlesArr;
         
-        [self.view addSubview:round];
+        _myRoundView = round;
+        
+        [self.view addSubview:_myRoundView];
     }else{
-        //        [SVProgressHUD showErrorWithStatus:@"没有生活建议数据" maskType:SVProgressHUDMaskTypeClear];
         NSLog(@"%s----->并没有生活数据",__func__);
     }
 }
 
-/**
- *  bgImage
- */
+#pragma mark - 背景图片
 - (void)setupImage{
     UIImageView *imgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bgDay"]];
     imgV.frame = [UIScreen mainScreen].bounds;
@@ -622,13 +619,17 @@ static SystemSoundID shakeSound = 0;
 - (void)RoundViewClickTheTitleWithNumber:(NSInteger)number
 {
     NSLog(@"我点击了第%ld个标签",(long)number);
+    if (number == 0) {
+    }
+    [SVProgressHUD showWithStatus:[NSString stringWithFormat:@"%@",self.myRoundView.titles[0]]];
 }
 
 - (BOOL)prefersStatusBarHidden{
     
     return YES;
 }
-//换行
+
+#pragma mark 换行
 - (NSAttributedString *)padding {
     NSMutableAttributedString *pad = [[NSMutableAttributedString alloc] initWithString:@"\n\n"];
     pad.font = [UIFont systemFontOfSize:4];
@@ -637,8 +638,6 @@ static SystemSoundID shakeSound = 0;
 
 #pragma mark - 点击切换选择城市
 - (void)tapChangeLocBtn{
-
-    NSLog(@"%s----->卧槽？",__func__);
     
     CATransition *transition = [CATransition animation];
     transition.duration = 1.0f;
@@ -658,7 +657,7 @@ static SystemSoundID shakeSound = 0;
     NSLog(@"%s----->你点到我了",__func__);
 }
 
-#pragma mark - Grid
+#pragma mark - Grid 待修改
 - (void)showGridMenu{
     
     CNPGridMenuItem *laterToday = [[CNPGridMenuItem alloc] init];
@@ -719,6 +718,7 @@ static SystemSoundID shakeSound = 0;
     }];
 }
 
+#pragma mark - 摇动事件
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
     //如果是摇手机类型的事件

@@ -10,9 +10,12 @@
 #import "WeatherViewController.h"
 #import "FLAnimatedImage.h"
 #import "YYKit.h"
-
+#import "Masonry.h"
 //GIF Path
 #define gifPath [[NSBundle mainBundle] pathForResource:@"loading.gif" ofType:nil]
+
+#define ScreenW [UIScreen mainScreen].bounds.size.width
+#define ScreenH [UIScreen mainScreen].bounds.size.height
 
 @interface WeatherLoadingController ()
 
@@ -30,7 +33,8 @@
     FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:gifPath]];
     FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
     imageView.animatedImage = image;
-    imageView.frame = CGRectMake(0.0, 0.0, 320.0, 480.0);
+    imageView.frame = CGRectMake(0.0, 0.0, ScreenW, ScreenH);
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
     
     imageView.userInteractionEnabled = NO;//后面动画完了自动跳转
     
@@ -103,6 +107,14 @@
     _okLabel = tmpOkLabel;
     
     [self.loadingImgV addSubview:_okLabel];
+    
+    [_okLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.view);
+    }];
+    [_loadingLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_okLabel).offset(- self.view.frame.size.height / 6);
+        make.centerX.equalTo(_okLabel);
+    }];
     
 #pragma mark - 动画部分
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
