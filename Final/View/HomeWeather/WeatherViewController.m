@@ -11,41 +11,44 @@
 #import "DailyView.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-//basic of weather
-#import "Basic.h"
-#import "Update.h"
+
 #import "WeatherData.h"
 #import "HeWeather.h"
-#import "Weather.h"
 
-//HourlyForecast
-#import "HourlyForecast.h"
-#import "WindInHour.h"
+////basic of weather
+//#import "Basic.h"
+//#import "Update.h"
 
-//DailyForecast
-#import "DailyForecast.h"
-#import "CondDLY.h"
-#import "WindDLY.h"
-#import "TmpDLY.h"
-#import "AstroDLY.h"
-
-//suggestion
-#import "Suggestion.h"
-#import "Drsg.h"
-#import "Flu.h"
-#import "Sport.h"
-#import "Comf.h"
-#import "Trav.h"
-#import "Cw.h"
-#import "Uv.h"
-
-//aqi
-#import "Aqi.h"
-
-//now
-#import "NowWeather.h"
-#import "CondInNow.h"
-#import "WindInNow.h"
+//#import "Weather.h"
+//
+////HourlyForecast
+//#import "HourlyForecast.h"
+//#import "WindInHour.h"
+//
+////DailyForecast
+//#import "DailyForecast.h"
+//#import "CondDLY.h"
+//#import "WindDLY.h"
+//#import "TmpDLY.h"
+//#import "AstroDLY.h"
+//
+////suggestion
+//#import "Suggestion.h"
+//#import "Drsg.h"
+//#import "Flu.h"
+//#import "Sport.h"
+//#import "Comf.h"
+//#import "Trav.h"
+//#import "Cw.h"
+//#import "Uv.h"
+//
+////aqi
+//#import "Aqi.h"
+//
+////now
+//#import "NowWeather.h"
+//#import "CondInNow.h"
+//#import "WindInNow.h"
 
 //tools
 #import "DateCompare.h"
@@ -96,7 +99,6 @@ static SystemSoundID shakeSound = 0;
 //grid
 @property (nonatomic, strong) CNPGridMenu *gridMenu;
 
-
 @end
 
 @implementation WeatherViewController
@@ -115,6 +117,19 @@ static SystemSoundID shakeSound = 0;
   
 }
 
+//- (Weather *)weathers{
+//    if (!_weathers) {
+//
+//        NSMutableArray *arrM = [NSMutableArray array];
+//        HeWeather *MyWeather = [YYTool jsonToModel:jsonPath];
+//
+//        
+//        
+//        NSMutableArray *arrM =[NSMutableArray array];
+//        for
+//    }
+//    
+//}
 
 - (BOOL)canBecomeFirstResponder{
     return YES;

@@ -11,27 +11,6 @@
 		155C01BA1C952D99002A2694 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01B41C952D99002A2694 /* UIView+Extension.m */; };
 		155C01C31C95316E002A2694 /* ZFMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01C21C95316E002A2694 /* ZFMoreViewController.m */; };
 		155C020B1C9535BD002A2694 /* HeWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01C91C9535BD002A2694 /* HeWeather.m */; };
-		155C020C1C9535BD002A2694 /* Basic.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01CD1C9535BD002A2694 /* Basic.m */; };
-		155C020D1C9535BD002A2694 /* Update.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01D01C9535BD002A2694 /* Update.m */; };
-		155C020E1C9535BD002A2694 /* AstroDLY.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01D41C9535BD002A2694 /* AstroDLY.m */; };
-		155C020F1C9535BD002A2694 /* CondDLY.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01D71C9535BD002A2694 /* CondDLY.m */; };
-		155C02101C9535BD002A2694 /* DailyForecast.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01D91C9535BD002A2694 /* DailyForecast.m */; };
-		155C02111C9535BD002A2694 /* TmpDLY.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01DC1C9535BD002A2694 /* TmpDLY.m */; };
-		155C02121C9535BD002A2694 /* WindDLY.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01DF1C9535BD002A2694 /* WindDLY.m */; };
-		155C02131C9535BD002A2694 /* HourlyForecast.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01E21C9535BD002A2694 /* HourlyForecast.m */; };
-		155C02141C9535BD002A2694 /* WindInHour.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01E51C9535BD002A2694 /* WindInHour.m */; };
-		155C02151C9535BD002A2694 /* CondInNow.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01E91C9535BD002A2694 /* CondInNow.m */; };
-		155C02161C9535BE002A2694 /* NowWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01EB1C9535BD002A2694 /* NowWeather.m */; };
-		155C02171C9535BE002A2694 /* WindInNow.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01EE1C9535BD002A2694 /* WindInNow.m */; };
-		155C02181C9535BE002A2694 /* Comf.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01F21C9535BD002A2694 /* Comf.m */; };
-		155C02191C9535BE002A2694 /* Cw.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01F51C9535BD002A2694 /* Cw.m */; };
-		155C021A1C9535BE002A2694 /* Drsg.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01F81C9535BD002A2694 /* Drsg.m */; };
-		155C021B1C9535BE002A2694 /* Flu.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01FB1C9535BD002A2694 /* Flu.m */; };
-		155C021C1C9535BE002A2694 /* Sport.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01FE1C9535BD002A2694 /* Sport.m */; };
-		155C021D1C9535BE002A2694 /* Suggestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C02001C9535BD002A2694 /* Suggestion.m */; };
-		155C021E1C9535BE002A2694 /* Trav.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C02031C9535BD002A2694 /* Trav.m */; };
-		155C021F1C9535BE002A2694 /* Uv.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C02061C9535BD002A2694 /* Uv.m */; };
-		155C02201C9535BE002A2694 /* Weather.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C02081C9535BD002A2694 /* Weather.m */; };
 		155C02211C9535BE002A2694 /* WeatherData.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C020A1C9535BD002A2694 /* WeatherData.m */; };
 		155C02351C95375C002A2694 /* DateCompare.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C02321C95375C002A2694 /* DateCompare.m */; };
 		155C02361C95375C002A2694 /* YYTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C02341C95375C002A2694 /* YYTool.m */; };
@@ -43,8 +22,6 @@
 		157B411F1C98174D0063752A /* settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 157B411E1C98174D0063752A /* settings.plist */; };
 		157B41221C9818B00063752A /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 157B41211C9818B00063752A /* Settings.m */; };
 		157B41261C9819A70063752A /* CodeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 157B41251C9819A70063752A /* CodeModel.m */; };
-		157B412B1C9849950063752A /* Aqi.m in Sources */ = {isa = PBXBuildFile; fileRef = 157B412A1C9849950063752A /* Aqi.m */; };
-		157B412E1C9849A30063752A /* City.m in Sources */ = {isa = PBXBuildFile; fileRef = 157B412D1C9849A30063752A /* City.m */; };
 		159124C71C9677970000B351 /* CitiesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 159124C61C9677970000B351 /* CitiesModel.m */; };
 		159124C91C969B570000B351 /* cityID.json in Resources */ = {isa = PBXBuildFile; fileRef = 159124C81C969B570000B351 /* cityID.json */; };
 		159124D11C96A3670000B351 /* Province.m in Sources */ = {isa = PBXBuildFile; fileRef = 159124D01C96A3670000B351 /* Province.m */; };
@@ -69,48 +46,6 @@
 		155C01C21C95316E002A2694 /* ZFMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFMoreViewController.m; sourceTree = "<group>"; };
 		155C01C81C9535BD002A2694 /* HeWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeWeather.h; sourceTree = "<group>"; };
 		155C01C91C9535BD002A2694 /* HeWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeWeather.m; sourceTree = "<group>"; };
-		155C01CC1C9535BD002A2694 /* Basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Basic.h; sourceTree = "<group>"; };
-		155C01CD1C9535BD002A2694 /* Basic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Basic.m; sourceTree = "<group>"; };
-		155C01CF1C9535BD002A2694 /* Update.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Update.h; sourceTree = "<group>"; };
-		155C01D01C9535BD002A2694 /* Update.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Update.m; sourceTree = "<group>"; };
-		155C01D31C9535BD002A2694 /* AstroDLY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AstroDLY.h; sourceTree = "<group>"; };
-		155C01D41C9535BD002A2694 /* AstroDLY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AstroDLY.m; sourceTree = "<group>"; };
-		155C01D61C9535BD002A2694 /* CondDLY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CondDLY.h; sourceTree = "<group>"; };
-		155C01D71C9535BD002A2694 /* CondDLY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CondDLY.m; sourceTree = "<group>"; };
-		155C01D81C9535BD002A2694 /* DailyForecast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailyForecast.h; sourceTree = "<group>"; };
-		155C01D91C9535BD002A2694 /* DailyForecast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DailyForecast.m; sourceTree = "<group>"; };
-		155C01DB1C9535BD002A2694 /* TmpDLY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmpDLY.h; sourceTree = "<group>"; };
-		155C01DC1C9535BD002A2694 /* TmpDLY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TmpDLY.m; sourceTree = "<group>"; };
-		155C01DE1C9535BD002A2694 /* WindDLY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindDLY.h; sourceTree = "<group>"; };
-		155C01DF1C9535BD002A2694 /* WindDLY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindDLY.m; sourceTree = "<group>"; };
-		155C01E11C9535BD002A2694 /* HourlyForecast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HourlyForecast.h; sourceTree = "<group>"; };
-		155C01E21C9535BD002A2694 /* HourlyForecast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HourlyForecast.m; sourceTree = "<group>"; };
-		155C01E41C9535BD002A2694 /* WindInHour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindInHour.h; sourceTree = "<group>"; };
-		155C01E51C9535BD002A2694 /* WindInHour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindInHour.m; sourceTree = "<group>"; };
-		155C01E81C9535BD002A2694 /* CondInNow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CondInNow.h; sourceTree = "<group>"; };
-		155C01E91C9535BD002A2694 /* CondInNow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CondInNow.m; sourceTree = "<group>"; };
-		155C01EA1C9535BD002A2694 /* NowWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NowWeather.h; sourceTree = "<group>"; };
-		155C01EB1C9535BD002A2694 /* NowWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NowWeather.m; sourceTree = "<group>"; };
-		155C01ED1C9535BD002A2694 /* WindInNow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindInNow.h; sourceTree = "<group>"; };
-		155C01EE1C9535BD002A2694 /* WindInNow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindInNow.m; sourceTree = "<group>"; };
-		155C01F11C9535BD002A2694 /* Comf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comf.h; sourceTree = "<group>"; };
-		155C01F21C9535BD002A2694 /* Comf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comf.m; sourceTree = "<group>"; };
-		155C01F41C9535BD002A2694 /* Cw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cw.h; sourceTree = "<group>"; };
-		155C01F51C9535BD002A2694 /* Cw.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cw.m; sourceTree = "<group>"; };
-		155C01F71C9535BD002A2694 /* Drsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drsg.h; sourceTree = "<group>"; };
-		155C01F81C9535BD002A2694 /* Drsg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Drsg.m; sourceTree = "<group>"; };
-		155C01FA1C9535BD002A2694 /* Flu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flu.h; sourceTree = "<group>"; };
-		155C01FB1C9535BD002A2694 /* Flu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Flu.m; sourceTree = "<group>"; };
-		155C01FD1C9535BD002A2694 /* Sport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sport.h; sourceTree = "<group>"; };
-		155C01FE1C9535BD002A2694 /* Sport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sport.m; sourceTree = "<group>"; };
-		155C01FF1C9535BD002A2694 /* Suggestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Suggestion.h; sourceTree = "<group>"; };
-		155C02001C9535BD002A2694 /* Suggestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Suggestion.m; sourceTree = "<group>"; };
-		155C02021C9535BD002A2694 /* Trav.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trav.h; sourceTree = "<group>"; };
-		155C02031C9535BD002A2694 /* Trav.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trav.m; sourceTree = "<group>"; };
-		155C02051C9535BD002A2694 /* Uv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Uv.h; sourceTree = "<group>"; };
-		155C02061C9535BD002A2694 /* Uv.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Uv.m; sourceTree = "<group>"; };
-		155C02071C9535BD002A2694 /* Weather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Weather.h; sourceTree = "<group>"; };
-		155C02081C9535BD002A2694 /* Weather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Weather.m; sourceTree = "<group>"; };
 		155C02091C9535BD002A2694 /* WeatherData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherData.h; sourceTree = "<group>"; };
 		155C020A1C9535BD002A2694 /* WeatherData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherData.m; sourceTree = "<group>"; };
 		155C02311C95375C002A2694 /* DateCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateCompare.h; sourceTree = "<group>"; };
@@ -131,10 +66,6 @@
 		157B41211C9818B00063752A /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		157B41241C9819A70063752A /* CodeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodeModel.h; sourceTree = "<group>"; };
 		157B41251C9819A70063752A /* CodeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodeModel.m; sourceTree = "<group>"; };
-		157B41291C9849950063752A /* Aqi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Aqi.h; sourceTree = "<group>"; };
-		157B412A1C9849950063752A /* Aqi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Aqi.m; sourceTree = "<group>"; };
-		157B412C1C9849A30063752A /* City.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = City.h; sourceTree = "<group>"; };
-		157B412D1C9849A30063752A /* City.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = City.m; sourceTree = "<group>"; };
 		159124C51C9677970000B351 /* CitiesModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CitiesModel.h; sourceTree = "<group>"; };
 		159124C61C9677970000B351 /* CitiesModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CitiesModel.m; sourceTree = "<group>"; };
 		159124C81C969B570000B351 /* cityID.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cityID.json; sourceTree = "<group>"; };
@@ -241,219 +172,8 @@
 			children = (
 				155C01C81C9535BD002A2694 /* HeWeather.h */,
 				155C01C91C9535BD002A2694 /* HeWeather.m */,
-				155C01CA1C9535BD002A2694 /* Weather */,
 			);
 			path = HeWeather;
-			sourceTree = "<group>";
-		};
-		155C01CA1C9535BD002A2694 /* Weather */ = {
-			isa = PBXGroup;
-			children = (
-				157B41271C9849820063752A /* Aqi */,
-				155C01CB1C9535BD002A2694 /* Basic */,
-				155C01D11C9535BD002A2694 /* DailyForcast */,
-				155C01E01C9535BD002A2694 /* HourlyForecast */,
-				155C01E61C9535BD002A2694 /* NowWeather */,
-				155C01EF1C9535BD002A2694 /* Suggestion */,
-				155C02071C9535BD002A2694 /* Weather.h */,
-				155C02081C9535BD002A2694 /* Weather.m */,
-			);
-			path = Weather;
-			sourceTree = "<group>";
-		};
-		155C01CB1C9535BD002A2694 /* Basic */ = {
-			isa = PBXGroup;
-			children = (
-				155C01CC1C9535BD002A2694 /* Basic.h */,
-				155C01CD1C9535BD002A2694 /* Basic.m */,
-				155C01CE1C9535BD002A2694 /* Update */,
-			);
-			path = Basic;
-			sourceTree = "<group>";
-		};
-		155C01CE1C9535BD002A2694 /* Update */ = {
-			isa = PBXGroup;
-			children = (
-				155C01CF1C9535BD002A2694 /* Update.h */,
-				155C01D01C9535BD002A2694 /* Update.m */,
-			);
-			path = Update;
-			sourceTree = "<group>";
-		};
-		155C01D11C9535BD002A2694 /* DailyForcast */ = {
-			isa = PBXGroup;
-			children = (
-				155C01D21C9535BD002A2694 /* AstroDLY */,
-				155C01D51C9535BD002A2694 /* CondDLY */,
-				155C01D81C9535BD002A2694 /* DailyForecast.h */,
-				155C01D91C9535BD002A2694 /* DailyForecast.m */,
-				155C01DA1C9535BD002A2694 /* TmpDLY */,
-				155C01DD1C9535BD002A2694 /* WindDLY */,
-			);
-			path = DailyForcast;
-			sourceTree = "<group>";
-		};
-		155C01D21C9535BD002A2694 /* AstroDLY */ = {
-			isa = PBXGroup;
-			children = (
-				155C01D31C9535BD002A2694 /* AstroDLY.h */,
-				155C01D41C9535BD002A2694 /* AstroDLY.m */,
-			);
-			path = AstroDLY;
-			sourceTree = "<group>";
-		};
-		155C01D51C9535BD002A2694 /* CondDLY */ = {
-			isa = PBXGroup;
-			children = (
-				155C01D61C9535BD002A2694 /* CondDLY.h */,
-				155C01D71C9535BD002A2694 /* CondDLY.m */,
-			);
-			path = CondDLY;
-			sourceTree = "<group>";
-		};
-		155C01DA1C9535BD002A2694 /* TmpDLY */ = {
-			isa = PBXGroup;
-			children = (
-				155C01DB1C9535BD002A2694 /* TmpDLY.h */,
-				155C01DC1C9535BD002A2694 /* TmpDLY.m */,
-			);
-			path = TmpDLY;
-			sourceTree = "<group>";
-		};
-		155C01DD1C9535BD002A2694 /* WindDLY */ = {
-			isa = PBXGroup;
-			children = (
-				155C01DE1C9535BD002A2694 /* WindDLY.h */,
-				155C01DF1C9535BD002A2694 /* WindDLY.m */,
-			);
-			path = WindDLY;
-			sourceTree = "<group>";
-		};
-		155C01E01C9535BD002A2694 /* HourlyForecast */ = {
-			isa = PBXGroup;
-			children = (
-				155C01E11C9535BD002A2694 /* HourlyForecast.h */,
-				155C01E21C9535BD002A2694 /* HourlyForecast.m */,
-				155C01E31C9535BD002A2694 /* WindInHour */,
-			);
-			path = HourlyForecast;
-			sourceTree = "<group>";
-		};
-		155C01E31C9535BD002A2694 /* WindInHour */ = {
-			isa = PBXGroup;
-			children = (
-				155C01E41C9535BD002A2694 /* WindInHour.h */,
-				155C01E51C9535BD002A2694 /* WindInHour.m */,
-			);
-			path = WindInHour;
-			sourceTree = "<group>";
-		};
-		155C01E61C9535BD002A2694 /* NowWeather */ = {
-			isa = PBXGroup;
-			children = (
-				155C01E71C9535BD002A2694 /* CondInNow */,
-				155C01EA1C9535BD002A2694 /* NowWeather.h */,
-				155C01EB1C9535BD002A2694 /* NowWeather.m */,
-				155C01EC1C9535BD002A2694 /* WindInNow */,
-			);
-			path = NowWeather;
-			sourceTree = "<group>";
-		};
-		155C01E71C9535BD002A2694 /* CondInNow */ = {
-			isa = PBXGroup;
-			children = (
-				155C01E81C9535BD002A2694 /* CondInNow.h */,
-				155C01E91C9535BD002A2694 /* CondInNow.m */,
-			);
-			path = CondInNow;
-			sourceTree = "<group>";
-		};
-		155C01EC1C9535BD002A2694 /* WindInNow */ = {
-			isa = PBXGroup;
-			children = (
-				155C01ED1C9535BD002A2694 /* WindInNow.h */,
-				155C01EE1C9535BD002A2694 /* WindInNow.m */,
-			);
-			path = WindInNow;
-			sourceTree = "<group>";
-		};
-		155C01EF1C9535BD002A2694 /* Suggestion */ = {
-			isa = PBXGroup;
-			children = (
-				155C01F01C9535BD002A2694 /* Comf */,
-				155C01F31C9535BD002A2694 /* Cw */,
-				155C01F61C9535BD002A2694 /* Drsg */,
-				155C01F91C9535BD002A2694 /* Flu */,
-				155C01FC1C9535BD002A2694 /* Sport */,
-				155C01FF1C9535BD002A2694 /* Suggestion.h */,
-				155C02001C9535BD002A2694 /* Suggestion.m */,
-				155C02011C9535BD002A2694 /* Trav */,
-				155C02041C9535BD002A2694 /* Uv */,
-			);
-			path = Suggestion;
-			sourceTree = "<group>";
-		};
-		155C01F01C9535BD002A2694 /* Comf */ = {
-			isa = PBXGroup;
-			children = (
-				155C01F11C9535BD002A2694 /* Comf.h */,
-				155C01F21C9535BD002A2694 /* Comf.m */,
-			);
-			path = Comf;
-			sourceTree = "<group>";
-		};
-		155C01F31C9535BD002A2694 /* Cw */ = {
-			isa = PBXGroup;
-			children = (
-				155C01F41C9535BD002A2694 /* Cw.h */,
-				155C01F51C9535BD002A2694 /* Cw.m */,
-			);
-			path = Cw;
-			sourceTree = "<group>";
-		};
-		155C01F61C9535BD002A2694 /* Drsg */ = {
-			isa = PBXGroup;
-			children = (
-				155C01F71C9535BD002A2694 /* Drsg.h */,
-				155C01F81C9535BD002A2694 /* Drsg.m */,
-			);
-			path = Drsg;
-			sourceTree = "<group>";
-		};
-		155C01F91C9535BD002A2694 /* Flu */ = {
-			isa = PBXGroup;
-			children = (
-				155C01FA1C9535BD002A2694 /* Flu.h */,
-				155C01FB1C9535BD002A2694 /* Flu.m */,
-			);
-			path = Flu;
-			sourceTree = "<group>";
-		};
-		155C01FC1C9535BD002A2694 /* Sport */ = {
-			isa = PBXGroup;
-			children = (
-				155C01FD1C9535BD002A2694 /* Sport.h */,
-				155C01FE1C9535BD002A2694 /* Sport.m */,
-			);
-			path = Sport;
-			sourceTree = "<group>";
-		};
-		155C02011C9535BD002A2694 /* Trav */ = {
-			isa = PBXGroup;
-			children = (
-				155C02021C9535BD002A2694 /* Trav.h */,
-				155C02031C9535BD002A2694 /* Trav.m */,
-			);
-			path = Trav;
-			sourceTree = "<group>";
-		};
-		155C02041C9535BD002A2694 /* Uv */ = {
-			isa = PBXGroup;
-			children = (
-				155C02051C9535BD002A2694 /* Uv.h */,
-				155C02061C9535BD002A2694 /* Uv.m */,
-			);
-			path = Uv;
 			sourceTree = "<group>";
 		};
 		155C02221C95370A002A2694 /* Lib */ = {
@@ -497,25 +217,6 @@
 				157B41251C9819A70063752A /* CodeModel.m */,
 			);
 			name = CodeModel;
-			sourceTree = "<group>";
-		};
-		157B41271C9849820063752A /* Aqi */ = {
-			isa = PBXGroup;
-			children = (
-				157B41281C9849820063752A /* City */,
-				157B41291C9849950063752A /* Aqi.h */,
-				157B412A1C9849950063752A /* Aqi.m */,
-			);
-			path = Aqi;
-			sourceTree = "<group>";
-		};
-		157B41281C9849820063752A /* City */ = {
-			isa = PBXGroup;
-			children = (
-				157B412C1C9849A30063752A /* City.h */,
-				157B412D1C9849A30063752A /* City.m */,
-			);
-			path = City;
 			sourceTree = "<group>";
 		};
 		159124C41C9677870000B351 /* City */ = {
@@ -749,47 +450,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				155C020D1C9535BD002A2694 /* Update.m in Sources */,
-				155C02101C9535BD002A2694 /* DailyForecast.m in Sources */,
 				159124C71C9677970000B351 /* CitiesModel.m in Sources */,
-				155C02121C9535BD002A2694 /* WindDLY.m in Sources */,
-				155C02171C9535BE002A2694 /* WindInNow.m in Sources */,
-				155C02151C9535BD002A2694 /* CondInNow.m in Sources */,
 				157B40EE1C97B6E00063752A /* SelectLocController.m in Sources */,
-				157B412E1C9849A30063752A /* City.m in Sources */,
 				155C02461C954553002A2694 /* WeatherViewController.m in Sources */,
-				155C021E1C9535BE002A2694 /* Trav.m in Sources */,
-				155C020F1C9535BD002A2694 /* CondDLY.m in Sources */,
 				155C01BA1C952D99002A2694 /* UIView+Extension.m in Sources */,
 				155C02211C9535BE002A2694 /* WeatherData.m in Sources */,
 				15D9FC111C9A74EF005EF128 /* FileOwner.m in Sources */,
-				155C02131C9535BD002A2694 /* HourlyForecast.m in Sources */,
-				155C02161C9535BE002A2694 /* NowWeather.m in Sources */,
 				157B41221C9818B00063752A /* Settings.m in Sources */,
 				155C02351C95375C002A2694 /* DateCompare.m in Sources */,
 				155C024C1C9573EB002A2694 /* RoundView.m in Sources */,
-				155C021F1C9535BE002A2694 /* Uv.m in Sources */,
-				155C02141C9535BD002A2694 /* WindInHour.m in Sources */,
-				155C020C1C9535BD002A2694 /* Basic.m in Sources */,
 				15D9FC0C1C9A6725005EF128 /* DailyView.m in Sources */,
-				155C021B1C9535BE002A2694 /* Flu.m in Sources */,
-				155C021D1C9535BE002A2694 /* Suggestion.m in Sources */,
 				155C01C31C95316E002A2694 /* ZFMoreViewController.m in Sources */,
-				155C021A1C9535BE002A2694 /* Drsg.m in Sources */,
 				15C374221C95281000881255 /* ViewController.m in Sources */,
-				155C02181C9535BE002A2694 /* Comf.m in Sources */,
-				155C020E1C9535BD002A2694 /* AstroDLY.m in Sources */,
 				15C3741F1C95281000881255 /* AppDelegate.m in Sources */,
-				155C02111C9535BD002A2694 /* TmpDLY.m in Sources */,
-				155C02191C9535BE002A2694 /* Cw.m in Sources */,
 				159124D51C96A3870000B351 /* Cities.m in Sources */,
-				155C02201C9535BE002A2694 /* Weather.m in Sources */,
 				15C3741C1C95281000881255 /* main.m in Sources */,
 				1566FC031C9912BA0039195F /* WeatherLoadingController.m in Sources */,
-				157B412B1C9849950063752A /* Aqi.m in Sources */,
 				159124D11C96A3670000B351 /* Province.m in Sources */,
 				155C01B71C952D99002A2694 /* Foundation+Log.m in Sources */,
-				155C021C1C9535BE002A2694 /* Sport.m in Sources */,
 				157B41261C9819A70063752A /* CodeModel.m in Sources */,
 				155C020B1C9535BD002A2694 /* HeWeather.m in Sources */,
 				155C02361C95375C002A2694 /* YYTool.m in Sources */,

@@ -13,7 +13,7 @@
 
 + (void)loadWeatherData;
 
-+ (void)requestData;
+//+ (void)requestData;
 //和风版本
 + (void)requestDataFromHEserver;
 

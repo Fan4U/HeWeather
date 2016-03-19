@@ -9,42 +9,41 @@
 #import "WeatherData.h"
 
 #import "HeWeather.h"
-#import "Weather.h"
 #import "Settings.h"
 #import "CodeModel.h"
-
-//基本信息
-#import "Basic.h"
-#import "Update.h"
-
-//3小时预报
-#import "HourlyForecast.h"
-#import "WindInHour.h"
-
-//每日预报
-#import "DailyForecast.h"
-#import "CondDLY.h"
-#import "WindDLY.h"
-#import "TmpDLY.h"
-#import "AstroDLY.h"
-
-//生活建议
-#import "Suggestion.h"
-#import "Drsg.h"
-#import "Flu.h"
-#import "Sport.h"
-#import "Comf.h"
-#import "Trav.h"
-#import "Cw.h"
-#import "Uv.h"
-
-//实时天气
-#import "NowWeather.h"
-#import "CondInNow.h"
-#import "WindInNow.h"
-
-//空气啥的
-#import "Aqi.h"
+//
+////基本信息
+//#import "Basic.h"
+//#import "Update.h"
+//
+////3小时预报
+//#import "HourlyForecast.h"
+//#import "WindInHour.h"
+//
+////每日预报
+//#import "DailyForecast.h"
+//#import "CondDLY.h"
+//#import "WindDLY.h"
+//#import "TmpDLY.h"
+//#import "AstroDLY.h"
+//
+////生活建议
+//#import "Suggestion.h"
+//#import "Drsg.h"
+//#import "Flu.h"
+//#import "Sport.h"
+//#import "Comf.h"
+//#import "Trav.h"
+//#import "Cw.h"
+//#import "Uv.h"
+//
+////实时天气
+//#import "NowWeather.h"
+//#import "CondInNow.h"
+//#import "WindInNow.h"
+//
+////空气啥的
+//#import "Aqi.h"
 
 //工具
 #import "YYKit.h"
@@ -64,8 +63,6 @@
 @end
 
 @implementation WeatherData
-
-
 
 /**
  *  先判读本地是否有数据，YYModel转模型后测试。 如果没有数据就去网络获取json。
