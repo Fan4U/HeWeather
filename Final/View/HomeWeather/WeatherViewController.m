@@ -8,7 +8,7 @@
 
 #import "WeatherViewController.h"
 #import "SelectLocController.h"
-#import <AudioToolbox/AudioToolbox.h>
+//#import <AudioToolbox/AudioToolbox.h>
 
 //weather
 #import "WeatherData.h"
@@ -36,7 +36,7 @@
 #define ScreenW [UIScreen mainScreen].bounds.size.width
 #define ScreenH [UIScreen mainScreen].bounds.size.height
 
-static SystemSoundID shakeSound = 0;
+//static SystemSoundID shakeSound = 0;如果播放声音的话
 
 @interface WeatherViewController () <RoundViewDelegate,CNPGridMenuDelegate>
 
@@ -51,27 +51,24 @@ static SystemSoundID shakeSound = 0;
 @property (nonatomic, weak)YYLabel *sunRiseLabel;
 @property (nonatomic, weak)YYLabel *sunSetLabel;
 //on top left
-@property (nonatomic, weak)UILabel *lastUpdTimeLabel;
+@property (nonatomic, weak)YYLabel *lastUpdTimeLabel;
 //on top right
 @property (nonatomic, weak)YYLabel *changeCity;
-
-//view
+//view of 7days
 @property (nonatomic, weak)DailyView *dailyView;
-
 //ImgV
 @property (nonatomic, weak)UIImageView *backgroundImage;
-@property (nonatomic, weak)UIImageView *locLittleIcon;
 @property (nonatomic, weak)UIImageView *srIcon;
 @property (nonatomic, weak)UIImageView *ssIcon;
-
 //grid
 @property (nonatomic, weak)CNPGridMenu *gridMenu;
-
 //weather data
 @property (nonatomic, strong)HeWeather *weatherDataInMain;
-
 //round View
 @property (nonatomic, weak)RoundView *myRoundView;
+//swipe
+@property (nonatomic, strong)UISwipeGestureRecognizer *left;
+@property (nonatomic, strong)UISwipeGestureRecognizer *right;
 
 @end
 
@@ -79,16 +76,22 @@ static SystemSoundID shakeSound = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.view.backgroundColor = Color(244, 244, 244);//Color(249, 249, 249)
-    [self.navigationController setNavigationBarHidden:YES]; //没必要显示
-    [WeatherData loadWeatherData];  //测试
+    [self.navigationController setNavigationBarHidden:YES];
+
     
 //    主界面
     [self setupImage];
     [self setupWelcomLabel];
     [self becomeFirstResponder];
-  
+    
+//  swipe
+    self.left = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tapChangeLocBtn)];
+    self.right = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(popForRefresh)];
+    self.left.direction = UISwipeGestureRecognizerDirectionLeft;
+    self.right.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:self.left];
+    [self.view addGestureRecognizer:self.right];
+
 }
 
 -(HeWeather *)weatherDataInMain{
@@ -155,7 +158,7 @@ static SystemSoundID shakeSound = 0;
     NSMutableAttributedString *text = [NSMutableAttributedString new];
     //设置富文本 ----温度
     {
-        NSMutableAttributedString *one = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@° %@",self.weatherDataInMain.weather[0].nowWeather.tmpInNow,self.weatherDataInMain.weather[0].nowWeather.condInNow.txtInNow]];
+        NSMutableAttributedString *one = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@°C %@",self.weatherDataInMain.weather[0].nowWeather.tmpInNow,self.weatherDataInMain.weather[0].nowWeather.condInNow.txtInNow]];
         one.font = [UIFont systemFontOfSize:30.0];
         one.color = [UIColor blackColor];
         YYTextShadow *shadow = [YYTextShadow new];
@@ -177,7 +180,7 @@ static SystemSoundID shakeSound = 0;
     
     [self.view addSubview:_tempLabel];
     
-    // only be available after [self.view addSubview:_tempLabel]! why?
+    // only available after [self.view addSubview:_tempLabel]!
     [tmpLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);//make the centerx of label equal to self.view
         make.centerY.equalTo(self.view).with.offset(-100);
@@ -237,40 +240,42 @@ static SystemSoundID shakeSound = 0;
     }];
     
 #pragma mark - 选择城市Label
-    NSMutableAttributedString *text2 = [NSMutableAttributedString new];
-    NSMutableAttributedString *changeCityStr = [[NSMutableAttributedString alloc] initWithString:@"选择城市"];
-    {
-    changeCityStr.font = [UIFont boldSystemFontOfSize:15.0];
-    changeCityStr.underlineColor = changeCityStr.color;
-    changeCityStr.underlineStyle = NSUnderlineStyleSingle;
     
-    [changeCityStr setTextHighlightRange:changeCityStr.rangeOfAll
-                         color:[UIColor blackColor]
-               backgroundColor:[UIColor clearColor]
-                     tapAction:^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect) {
-                         [self tapChangeLocBtn];
-                     }];
-    
-    [text2 appendAttributedString:changeCityStr];
-    [text2 appendAttributedString:[self padding]];
-    }
-    
-    //init tmp YYlabel
-    YYLabel *tmpChangeCityLabel = [[YYLabel alloc] init];
-    tmpChangeCityLabel.textAlignment = NSTextAlignmentCenter;
-    tmpChangeCityLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    tmpChangeCityLabel.attributedText = changeCityStr;
-    
-    _changeCity = tmpChangeCityLabel;
-    
-    [self.view addSubview:_changeCity];
-    
-    [_changeCity mas_makeConstraints:^(MASConstraintMaker *make) {
-        //设置size
-        make.size.mas_equalTo(CGSizeMake(75, 55));
-        make.right.equalTo(self.view).offset(-2);
-        make.top.equalTo(self.view).offset(10);
-    }];
+
+//    NSMutableAttributedString *text2 = [NSMutableAttributedString new];
+//    NSMutableAttributedString *changeCityStr = [[NSMutableAttributedString alloc] initWithString:@"aaa"];
+//    {
+//    changeCityStr.font = [UIFont boldSystemFontOfSize:15.0];
+//    changeCityStr.underlineColor = changeCityStr.color;
+//    changeCityStr.underlineStyle = NSUnderlineStyleSingle;
+//    
+//    [changeCityStr setTextHighlightRange:changeCityStr.rangeOfAll
+//                         color:[UIColor blackColor]
+//               backgroundColor:[UIColor clearColor]
+//                     tapAction:^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect) {
+//                         [self tapChangeLocBtn];
+//                     }];
+//    
+//    [text2 appendAttributedString:changeCityStr];
+//    [text2 appendAttributedString:[self padding]];
+//    }
+//    
+//    //init tmp YYlabel
+//    YYLabel *tmpChangeCityLabel = [[YYLabel alloc] init];
+//    tmpChangeCityLabel.textAlignment = NSTextAlignmentCenter;
+//    tmpChangeCityLabel.translatesAutoresizingMaskIntoConstraints = NO;
+//    tmpChangeCityLabel.attributedText = changeCityStr;
+//    
+//    _changeCity = tmpChangeCityLabel;
+//    
+//    [self.view addSubview:_changeCity];
+//
+//    [_changeCity mas_makeConstraints:^(MASConstraintMaker *make) {
+//        //设置size
+//        make.size.mas_equalTo(CGSizeMake(75, 55));
+//        make.right.equalTo(self.view).offset(-2);
+//        make.top.equalTo(self.view).offset(10);
+//    }];
     
     
     
@@ -281,7 +286,6 @@ static SystemSoundID shakeSound = 0;
     
     _dailyView = tmpDailyView;
     _dailyView.translatesAutoresizingMaskIntoConstraints = NO;
-//    _dailyView.backgroundColor = [UIColor redColor];
 
     [self.view addSubview:_dailyView];
     
@@ -347,21 +351,7 @@ static SystemSoundID shakeSound = 0;
         });
 });
     
-    
-    
-#pragma mark - locLittelIcon 选择城市按钮左侧图标
-    UIImageView *tmpSRIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"locIcon"]];
-    tmpSRIcon.contentMode = UIViewContentModeScaleAspectFill;
-    
-    _locLittleIcon = tmpSRIcon;
-    
-    [self.view addSubview:_locLittleIcon];
-    
-    [_locLittleIcon mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(44, 44));
-        make.centerY.equalTo(self.changeCity);
-        make.left.equalTo(self.changeCity).offset(-34);
-    }];
+
 
 #pragma mark - 风向Label
     NSMutableAttributedString *textofNowWindDir = [NSMutableAttributedString new];
@@ -557,6 +547,40 @@ static SystemSoundID shakeSound = 0;
         });
     });
     
+#pragma mark - 最后更新
+    NSMutableAttributedString *attrTxt4upd = [NSMutableAttributedString new];
+    {
+        NSMutableAttributedString *tmpAttrTxt4upd = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"最后更新:%@",self.weatherDataInMain.weather[0].basic.update.loc]];
+        tmpAttrTxt4upd.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightUltraLight];
+        tmpAttrTxt4upd.color = [UIColor blackColor];
+        YYTextShadow *shadow = [YYTextShadow new];
+        shadow.color = [UIColor colorWithWhite:0.000 alpha:0.490];
+        shadow.offset = CGSizeMake(0, 1);
+        shadow.radius = 5;
+        tmpAttrTxt4upd.textShadow = shadow;
+        [attrTxt4upd appendAttributedString:tmpAttrTxt4upd];
+        [attrTxt4upd appendAttributedString:[self padding]];
+    }
+    
+    //init tmp YYlabel
+    YYLabel *updLabelTmp = [[YYLabel alloc] init];
+    updLabelTmp.textAlignment = NSTextAlignmentLeft;
+    updLabelTmp.translatesAutoresizingMaskIntoConstraints = NO;
+    updLabelTmp.attributedText = attrTxt4upd;
+    
+    _lastUpdTimeLabel = updLabelTmp;
+    
+    [self.view addSubview:_lastUpdTimeLabel];
+    
+    [_lastUpdTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        //设置size
+        make.size.mas_equalTo(CGSizeMake(200, 20));
+        make.left.equalTo(self.view).offset(5);
+        make.top.equalTo(self.view).offset(3);
+    }];
+
+
+
 }
 
 #pragma mark - 轮播
@@ -622,6 +646,9 @@ static SystemSoundID shakeSound = 0;
     if (number == 0) {
     }
     [SVProgressHUD showWithStatus:[NSString stringWithFormat:@"%@",self.myRoundView.titles[0]]];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [SVProgressHUD dismiss];
+    });
 }
 
 - (BOOL)prefersStatusBarHidden{
@@ -650,11 +677,6 @@ static SystemSoundID shakeSound = 0;
     SelectLocController *select = [[SelectLocController alloc] init];
     [self.navigationController pushViewController:select animated:YES];
 
-}
-
-#pragma mark - 用来测试的
-- (void)nothing{
-    NSLog(@"%s----->你点到我了",__func__);
 }
 
 #pragma mark - Grid 待修改
@@ -724,30 +746,36 @@ static SystemSoundID shakeSound = 0;
     //如果是摇手机类型的事件
     if(motion == UIEventSubtypeMotionShake){
         NSLog(@"%s----->摇一摇",__func__);
-        CATransition *transition = [CATransition animation];
-        transition.duration = 1.0f;
-        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        transition.type = @"cube";
-        transition.subtype = kCATransitionFromRight;
-        transition.delegate = self;
-        [self.navigationController.view.layer addAnimation:transition forKey:nil];
-        
-        [self playSoundofShake];
-        [WeatherData requestDataFromHEserver];
-        [self.navigationController popViewControllerAnimated:YES];
-        
+        [self popForRefresh];
     }
 }
 
-- (void)playSoundofShake{
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"shake" ofType:@"wav"];
-    if (path) {
-        //注册声音到系统
-        AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:path],&shakeSound);
-        AudioServicesPlaySystemSound(shakeSound);
-        }
+- (void)popForRefresh{
+    CATransition *transition = [CATransition animation];
+    transition.duration = 1.0f;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = @"cube";
+    transition.subtype = kCATransitionFromRight;
+    transition.delegate = self;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
     
-    AudioServicesPlaySystemSound(shakeSound);   //播放注册的声音
-//    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);}
+//    [self playSoundofShake];
+    [WeatherData requestDataFromHEserver];
+    [self.navigationController popViewControllerAnimated:YES];
 }
+
+//不播放声音
+//- (void)playSoundofShake{
+//    NSString *path = [[NSBundle mainBundle] pathForResource:@"shake" ofType:@"wav"];
+//    if (path) {
+//        //注册声音到系统
+//        AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:path],&shakeSound);
+//        AudioServicesPlaySystemSound(shakeSound);
+//        }
+//    
+//    AudioServicesPlaySystemSound(shakeSound);   //播放注册的声音
+////    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);}
+//}
+
+
 @end

@@ -8,6 +8,8 @@
 
 #import "WeatherLoadingController.h"
 #import "WeatherViewController.h"
+#import "WeatherData.h"
+
 #import "FLAnimatedImage.h"
 #import "YYKit.h"
 #import "Masonry.h"
@@ -28,6 +30,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [WeatherData loadWeatherData];
+    });
     
 #pragma mark - 初始化GIF播放view
     FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:gifPath]];

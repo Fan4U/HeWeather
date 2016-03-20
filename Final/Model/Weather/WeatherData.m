@@ -52,6 +52,8 @@
         if (hoursFromLastUpdate > 3) {
             NSLog(@"已经过去3小时 尝试更新数据");
             [self requestDataFromHEserver];//重新获取并保存json 看是不是大于三小时
+        }else{
+            return;
         }
     }else{
         NSLog(@"%s----->本地没有Json，更新数据",__func__);
@@ -73,9 +75,6 @@
     //    取出其中settings的value并用参数pinyin来替换
     NSString *value = [cityID objectForKey:@"settings"];
     NSLog(@"%s准备以ID名为%@的城市代码向服务器getJSON",__func__,value);
-    
-    //    做成请求参数
-//    NSString *httpArg = [NSString stringWithFormat:@"city=%@",value];
 
     NSString *http1 = @"https://api.heweather.com/x3/weather";
     NSString *http2 = @"cityid=CN";
@@ -93,14 +92,10 @@
                 if (error) {
                    NSLog(@"Httperror: %@%ld", error.localizedDescription, (long)error.code);
                }else {
-                   //                                   NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
                    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                   //NSLog(@"HttpResponseCode:%ld", responseCode);
                    NSLog(@"%s----->%@",__func__,responseString);
-                   
                    NSData *jsonData = [responseString dataUsingEncoding:NSUTF8StringEncoding];
                    [jsonData writeToFile:path atomically:YES];
-//                   [SVProgressHUD showSuccessWithStatus:@"数据已更新!"];
                    NSLog(@"%s----->新的数据已经写入",__func__);
                }
             }];

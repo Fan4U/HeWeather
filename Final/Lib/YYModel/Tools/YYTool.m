@@ -11,6 +11,7 @@
 #import "HeWeather.h"
 #import "WeatherData.h"
 #import "CitiesModel.h"
+#import <CoreLocation/CoreLocation.h>
 //codelist
 #define codeList [[NSBundle mainBundle] pathForResource:@"cityID.json" ofType:nil]
 //文件路径
@@ -52,5 +53,7 @@
 //    
 //    
 //}
+
+
 
 @end
