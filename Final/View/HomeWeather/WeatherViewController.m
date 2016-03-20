@@ -138,14 +138,17 @@
     welcome.textColor = [UIColor whiteColor];
     
     [self.view addSubview:welcome];
-    [UIView animateWithDuration:1.7 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:1.1 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         welcome.transform = CGAffineTransformMakeTranslation(0, 44);
         //        welcome.top = 44;
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:3.4 delay:1.2 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:1.1 delay:1.2 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             welcome.transform = CGAffineTransformMakeTranslation(0, -44);
         } completion:^(BOOL finished) {
             [welcome removeFromSuperview];
+            [UIView animateWithDuration:0.7 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                _lastUpdTimeLabel.alpha = 1;
+            } completion:nil];
         }];
     }];
     
@@ -568,7 +571,9 @@
     updLabelTmp.translatesAutoresizingMaskIntoConstraints = NO;
     updLabelTmp.attributedText = attrTxt4upd;
     
+    
     _lastUpdTimeLabel = updLabelTmp;
+    _lastUpdTimeLabel.alpha = 0;
     
     [self.view addSubview:_lastUpdTimeLabel];
     
