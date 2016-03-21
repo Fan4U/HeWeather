@@ -9,6 +9,7 @@
 #import "WeatherLoadingController.h"
 #import "WeatherViewController.h"
 #import "WeatherData.h"
+#import <CoreLocation/CoreLocation.h>
 
 #import "FLAnimatedImage.h"
 #import "YYKit.h"
@@ -19,11 +20,13 @@
 #define ScreenW [UIScreen mainScreen].bounds.size.width
 #define ScreenH [UIScreen mainScreen].bounds.size.height
 
-@interface WeatherLoadingController ()
+@interface WeatherLoadingController () <CLLocationManagerDelegate>
 
 @property (nonatomic, weak)YYLabel *loadingLabel;
 @property (nonatomic, weak)YYLabel *okLabel;
 @property (nonatomic, weak)FLAnimatedImageView *loadingImgV;
+
+@property (nonatomic, strong)CLLocationManager *locManager;
 @end
 
 @implementation WeatherLoadingController
@@ -52,13 +55,57 @@
     
 #pragma mark - 是否隐藏nav
     [self.navigationController setNavigationBarHidden:YES];
+    
+#pragma mark - init CLLocationManager
+    self.locManager = [CLLocationManager new];
+    
+    [self.locManager requestWhenInUseAuthorization];
+    self.locManager.delegate = self;
+    [self.locManager startUpdatingLocation];
+    self.locManager.distanceFilter = 500;
+    self.locManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
 
 }
 
 
 - (void)viewWillAppear:(BOOL)animated{
+    [self loadingLabels];
+
     
-#pragma mark - loading Label
+    
+}
+
+-(BOOL)prefersStatusBarHidden{
+    return YES;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+
+}
+
+- (void)switch2Main{
+    
+    CATransition *transition = [CATransition animation];
+    transition.duration = 1.0f;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = @"cube";
+    transition.subtype = kCATransitionFromRight;
+    transition.delegate = self;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
+    WeatherViewController *weather = [[WeatherViewController alloc] init];
+    [self.navigationController pushViewController: weather animated:YES];
+    
+}
+
+- (NSAttributedString *)padding {
+    NSMutableAttributedString *pad = [[NSMutableAttributedString alloc] initWithString:@"\n\n"];
+    pad.font = [UIFont systemFontOfSize:4];
+    return pad;
+}
+
+- (void)loadingLabels{
     NSMutableAttributedString *text = [NSMutableAttributedString new];
     
     {
@@ -129,46 +176,26 @@
             [UIView animateWithDuration:0.6 animations:^{
                 _okLabel.alpha = 1;
             } completion:^(BOOL finished) {
-//                imageView.userInteractionEnabled = YES;
+                //                imageView.userInteractionEnabled = YES;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [self switch2Main];
                     _okLabel.alpha = 0; //得恢复成透明 不然下次回来是直接出现的
-                });                
+                });
             }];
         }];
     });
-    
-    
 }
 
--(BOOL)prefersStatusBarHidden{
-    return YES;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-
-}
-
-#pragma mark - 切换
-- (void)switch2Main{
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    CLLocation *location = locations[0];
+    NSLog(@"--%@--",location);
+    NSString *longtitude = [NSString stringWithFormat:@"%.2f",location.coordinate.longitude];
+    NSString *latitude = [NSString stringWithFormat:@"%.2f",location.coordinate.latitude];
     
-    CATransition *transition = [CATransition animation];
-    transition.duration = 1.0f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = @"cube";
-    transition.subtype = kCATransitionFromRight;
-    transition.delegate = self;
-    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [WeatherData getNameOfCityWithlon:longtitude lat:latitude];
     
-    WeatherViewController *weather = [[WeatherViewController alloc] init];
-    [self.navigationController pushViewController: weather animated:YES];
-    
-}
+    NSLog(@"%@---%@",longtitude,latitude);
+    [self.locManager stopUpdatingLocation];
 
-- (NSAttributedString *)padding {
-    NSMutableAttributedString *pad = [[NSMutableAttributedString alloc] initWithString:@"\n\n"];
-    pad.font = [UIFont systemFontOfSize:4];
-    return pad;
 }
 @end

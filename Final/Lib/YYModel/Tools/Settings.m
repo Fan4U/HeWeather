@@ -53,7 +53,11 @@
         
         [plugin1 setObject:@"cityID" forKey:@"properties"];
         
-        [plugin1 setObject:@"101180901" forKey:@"settings"]; //默认洛阳
+        [plugin1 setObject:@"101010100" forKey:@"settings"]; //默认北京 测试定位结果
+        
+        [plugin1 setObject:@"none" forKey:@"nameFromGPS"]; //拼音
+        
+        [plugin1 setObject:@"1" forKey:@"isFirstLogin"];
         
         //定义第二个字典
         
@@ -104,7 +108,7 @@
         NSLog(@"%s----->收到的城市ID和Plist中的相同，返回",__func__);
         return NO;
     }else{
-        NSLog(@"%s----->收到的城市ID和Plist中的不同，开始修改",__func__);        
+        NSLog(@"%s----->收到的城市ID和Plist中的不同，开始修改",__func__);
         //    赋值
         value = cityID;
         
@@ -118,6 +122,37 @@
         [WeatherData requestDataFromHEserver];
         return YES;
     }
+}
+
++ (void)cityModifiedWithNameFromGPS:(NSString *)cityNamePY{
+    //    取出整个
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
+    
+    //    拿出保存城市名称的那个字典
+    NSMutableDictionary *cityPY = [infolist objectForKey:@"cityOfWeather"];
+    
+    //    取出其中settings的value并用参数pinyin来替换
+    NSString *value = [cityPY objectForKey:@"nameFromGPS"];
+    NSLog(@"%s当前Plist中的城市ID----->%@",__func__,value);
+    
+    //    如果递交过来的结果相同就返回
+    if ([value isEqualToString:cityNamePY]) {
+        NSLog(@"%s----->收到的城市ID和Plist中的相同，返回",__func__);
+    }else{
+        NSLog(@"%s----->收到的城市ID和Plist中的不同，开始修改",__func__);
+        //    赋值
+        value = cityNamePY;
+        
+        //  写回去
+        [cityPY setValue:value forKey:@"nameFromGPS"];
+        [infolist setValue:cityPY forKey:@"cityOfWeather"];
+        
+        //    保存
+        NSLog(@"%s---%@---保存Plist中新的城市ID",__func__,infolist);
+        [infolist writeToFile:plistPath atomically:YES];
+        [WeatherData requestDataFromHEserver];
+    }
+
 }
 //#pragma mark - 拿出城市拼音
 //- (NSString *)getCityPY{

@@ -16,5 +16,7 @@
 //+ (void)requestData;
 //和风版本
 + (void)requestDataFromHEserver;
+//从百度获取城市名字
++ (void)getNameOfCityWithlon:(NSString *)lon lat:(NSString *)lat;
 
 @end

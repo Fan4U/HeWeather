@@ -25,10 +25,11 @@
 #import "RoundView.h"
 #import "Masonry.h"
 #import "SVProgressHUD.h"
-#import "CNPGridMenu.h"
 
 //JSON Path
 #define jsonPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"weather.json"]
+//plist
+#define plistPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"settings.plist"]
 
 // RGB颜色
 #define Color(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
@@ -38,7 +39,7 @@
 
 //static SystemSoundID shakeSound = 0;如果播放声音的话
 
-@interface WeatherViewController () <RoundViewDelegate,CNPGridMenuDelegate>
+@interface WeatherViewController () <RoundViewDelegate>
 
 //on center
 @property (nonatomic, weak)YYLabel *tempLabel;
@@ -60,8 +61,6 @@
 @property (nonatomic, weak)UIImageView *backgroundImage;
 @property (nonatomic, weak)UIImageView *srIcon;
 @property (nonatomic, weak)UIImageView *ssIcon;
-//grid
-@property (nonatomic, weak)CNPGridMenu *gridMenu;
 //weather data
 @property (nonatomic, strong)HeWeather *weatherDataInMain;
 //round View
@@ -91,6 +90,22 @@
     self.right.direction = UISwipeGestureRecognizerDirectionRight;
     [self.view addGestureRecognizer:self.left];
     [self.view addGestureRecognizer:self.right];
+    
+//  如果第一次运行定位权限获取慢了  提示用户
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
+    NSMutableDictionary *city = [infolist objectForKey:@"cityOfWeather"];
+    NSString *isFirstLogin = [city objectForKey:@"isFirstLogin"];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if ([isFirstLogin isEqualToString:@"1"]) {
+            [SVProgressHUD showInfoWithStatus:@"第一次运行，如果城市显示错误时请摇动手机刷新。" maskType:SVProgressHUDMaskTypeClear];
+            [city setValue:@"0" forKey:@"isFirstLogin"];
+            [infolist setValue:city forKey:@"cityOfWeather"];
+            [infolist writeToFile:plistPath atomically:YES];
+//            [SVProgressHUD dismiss];
+        }
+    });
+    
 
 }
 
@@ -224,9 +239,6 @@
 #pragma mark - 天气状态图
     
     UIImageView *imgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",self.weatherDataInMain.weather[0].nowWeather.condInNow.codeInNow]]];
-    imgV.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showGridMenu)];
-    [imgV addGestureRecognizer:tap];
     
     _condIcon = imgV;
     [self.view addSubview:_condIcon];
@@ -684,67 +696,6 @@
 
 }
 
-#pragma mark - Grid 待修改
-- (void)showGridMenu{
-    
-    CNPGridMenuItem *laterToday = [[CNPGridMenuItem alloc] init];
-    laterToday.icon = [UIImage imageNamed:@"LaterToday"];
-    laterToday.title = @"Later Today";
-    
-    CNPGridMenuItem *thisEvening = [[CNPGridMenuItem alloc] init];
-    thisEvening.icon = [UIImage imageNamed:@"ThisEvening"];
-    thisEvening.title = @"This Evening";
-    
-    CNPGridMenuItem *tomorrow = [[CNPGridMenuItem alloc] init];
-    tomorrow.icon = [UIImage imageNamed:@"Tomorrow"];
-    tomorrow.title = @"Tomorrow";
-    
-    CNPGridMenuItem *thisWeekend = [[CNPGridMenuItem alloc] init];
-    thisWeekend.icon = [UIImage imageNamed:@"ThisWeekend"];
-    thisWeekend.title = @"This Weekend";
-    
-    CNPGridMenuItem *nextWeek = [[CNPGridMenuItem alloc] init];
-    nextWeek.icon = [UIImage imageNamed:@"NextWeek"];
-    nextWeek.title = @"Next Week";
-    
-    CNPGridMenuItem *inAMonth = [[CNPGridMenuItem alloc] init];
-    inAMonth.icon = [UIImage imageNamed:@"InMonth"];
-    inAMonth.title = @"In A Month";
-    
-    CNPGridMenuItem *someday = [[CNPGridMenuItem alloc] init];
-    someday.icon = [UIImage imageNamed:@"Someday"];
-    someday.title = @"Someday";
-    
-    CNPGridMenuItem *desktop = [[CNPGridMenuItem alloc] init];
-    desktop.icon = [UIImage imageNamed:@"Desktop"];
-    desktop.title = @"Desktop";
-    
-    CNPGridMenuItem *pickDate = [[CNPGridMenuItem alloc] init];
-    pickDate.icon = [UIImage imageNamed:@"PickDate"];
-    pickDate.title = @"Pick Date";
-    
-    CNPGridMenu *gridMenu = [[CNPGridMenu alloc] initWithMenuItems:@[laterToday, thisEvening, tomorrow, thisWeekend, nextWeek, inAMonth, someday, desktop, pickDate]];
-    gridMenu.delegate = self;
-    [self presentGridMenu:gridMenu animated:YES completion:^{
-        NSLog(@"Grid Menu Presented");
-    }];
-}
-
-- (void)gridMenuDidTapOnBackground:(CNPGridMenu *)menu {
-    [self dismissGridMenuAnimated:YES completion:^{
-        NSLog(@"Grid Menu Dismissed With Background Tap");
-    }];
-}
-
-- (void)gridMenu:(CNPGridMenu *)menu didTapOnItem:(CNPGridMenuItem *)item {
-    [self dismissGridMenuAnimated:YES completion:^{
-        NSLog(@"Grid Menu Did Tap On Item: %@", item.title);
-        if ([item.title isEqualToString:@"This Evening"]) {
-            [self tapChangeLocBtn];
-        }
-    }];
-}
-
 #pragma mark - 摇动事件
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
@@ -765,7 +716,7 @@
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
     
 //    [self playSoundofShake];
-    [WeatherData requestDataFromHEserver];
+//    [WeatherData requestDataFromHEserver];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

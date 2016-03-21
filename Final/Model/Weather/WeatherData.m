@@ -11,12 +11,14 @@
 #import "HeWeather.h"
 #import "Settings.h"
 #import "CodeModel.h"
+#import "OpenWeatherModel.h"
 
 //工具
 #import "YYKit.h"
 #import "YYTool.h"
 #import "DateCompare.h"
 #import "SVProgressHUD.h"
+#import "AFNetworking.h"
 
 
 
@@ -24,7 +26,8 @@
 #define path [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"weather.json"]
 //Plist
 #define plistPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"settings.plist"]
-
+//baidu api keys
+#define baiduAK 420c56ebf46b7a335b385152ff7cc28
 @interface WeatherData()
 
 @end
@@ -51,9 +54,9 @@
         //这里也是没有办法 不知道数据更新的间隔 先设置成20小时 如果20小时没更新数据就重新获取数据
         if (hoursFromLastUpdate > 3) {
             NSLog(@"已经过去3小时 尝试更新数据");
-            [self requestDataFromHEserver];//重新获取并保存json 看是不是大于三小时
+            [self requestDataFromHEserver];//重新获取并保存json
         }else{
-            return;
+            NSLog(@"距离上次数据不到3小时");
         }
     }else{
         NSLog(@"%s----->本地没有Json，更新数据",__func__);
@@ -73,17 +76,31 @@
     NSMutableDictionary *cityID = [infolist objectForKey:@"cityOfWeather"];
     
     //    取出其中settings的value并用参数pinyin来替换
-    NSString *value = [cityID objectForKey:@"settings"];
-    NSLog(@"%s准备以ID名为%@的城市代码向服务器getJSON",__func__,value);
-
-    NSString *http1 = @"https://api.heweather.com/x3/weather";
-    NSString *http2 = @"cityid=CN";
-    NSString *http3 = @"key=cdbb0dd11c3949c88248b270c58d737c";
+    NSString *value1 = [cityID objectForKey:@"settings"];
+    NSString *value2 = [cityID objectForKey:@"nameFromGPS"];
     
-    NSString *httpURL = [NSString stringWithFormat:@"%@?%@%@&%@",http1,http2,value,http3];
+    NSString *finalURL = [[NSString alloc] init];
+    if ([value2 isEqualToString:@"none"]) {
+        
+        NSLog(@"%s准备以ID名为%@的城市代码向服务器getJSON",__func__,value1);
+        
+        NSString *http1 = @"https://api.heweather.com/x3/weather";
+        NSString *http2 = @"cityid=CN";
+        NSString *http3 = @"key=cdbb0dd11c3949c88248b270c58d737c";
+        
+        finalURL = [NSString stringWithFormat:@"%@?%@%@&%@",http1,http2,value1,http3];
+    }else{
+        NSLog(@"使用拼音城市名请求数据");
+        
+        NSString *http1 = @"https://api.heweather.com/x3/weather";
+        NSString *http2 = @"city=";
+        NSString *http3 = @"key=cdbb0dd11c3949c88248b270c58d737c";
+        
+        finalURL = [NSString stringWithFormat:@"%@?%@%@&%@",http1,http2,value2,http3];
 
+    }
     
-    NSURL *url = [NSURL URLWithString: httpURL];
+    NSURL *url = [NSURL URLWithString: finalURL];
      	NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 10];
      	[request setHTTPMethod: @"GET"];
      	[NSURLConnection sendAsynchronousRequest: request
@@ -100,4 +117,38 @@
                }
             }];
 }
+
+/**
+ *  这调用了另一个OpenWeatherMap的api只为了根据定位的经纬度获取城市名称的拼音 然后再交给和风接口，因为和风没有经纬度请求参数
+ *
+ *  @param lon
+ *  @param lat
+ */
++ (void)getNameOfCityWithlon:(NSString *)lon lat:(NSString *)lat{
+    
+
+    AFHTTPSessionManager *mgr = [AFHTTPSessionManager manager];
+    
+    NSString *url = [NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/forecast?"];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"APPID"] = @"1ab4d87f94a564708b2f164b4d344f83";
+    params[@"lat"] = lat;
+    params[@"lon"] = lon;
+    
+
+    [mgr GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSLog(@"来自%s----->%@",__func__,responseObject);
+        OpenWeatherModel *model = [OpenWeatherModel modelWithJSON:responseObject];
+        NSString * nameOfCity = model.cityInOpen.name;
+//        NSLog(@"啊啊啊啊啊----->%@",model.cityInOpen.name);
+        [Settings cityModifiedWithNameFromGPS:nameOfCity];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%s错误 ----->%@",__func__,error);
+    }];
+    
+    
+}
+
 @end

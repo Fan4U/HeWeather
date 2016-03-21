@@ -5,7 +5,7 @@ platform :ios, '8.0'
 
 pod ’SVProgressHUD’
 pod ‘YYKit’
-pod ‘CNPGridMenu’
+pod ‘AFNetworking’
 pod ‘Masonry’
 pod 'FLAnimatedImage'
 

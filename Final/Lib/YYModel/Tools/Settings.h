@@ -17,4 +17,7 @@
 //修改城市
 + (BOOL)CitySettingsWillModified:(NSString *)cityID;
 
+//修改城市 拼音来自国外
++ (void)cityModifiedWithNameFromGPS:(NSString *)cityNamePY;
+
 @end
