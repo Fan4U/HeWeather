@@ -9,7 +9,6 @@
 #import "Settings.h"
 #import "CodeModel.h"
 #import "WeatherData.h"
-
 //Macro
 #define plistPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"settings.plist"]
 
@@ -19,27 +18,6 @@
 
 @implementation Settings
 
-#pragma mark - 初始化模型
-//- (NSArray *)settings{
-//    
-//    if (!_settingsModel) {
-//        
-//        NSArray *prpts = [NSArray arrayWithContentsOfFile:plistPath];
-//        
-//        //        NSLog(@"本地设置-属性%@ ",prpts);
-//        
-//        NSMutableArray *setM = [NSMutableArray array];
-//        
-//        for (NSDictionary *dict in prpts) {
-//            CodeModel *pro = [CodeModel CodeModelWithDict:dict];
-//            [setM addObject:pro];
-//        }
-//        _settingsModel = setM;
-//        NSLog(@"_settings本地模型  %@  ",_settingsModel);
-//    }
-//    return _settingsModel;
-//}
-//
 #pragma mark - 初始化Plist
 + (void)initializePlist{
 //本地没有plist就新建
@@ -47,31 +25,24 @@
         NSLog(@"%s-----本地没有Plist",__func__);
         NSMutableDictionary *dictplist = [[NSMutableDictionary alloc ] init];
         
-        //定义第一个字典
+
         
-        NSMutableDictionary *plugin1 = [[NSMutableDictionary alloc]init];
+        NSMutableDictionary *settings = [[NSMutableDictionary alloc]init];
         
-        [plugin1 setObject:@"cityID" forKey:@"properties"];
+        [settings setObject:@"101010100" forKey:@"cityID"]; //城市ID 默认北京
         
-        [plugin1 setObject:@"101010100" forKey:@"settings"]; //默认北京 测试定位结果
+        [settings setObject:@"none" forKey:@"nameFromGPS"]; //本地城市拼音
         
-        [plugin1 setObject:@"none" forKey:@"nameFromGPS"]; //拼音
+        [settings setObject:@"1" forKey:@"isFirstLogin"];//是否首次登陆
         
-        [plugin1 setObject:@"1" forKey:@"isFirstLogin"];
+        [settings setObject:@"1" forKey:@"needSetWithGPS"];//是否需要GPS定位
         
-        //定义第二个字典
+        [settings setObject:@"0" forKey:@"isJSONSavedToLocal"];//是否需要GPS定位
         
-        //    NSMutableDictionary *plugin2 = [[NSMutableDictionary alloc]init];
-        //
-        //    [plugin2 setObject:@"properties" forKey:@"name1"];
-        //
-        //    [plugin2 setObject:@"content" forKey:@"name2"];
-        
+        [settings setObject:@"none" forKey:@"whatToDoAfterLoading"];//updateByRefresh, updateByID,
         //设置属性值
         
-        [dictplist setObject:plugin1 forKey:@"cityOfWeather"];
-        
-        //    [dictplist setObject:plugin2 forKey:@"初二班"];
+        [dictplist setObject:settings forKey:@"cityOfWeather"];
         
         //写入文件
         NSLog(@"%s---写入了新的值--新的字典为:%@",__func__,dictplist);
@@ -83,7 +54,7 @@
     return;
     
 }
-#pragma mark - 修改城市名称值
+
 /**
  *  判断是否要修改plist里的城市
  *
@@ -91,71 +62,135 @@
  *
  *  @return 是否要修改 为页面跳转提供依据
  */
-+ (BOOL)CitySettingsWillModified:(NSString *)cityID{
++ (BOOL)cityWillModifiedWithCityID:(NSString *)cityID{
   
-//    取出整个
     NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    NSString *localValueOfCityID = [cityOfWeather objectForKey:@"cityID"];
     
-//    拿出保存城市名称的那个字典
-    NSMutableDictionary *cityPY = [infolist objectForKey:@"cityOfWeather"];
-    
-//    取出其中settings的value并用参数pinyin来替换
-    NSString *value = [cityPY objectForKey:@"settings"];
-    NSLog(@"%s当前Plist中的城市ID----->%@",__func__,value);
-    
-//    如果递交过来的结果相同就返回
-    if ([value isEqualToString:cityID]) {
-        NSLog(@"%s----->收到的城市ID和Plist中的相同，返回",__func__);
+    if ([localValueOfCityID isEqualToString:cityID]) {
         return NO;
     }else{
-        NSLog(@"%s----->收到的城市ID和Plist中的不同，开始修改",__func__);
-        //    赋值
-        value = cityID;
+
+        localValueOfCityID = cityID;
+
+        [cityOfWeather setValue:localValueOfCityID forKey:@"cityID"];
+        [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
         
-        //  写回去
-        [cityPY setValue:value forKey:@"settings"];
-        [infolist setValue:cityPY forKey:@"cityOfWeather"];
         
-        //    保存
-        NSLog(@"%s---%@---保存Plist中新的城市ID",__func__,infolist);
         [infolist writeToFile:plistPath atomically:YES];
-        [WeatherData requestDataFromHEserver];
+        NSLog(@"保存完毕 cityID--->%@",cityID);
         return YES;
     }
 }
 
-+ (void)cityModifiedWithNameFromGPS:(NSString *)cityNamePY{
-    //    取出整个
+/**
+ *  修改拼音名称
+ *
+ *  @param cityNamePY 传进来的城市拼音
+ */
++ (void)cityWillModifiedWithNameFromGPS:(NSString *)cityNamePY{
+
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
+
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    
+    NSString *localValueOfNameFromGPS = [cityOfWeather objectForKey:@"nameFromGPS"];
+    
+    if ([localValueOfNameFromGPS isEqualToString:cityNamePY]) {
+        return; //定位结果和本地相同返回
+    }else{
+        
+        localValueOfNameFromGPS = cityNamePY;
+        
+        [cityOfWeather setValue:localValueOfNameFromGPS forKey:@"nameFromGPS"];
+        [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
+        [infolist writeToFile:plistPath atomically:YES];
+        NSLog(@"保存完毕 nameFromGPS--->%@",cityNamePY);
+        [WeatherData requestDataFromHEserverWithWhat:@"byName"];//交给获取方法，参数种类为城市名，
+    }
+}
+
+
++ (void)isFirstLoginWillChange:(NSString *)yesOrNo{
+    
     NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
     
-    //    拿出保存城市名称的那个字典
-    NSMutableDictionary *cityPY = [infolist objectForKey:@"cityOfWeather"];
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
     
-    //    取出其中settings的value并用参数pinyin来替换
-    NSString *value = [cityPY objectForKey:@"nameFromGPS"];
-    NSLog(@"%s当前Plist中的城市ID----->%@",__func__,value);
-    
-    //    如果递交过来的结果相同就返回
-    if ([value isEqualToString:cityNamePY]) {
-        NSLog(@"%s----->收到的城市ID和Plist中的相同，返回",__func__);
-    }else{
-        NSLog(@"%s----->收到的城市ID和Plist中的不同，开始修改",__func__);
-        //    赋值
-        value = cityNamePY;
-        
-        //  写回去
-        [cityPY setValue:value forKey:@"nameFromGPS"];
-        [infolist setValue:cityPY forKey:@"cityOfWeather"];
-        
-        //    保存
-        NSLog(@"%s---%@---保存Plist中新的城市ID",__func__,infolist);
-        [infolist writeToFile:plistPath atomically:YES];
-        [WeatherData requestDataFromHEserver];
-    }
-
+    [cityOfWeather setValue:yesOrNo forKey:@"isFirstLogin"];
+    [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
+    [infolist writeToFile:plistPath atomically:YES];
+    NSLog(@"保存完毕 isFirstLogin--->%@",yesOrNo);
 }
-//#pragma mark - 拿出城市拼音
-//- (NSString *)getCityPY{
-//    return self.settingsModel[0].
-//}
+
++ (BOOL)isFirstLogin{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    NSString *value = [cityOfWeather objectForKey:@"isFirstLogin"];
+    if ([value isEqualToString:@"1"]) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
+
+
++ (void)isLocalJSONSavedWillChange:(NSString *)yesOrNo{
+    
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
+    
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    
+    [cityOfWeather setValue:yesOrNo forKey:@"isJSONSavedToLocal"];
+    [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
+    [infolist writeToFile:plistPath atomically:YES];
+    NSLog(@"保存完毕 isJSONSavedToLocal--->%@",yesOrNo);
+    
+}
+
++ (void)isNeedSetWithGPSWillChange:(NSString *)yesOrNo{
+    
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
+    
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    
+    [cityOfWeather setValue:yesOrNo forKey:@"needSetWithGPS"];
+    [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
+    [infolist writeToFile:plistPath atomically:YES];
+    NSLog(@"保存完毕 needSetWithGPS--->%@",yesOrNo);
+    
+}
+
++ (BOOL)isNeedSetWithGPS{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    NSString *value = [cityOfWeather objectForKey:@"needSetWithGPS"];
+    if ([value isEqualToString:@"1"]) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
+
++ (void)setWhatToDoAfterLoading:(NSString *)action{
+    
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
+    
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    
+    [cityOfWeather setValue:action forKey:@"whatToDoAfterLoading"];
+    [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
+    [infolist writeToFile:plistPath atomically:YES];
+    NSLog(@"保存完毕 whatToDoAfterLoading--->%@",action);
+}
+
++ (NSString *)whatToDoAfterLoading{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    NSString *value = [cityOfWeather objectForKey:@"whatToDoAfterLoading"];
+    return value;
+}
 @end

@@ -13,8 +13,7 @@
 
 //citiesModel
 #import "CitiesModel.h"
-//#import "Province.h"
-//#import "Cities.h"
+
 //weather data
 #import "WeatherData.h"
 
@@ -53,6 +52,7 @@
 
     [self setupPickerView];
     [self setupBtns];
+
 }
 
 - (CitiesModel *)citiesModelInSel{
@@ -190,38 +190,30 @@
 #pragma mark - 点击方法
 - (void)okClick{
 
-        CitiesModel *model = [YYTool listToModel:codeList];
-        NSInteger proNum = [_locPicker selectedRowInComponent:0];  //左边的编号
-        NSInteger cityNum = [_locPicker selectedRowInComponent:1];  //右边的编号
-        
-        //通过编号去模型里找出那个城市的code string
-        NSString *selectedCity = [NSString stringWithFormat:@"%@",model.province[proNum].cities[cityNum].cityCode];
-        [Settings initializePlist];
-        [Settings CitySettingsWillModified:selectedCity];
-        NSLog(@"%s----->交由Setting判断是否需要修改城市ID",__func__);
-//        if ([Settings CitySettingsWillModified:selectedCity]) {
-            CATransition *transition = [CATransition animation];
-            transition.duration = 1.0f;
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            transition.type = @"cube";
-            transition.subtype = kCATransitionFromRight;
-            transition.delegate = self;
-            [self.navigationController.view.layer addAnimation:transition forKey:nil];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-//        }
-#warning 想法并没有错 只是问题出在重绘label以及轮播，待解决
-//        else
-//        {
-//            NSLog(@"%s----->所选城市与本地相同，返回",__func__);
-//            [self.navigationController popViewControllerAnimated:YES];
-//        }
+    CitiesModel *model = [YYTool listToModel:codeList];
+    NSInteger proNum = [_locPicker selectedRowInComponent:0];  //左边的编号
+    NSInteger cityNum = [_locPicker selectedRowInComponent:1];  //右边的编号
+    
+    //通过编号去模型里找出那个城市的code string
+    NSString *selectedCity = [NSString stringWithFormat:@"%@",model.province[proNum].cities[cityNum].cityCode];
+    [Settings initializePlist];
+    [Settings cityWillModifiedWithCityID:selectedCity];
 
-#warning 用工具转成拼音并去空格  成都会转化成chengdou 目前无解， 换新的api后采用城市id来保存
-//    NSString *result = [YYTool transform:selectedCity];
+    CATransition *transition = [CATransition animation];
+    transition.duration = 1.0f;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = @"cube";
+    transition.subtype = kCATransitionFromRight;
+    transition.delegate = self;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    [Settings setWhatToDoAfterLoading:@"updateByID"];
 
 }
 
 - (void)backClick{
+    
     CATransition *transition = [CATransition animation];
     transition.duration = 1.0f;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];

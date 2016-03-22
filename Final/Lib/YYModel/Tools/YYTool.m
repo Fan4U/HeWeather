@@ -23,17 +23,18 @@
 
 + (HeWeather *)jsonToModel{
     if ([[NSFileManager defaultManager] fileExistsAtPath:jsonPath]) {
+        NSLog(@"本地存在JSON，开始返回转模型");
         NSData *data = [[NSData alloc] initWithContentsOfFile:jsonPath];
         return [HeWeather modelWithJSON:data];
     }else{
-        [WeatherData requestDataFromHEserver];
+//        [WeatherData requestDataFromHEserverWithWhat:@"default"];
         return 0;
     }
-  
 }
 
 + (CitiesModel *)listToModel:(NSString *)file{
     if ([[NSFileManager defaultManager] fileExistsAtPath:codeList]) {
+        
         NSData *data = [[NSData alloc] initWithContentsOfFile:codeList];
         return [CitiesModel modelWithJSON:data];
     }else{

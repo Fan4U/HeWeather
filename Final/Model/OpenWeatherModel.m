@@ -15,8 +15,6 @@
 
 @end
 
-
-
 @implementation OpenWeatherModel
 + (NSDictionary *)modelCustomPropertyMapper{
     return @{@"cityInOpen" : @"city"};

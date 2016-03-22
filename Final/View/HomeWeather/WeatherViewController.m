@@ -20,6 +20,7 @@
 #import "YYTool.h"
 #import "YYKit.h"
 #import "UIView+Extension.h"
+#import "Settings.h"
 
 //other
 #import "RoundView.h"
@@ -28,8 +29,6 @@
 
 //JSON Path
 #define jsonPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"weather.json"]
-//plist
-#define plistPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"settings.plist"]
 
 // RGB颜色
 #define Color(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
@@ -76,14 +75,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.navigationController setNavigationBarHidden:YES];
-
     
 //    主界面
     [self setupImage];
-    [self setupWelcomLabel];
     [self becomeFirstResponder];
+}
+
+- (void)initInterface{
     
-//  swipe
+    NSLog(@"开始显示界面");
+    //labels
+    [self setupWelcomLabel];
+    [self setLabels];
+    [self SetupRoundView];
+    
+    //swipe
     self.left = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tapChangeLocBtn)];
     self.right = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(popForRefresh)];
     self.left.direction = UISwipeGestureRecognizerDirectionLeft;
@@ -91,25 +97,14 @@
     [self.view addGestureRecognizer:self.left];
     [self.view addGestureRecognizer:self.right];
     
-//  如果第一次运行定位权限获取慢了  提示用户
-    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc]initWithContentsOfFile:plistPath] mutableCopy];
-    NSMutableDictionary *city = [infolist objectForKey:@"cityOfWeather"];
-    NSString *isFirstLogin = [city objectForKey:@"isFirstLogin"];
+    //temp
+    [Settings isNeedSetWithGPSWillChange:@"0"];
+    [Settings isFirstLoginWillChange:@"0"];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if ([isFirstLogin isEqualToString:@"1"]) {
-            [SVProgressHUD showInfoWithStatus:@"第一次运行，如果城市显示错误时请摇动手机刷新。" maskType:SVProgressHUDMaskTypeClear];
-            [city setValue:@"0" forKey:@"isFirstLogin"];
-            [infolist setValue:city forKey:@"cityOfWeather"];
-            [infolist writeToFile:plistPath atomically:YES];
-//            [SVProgressHUD dismiss];
-        }
-    });
     
-
 }
 
--(HeWeather *)weatherDataInMain{
+- (HeWeather *)weatherDataInMain{
     if (!_weatherDataInMain) {
         _weatherDataInMain = [YYTool jsonToModel];
     }
@@ -120,13 +115,18 @@
     return YES;
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [self setLabels];
-    [self SetupRoundView];
-}
-
 - (void)viewDidAppear:(BOOL)animated{
     
+    if (![Settings isFirstLogin]) {
+        [self initInterface];
+    }else{
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initInterface) name:@"JSONCOMPLETE" object:nil];
+    }
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"JSONCOMPLETE" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -253,45 +253,6 @@
     [UIView animateWithDuration:1.2 animations:^{
         _condIcon.transform = CGAffineTransformMakeScale(1, 1);
     }];
-    
-#pragma mark - 选择城市Label
-    
-
-//    NSMutableAttributedString *text2 = [NSMutableAttributedString new];
-//    NSMutableAttributedString *changeCityStr = [[NSMutableAttributedString alloc] initWithString:@"aaa"];
-//    {
-//    changeCityStr.font = [UIFont boldSystemFontOfSize:15.0];
-//    changeCityStr.underlineColor = changeCityStr.color;
-//    changeCityStr.underlineStyle = NSUnderlineStyleSingle;
-//    
-//    [changeCityStr setTextHighlightRange:changeCityStr.rangeOfAll
-//                         color:[UIColor blackColor]
-//               backgroundColor:[UIColor clearColor]
-//                     tapAction:^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect) {
-//                         [self tapChangeLocBtn];
-//                     }];
-//    
-//    [text2 appendAttributedString:changeCityStr];
-//    [text2 appendAttributedString:[self padding]];
-//    }
-//    
-//    //init tmp YYlabel
-//    YYLabel *tmpChangeCityLabel = [[YYLabel alloc] init];
-//    tmpChangeCityLabel.textAlignment = NSTextAlignmentCenter;
-//    tmpChangeCityLabel.translatesAutoresizingMaskIntoConstraints = NO;
-//    tmpChangeCityLabel.attributedText = changeCityStr;
-//    
-//    _changeCity = tmpChangeCityLabel;
-//    
-//    [self.view addSubview:_changeCity];
-//
-//    [_changeCity mas_makeConstraints:^(MASConstraintMaker *make) {
-//        //设置size
-//        make.size.mas_equalTo(CGSizeMake(75, 55));
-//        make.right.equalTo(self.view).offset(-2);
-//        make.top.equalTo(self.view).offset(10);
-//    }];
-    
     
     
 #pragma mark - 7days Label
@@ -711,12 +672,11 @@
     transition.duration = 1.0f;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     transition.type = @"cube";
-    transition.subtype = kCATransitionFromRight;
+    transition.subtype = kCATransitionFromLeft;
     transition.delegate = self;
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
     
-//    [self playSoundofShake];
-//    [WeatherData requestDataFromHEserver];
+    [Settings setWhatToDoAfterLoading:@"updateByRefresh"];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

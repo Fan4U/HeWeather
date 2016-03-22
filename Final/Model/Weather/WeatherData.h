@@ -10,13 +10,13 @@
 @class HeWeather;
 @interface WeatherData : NSObject
 
-
+//判断
 + (void)loadWeatherData;
 
-//+ (void)requestData;
-//和风版本
-+ (void)requestDataFromHEserver;
-//从百度获取城市名字
+//从OpenWeather获取城市名字
 + (void)getNameOfCityWithlon:(NSString *)lon lat:(NSString *)lat;
+
+//getJSON
++ (void)requestDataFromHEserverWithWhat:(NSString *)requestType;
 
 @end

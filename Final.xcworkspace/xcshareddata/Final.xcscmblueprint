@@ -1,21 +1,28 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B3EA3C07BC9776D1C22E7053DD68043F97BC57A6",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "1BF82EDAE02E9CB1CF07FA80B6522EDB4C841E28",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "B3EA3C07BC9776D1C22E7053DD68043F97BC57A6" : 0,
-    "872DA8F0D4EF888E07F7E8E9ECBE4BB466D1827D" : 0
+    "872DA8F0D4EF888E07F7E8E9ECBE4BB466D1827D" : 0,
+    "1BF82EDAE02E9CB1CF07FA80B6522EDB4C841E28" : 0,
+    "B3EA3C07BC9776D1C22E7053DD68043F97BC57A6" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "0855959C-C2D0-4E9E-A08A-CDB36A0B0011",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "B3EA3C07BC9776D1C22E7053DD68043F97BC57A6" : "HeWeather\/",
-    "872DA8F0D4EF888E07F7E8E9ECBE4BB466D1827D" : ""
+    "872DA8F0D4EF888E07F7E8E9ECBE4BB466D1827D" : "",
+    "1BF82EDAE02E9CB1CF07FA80B6522EDB4C841E28" : "FinalToGit\/",
+    "B3EA3C07BC9776D1C22E7053DD68043F97BC57A6" : "HeWeather\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Final",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
   "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Final.xcworkspace",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Fan4U\/HeWeather.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1BF82EDAE02E9CB1CF07FA80B6522EDB4C841E28"
+    },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Fan4U\/iOS.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",

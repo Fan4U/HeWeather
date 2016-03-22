@@ -14,10 +14,26 @@
 //初始化
 + (void)initializePlist;
 
-//修改城市
-+ (BOOL)CitySettingsWillModified:(NSString *)cityID;
+//修改城市ID
++ (BOOL)cityWillModifiedWithCityID:(NSString *)cityID;
 
 //修改城市 拼音来自国外
-+ (void)cityModifiedWithNameFromGPS:(NSString *)cityNamePY;
++ (void)cityWillModifiedWithNameFromGPS:(NSString *)cityNamePY;
+
+//修改是否首次登陆
++ (void)isFirstLoginWillChange:(NSString *)yesOrNo;
++ (BOOL)isFirstLogin;
+
+//修改本地是否保存了Json
++ (void)isLocalJSONSavedWillChange:(NSString *)yesOrNo;
+
+//是否需要定位
++ (void)isNeedSetWithGPSWillChange:(NSString *)yesOrNo;
++ (BOOL)isNeedSetWithGPS;
+
+//跳转前判断
++ (NSString *)whatToDoAfterLoading;
++ (void)setWhatToDoAfterLoading:(NSString *)action;
+
 
 @end
