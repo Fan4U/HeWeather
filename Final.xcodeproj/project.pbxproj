@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		155C01B71C952D99002A2694 /* Foundation+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01AE1C952D98002A2694 /* Foundation+Log.m */; };
 		155C01BA1C952D99002A2694 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01B41C952D99002A2694 /* UIView+Extension.m */; };
-		155C01C31C95316E002A2694 /* ZFMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01C21C95316E002A2694 /* ZFMoreViewController.m */; };
 		155C020B1C9535BD002A2694 /* HeWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C01C91C9535BD002A2694 /* HeWeather.m */; };
 		155C02211C9535BE002A2694 /* WeatherData.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C020A1C9535BD002A2694 /* WeatherData.m */; };
 		155C02351C95375C002A2694 /* DateCompare.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C02321C95375C002A2694 /* DateCompare.m */; };
@@ -28,6 +27,9 @@
 		15C3741F1C95281000881255 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C3741E1C95281000881255 /* AppDelegate.m */; };
 		15C374221C95281000881255 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C374211C95281000881255 /* ViewController.m */; };
 		15C374271C95281100881255 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15C374261C95281100881255 /* Assets.xcassets */; };
+		15C685D51CA26B5500A36212 /* UINavigationController+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C685D41CA26B5500A36212 /* UINavigationController+Extension.m */; };
+		15C685DA1CA26ED100A36212 /* ZFNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C685D91CA26ED100A36212 /* ZFNavigationController.m */; };
+		15C685E01CA27BCA00A36212 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C685DF1CA27BCA00A36212 /* SettingsViewController.m */; };
 		15D538601C9FEAF3005817B2 /* OpenWeatherModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D5385F1C9FEAF3005817B2 /* OpenWeatherModel.m */; };
 		15D9FC0C1C9A6725005EF128 /* DailyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D9FC0B1C9A6725005EF128 /* DailyView.m */; };
 		15D9FC0E1C9A6745005EF128 /* DailyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15D9FC0D1C9A6745005EF128 /* DailyView.xib */; };
@@ -40,8 +42,6 @@
 		155C01AE1C952D98002A2694 /* Foundation+Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Foundation+Log.m"; sourceTree = "<group>"; };
 		155C01B31C952D99002A2694 /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
 		155C01B41C952D99002A2694 /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
-		155C01C11C95316E002A2694 /* ZFMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFMoreViewController.h; sourceTree = "<group>"; };
-		155C01C21C95316E002A2694 /* ZFMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFMoreViewController.m; sourceTree = "<group>"; };
 		155C01C81C9535BD002A2694 /* HeWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeWeather.h; sourceTree = "<group>"; };
 		155C01C91C9535BD002A2694 /* HeWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeWeather.m; sourceTree = "<group>"; };
 		155C02091C9535BD002A2694 /* WeatherData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherData.h; sourceTree = "<group>"; };
@@ -75,6 +75,12 @@
 		15C374211C95281000881255 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		15C374261C95281100881255 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		15C3742B1C95281100881255 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		15C685D31CA26B5500A36212 /* UINavigationController+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Extension.h"; sourceTree = "<group>"; };
+		15C685D41CA26B5500A36212 /* UINavigationController+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Extension.m"; sourceTree = "<group>"; };
+		15C685D81CA26ED100A36212 /* ZFNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFNavigationController.h; sourceTree = "<group>"; };
+		15C685D91CA26ED100A36212 /* ZFNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFNavigationController.m; sourceTree = "<group>"; };
+		15C685DE1CA27BCA00A36212 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		15C685DF1CA27BCA00A36212 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		15D5385E1C9FEAF3005817B2 /* OpenWeatherModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenWeatherModel.h; sourceTree = "<group>"; };
 		15D5385F1C9FEAF3005817B2 /* OpenWeatherModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenWeatherModel.m; sourceTree = "<group>"; };
 		15D9FC0A1C9A6725005EF128 /* DailyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailyView.h; sourceTree = "<group>"; };
@@ -103,6 +109,7 @@
 		155C01A51C952B21002A2694 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				15C685D71CA26ED100A36212 /* Navi */,
 				155C01C41C953242002A2694 /* HomeWeather */,
 				155C01C01C953161002A2694 /* More */,
 			);
@@ -115,6 +122,8 @@
 				155C01AE1C952D98002A2694 /* Foundation+Log.m */,
 				155C01B31C952D99002A2694 /* UIView+Extension.h */,
 				155C01B41C952D99002A2694 /* UIView+Extension.m */,
+				15C685D31CA26B5500A36212 /* UINavigationController+Extension.h */,
+				15C685D41CA26B5500A36212 /* UINavigationController+Extension.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -122,8 +131,8 @@
 		155C01C01C953161002A2694 /* More */ = {
 			isa = PBXGroup;
 			children = (
-				155C01C11C95316E002A2694 /* ZFMoreViewController.h */,
-				155C01C21C95316E002A2694 /* ZFMoreViewController.m */,
+				15C685DE1CA27BCA00A36212 /* SettingsViewController.h */,
+				15C685DF1CA27BCA00A36212 /* SettingsViewController.m */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -131,6 +140,7 @@
 		155C01C41C953242002A2694 /* HomeWeather */ = {
 			isa = PBXGroup;
 			children = (
+				15C685E11CA2A8B100A36212 /* CityPicker */,
 				15D9FC091C9A6707005EF128 /* 7day */,
 				155C02441C954553002A2694 /* WeatherViewController.h */,
 				155C02451C954553002A2694 /* WeatherViewController.m */,
@@ -286,6 +296,22 @@
 				15C3741B1C95281000881255 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		15C685D71CA26ED100A36212 /* Navi */ = {
+			isa = PBXGroup;
+			children = (
+				15C685D81CA26ED100A36212 /* ZFNavigationController.h */,
+				15C685D91CA26ED100A36212 /* ZFNavigationController.m */,
+			);
+			path = Navi;
+			sourceTree = "<group>";
+		};
+		15C685E11CA2A8B100A36212 /* CityPicker */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = CityPicker;
 			sourceTree = "<group>";
 		};
 		15D5385D1C9FEAC4005817B2 /* OpenWeatherModel */ = {
@@ -452,14 +478,15 @@
 				159124C71C9677970000B351 /* CitiesModel.m in Sources */,
 				157B40EE1C97B6E00063752A /* SelectLocController.m in Sources */,
 				155C02461C954553002A2694 /* WeatherViewController.m in Sources */,
+				15C685D51CA26B5500A36212 /* UINavigationController+Extension.m in Sources */,
 				155C01BA1C952D99002A2694 /* UIView+Extension.m in Sources */,
 				155C02211C9535BE002A2694 /* WeatherData.m in Sources */,
 				15D9FC111C9A74EF005EF128 /* FileOwner.m in Sources */,
 				157B41221C9818B00063752A /* Settings.m in Sources */,
 				155C02351C95375C002A2694 /* DateCompare.m in Sources */,
+				15C685DA1CA26ED100A36212 /* ZFNavigationController.m in Sources */,
 				155C024C1C9573EB002A2694 /* RoundView.m in Sources */,
 				15D9FC0C1C9A6725005EF128 /* DailyView.m in Sources */,
-				155C01C31C95316E002A2694 /* ZFMoreViewController.m in Sources */,
 				15C374221C95281000881255 /* ViewController.m in Sources */,
 				15D538601C9FEAF3005817B2 /* OpenWeatherModel.m in Sources */,
 				15C3741F1C95281000881255 /* AppDelegate.m in Sources */,
@@ -467,6 +494,7 @@
 				1566FC031C9912BA0039195F /* WeatherLoadingController.m in Sources */,
 				155C01B71C952D99002A2694 /* Foundation+Log.m in Sources */,
 				157B41261C9819A70063752A /* CodeModel.m in Sources */,
+				15C685E01CA27BCA00A36212 /* SettingsViewController.m in Sources */,
 				155C020B1C9535BD002A2694 /* HeWeather.m in Sources */,
 				155C02361C95375C002A2694 /* YYTool.m in Sources */,
 			);

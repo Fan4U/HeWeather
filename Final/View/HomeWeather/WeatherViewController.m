@@ -8,6 +8,7 @@
 
 #import "WeatherViewController.h"
 #import "SelectLocController.h"
+#import "SettingsViewController.h"
 //#import <AudioToolbox/AudioToolbox.h>
 
 //weather
@@ -74,15 +75,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.navigationController setNavigationBarHidden:YES];
     
 //    主界面
     [self setupImage];
     [self becomeFirstResponder];
+
 }
 
 - (void)initInterface{
     
+    _weatherDataInMain = [YYTool localJSONToModel];
     NSLog(@"开始显示界面");
     //labels
     [self setupWelcomLabel];
@@ -90,7 +92,7 @@
     [self SetupRoundView];
     
     //swipe
-    self.left = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tapChangeLocBtn)];
+    self.left = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(switchToSettings)];
     self.right = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(popForRefresh)];
     self.left.direction = UISwipeGestureRecognizerDirectionLeft;
     self.right.direction = UISwipeGestureRecognizerDirectionRight;
@@ -99,34 +101,41 @@
     
     //temp
     [Settings isNeedSetWithGPSWillChange:@"0"];
-    [Settings isFirstLoginWillChange:@"0"];
     
     
+    //如果第一次登陆 在这里写入plist
+    if([Settings isFirstLogin]){
+        NSString *cityName = [NSString stringWithFormat:@"%@",self.weatherDataInMain.weather[0].basic.city];
+        NSString *cityID   = [NSString stringWithFormat:@"%@",self.weatherDataInMain.weather[0].basic.cityID];
+        [Settings cityWillModifiedWithCityID:cityID andCityName:cityName];
+        
+    }
+
 }
 
-- (HeWeather *)weatherDataInMain{
-    if (!_weatherDataInMain) {
-        _weatherDataInMain = [YYTool jsonToModel];
-    }
-    return _weatherDataInMain;
-}
+//- (HeWeather *)weatherDataInMain{
+//    if (!_weatherDataInMain) {
+//        _weatherDataInMain = [YYTool localJSONToModel];
+//    }
+//    return _weatherDataInMain;
+//}
 
 - (BOOL)canBecomeFirstResponder{
     return YES;
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [self.navigationController setNavigationBarHidden:YES];
+    [self initInterface];
+
+}
+
 - (void)viewDidAppear:(BOOL)animated{
-    
-    if (![Settings isFirstLogin]) {
-        [self initInterface];
-    }else{
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initInterface) name:@"JSONCOMPLETE" object:nil];
-    }
-    
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"JSONCOMPLETE" object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"JSONCOMPLETE" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -641,19 +650,12 @@
     return pad;
 }
 
-#pragma mark - 点击切换选择城市
-- (void)tapChangeLocBtn{
+#pragma mark - 转向设置界面
+- (void)switchToSettings{
     
-    CATransition *transition = [CATransition animation];
-    transition.duration = 1.0f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = @"cube";
-    transition.subtype = kCATransitionFromRight;
-    transition.delegate = self;
-    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    SettingsViewController *settings = [[SettingsViewController alloc] init];
     
-    SelectLocController *select = [[SelectLocController alloc] init];
-    [self.navigationController pushViewController:select animated:YES];
+    [self.navigationController pushViewController:settings animated:YES];
 
 }
 
@@ -668,13 +670,6 @@
 }
 
 - (void)popForRefresh{
-    CATransition *transition = [CATransition animation];
-    transition.duration = 1.0f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = @"cube";
-    transition.subtype = kCATransitionFromLeft;
-    transition.delegate = self;
-    [self.navigationController.view.layer addAnimation:transition forKey:nil];
     
     [Settings setWhatToDoAfterLoading:@"updateByRefresh"];
     [self.navigationController popViewControllerAnimated:YES];

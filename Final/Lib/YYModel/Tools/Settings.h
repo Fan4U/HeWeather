@@ -14,8 +14,9 @@
 //初始化
 + (void)initializePlist;
 
-//修改城市ID
-+ (BOOL)cityWillModifiedWithCityID:(NSString *)cityID;
+//修改城市ID和名字 && 取城市中文名
++ (NSString *)cityName;
++ (BOOL)cityWillModifiedWithCityID:(NSString *)cityID andCityName:(NSString *)cityname;
 
 //修改城市 拼音来自国外
 + (void)cityWillModifiedWithNameFromGPS:(NSString *)cityNamePY;

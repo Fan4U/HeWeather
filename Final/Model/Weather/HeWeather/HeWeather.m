@@ -41,9 +41,7 @@
              @"basic" : [Basic class],
              @"nowWeather" : [NowWeather class],
              @"suggestion" : [Suggestion class],
-             @"aqi" : [Aqi class]
-             //不写status 不是分支 先记着
-             };
+             @"aqi" : [Aqi class]};
 }
 @end
 

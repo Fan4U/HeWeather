@@ -10,9 +10,9 @@
 @class HeWeather,CitiesModel;
 @interface YYTool : NSObject
 
-+ (HeWeather *)jsonToModel;
++ (HeWeather *)localJSONToModel;
 
 + (CitiesModel *)listToModel:(NSString *)file;
-//
-//+ (NSString *)transform:(NSString *)chinese;
+
++ (void)saveJSONToLocal:(NSString *)JSON;
 @end

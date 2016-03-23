@@ -27,7 +27,6 @@
 @interface WeatherLoadingController () <CLLocationManagerDelegate>
 
 @property (nonatomic, weak)YYLabel *loadingLabel;
-@property (nonatomic, weak)YYLabel *okLabel;
 @property (nonatomic, weak)FLAnimatedImageView *loadingImgV;
 
 @property (nonatomic, strong)CLLocationManager *locManager;
@@ -102,8 +101,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"NeedRefresh" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadNewCity" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 -(BOOL)prefersStatusBarHidden{
     return YES;
@@ -115,31 +113,21 @@
 }
 
 - (void)switch2Main{
-
     NSString *action = [Settings whatToDoAfterLoading];
-
-    if ([action isEqualToString:@"updateByRefresh"]) {
-        [WeatherData requestDataFromHEserverWithWhat:@"byRefresh"];
-    }else if ([action isEqualToString:@"updateByID"]){
-        [WeatherData requestDataFromHEserverWithWhat:@"byID"];
-    }
-    
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        WeatherViewController *weather = [[WeatherViewController alloc] init];
-        
-        CATransition *transition = [CATransition animation];
-        transition.duration = 1.0f;
-        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        transition.type = @"cube";
-        transition.subtype = kCATransitionFromRight;
-        transition.delegate = self;
-        [self.navigationController.view.layer addAnimation:transition forKey:nil];
-        [self.navigationController pushViewController: weather animated:YES];
-
-    });
-
-
+    if (![action isEqualToString:@"1st"]) {
+        if ([action isEqualToString:@"updateByRefresh"]) {
+            [WeatherData requestDataFromHEserverWithWhat:@"byRefresh"];
+        }else if([action isEqualToString:@"updateByID"]){
+            [WeatherData requestDataFromHEserverWithWhat:@"byID"];
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            WeatherViewController *weather = [[WeatherViewController alloc] init];
+            [self.navigationController pushViewController: weather animated:YES];
+        });
+    }else{
+        NSLog(@"第一次登陆 等待数据结果");
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(firstPush) name:@"JSON GET" object:nil];
+        }
 }
 
 - (NSAttributedString *)padding {
@@ -175,59 +163,6 @@
     [self.loadingImgV addSubview:_loadingLabel];
     
     
-#pragma mark - OK Label
-    
-    NSMutableAttributedString *textOK = [NSMutableAttributedString new];
-    
-    {
-        NSMutableAttributedString *two = [[NSMutableAttributedString alloc] initWithString:@"载入完成！"];
-        two.font = [UIFont boldSystemFontOfSize:20];
-        two.color = [UIColor whiteColor];
-        YYTextShadow *shadow = [YYTextShadow new];
-        shadow.color = [UIColor colorWithWhite:0.000 alpha:0.490];
-        shadow.offset = CGSizeMake(0, 1);
-        shadow.radius = 5;
-        two.textShadow = shadow;
-        [textOK appendAttributedString:two];
-        [textOK appendAttributedString:[self padding]];
-    }
-    
-    //init tmp YYlabel
-    YYLabel *tmpOkLabel = [[YYLabel alloc] initWithFrame:CGRectMake(120, 200, 180, 60)];
-    tmpOkLabel.textAlignment = NSTextAlignmentCenter;
-    tmpOkLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    tmpOkLabel.attributedText = textOK;
-    tmpOkLabel.alpha = 0;
-    
-    _okLabel = tmpOkLabel;
-    
-    [self.loadingImgV addSubview:_okLabel];
-    
-    [_okLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self.view);
-    }];
-    [_loadingLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_okLabel).offset(- self.view.frame.size.height / 6);
-        make.centerX.equalTo(_okLabel);
-    }];
-    
-#pragma mark - 动画部分
-
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.6 animations:^{
-                _loadingLabel.alpha = 0;
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.6 animations:^{
-                    _okLabel.alpha = 1;
-                } completion:^(BOOL finished) {
-                    //                imageView.userInteractionEnabled = YES;
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        _okLabel.alpha = 0; //得恢复成透明 不然下次回来是直接出现的
-                    });
-                }];
-            }];
-        });
-
 
 }
 
@@ -247,6 +182,11 @@
         NSLog(@"来自定位中的方法，开始跳转到主界面");
         [self switch2Main];
     });
+}
 
+- (void)firstPush{
+    NSLog(@"%s----->接到通知后跳转",__func__);
+    WeatherViewController *weather = [[WeatherViewController alloc] init];
+    [self.navigationController pushViewController:weather animated:YES];
 }
 @end

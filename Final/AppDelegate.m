@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "WeatherLoadingController.h"
+#import "ZFNavigationController.h"
 @interface AppDelegate ()
 
 @end
@@ -25,7 +26,7 @@
     self.window = [[UIWindow alloc] init];
     self.window.frame = [UIScreen mainScreen].bounds;
     self.window.backgroundColor = [UIColor brownColor];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[WeatherLoadingController alloc] init]];
+    ZFNavigationController *nav = [[ZFNavigationController alloc] initWithRootViewController:[[WeatherLoadingController alloc] init]];
     self.window.rootViewController = nav;
 
     [self.window makeKeyAndVisible];

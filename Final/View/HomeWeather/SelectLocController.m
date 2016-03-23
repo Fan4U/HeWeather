@@ -19,6 +19,7 @@
 
 #import "Masonry.h"
 #import "YYTool.h"
+#import "SVProgressHUD.h"
 
 //locdata
 #import "HeWeather.h"
@@ -47,12 +48,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bgSelect"]];
+    self.navigationController.navigationBarHidden = NO;
+    self.view.backgroundColor = [UIColor whiteColor];
 
     [self setupPickerView];
     [self setupBtns];
 
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 - (CitiesModel *)citiesModelInSel{
@@ -195,32 +200,35 @@
     NSInteger cityNum = [_locPicker selectedRowInComponent:1];  //右边的编号
     
     //通过编号去模型里找出那个城市的code string
-    NSString *selectedCity = [NSString stringWithFormat:@"%@",model.province[proNum].cities[cityNum].cityCode];
-    [Settings initializePlist];
-    [Settings cityWillModifiedWithCityID:selectedCity];
+    NSString *selectedCityCode = [NSString stringWithFormat:@"%@",model.province[proNum].cities[cityNum].cityCode];
+    NSString *selectedCityName = [NSString stringWithFormat:@"%@",model.province[proNum].cities[cityNum].cityName];
 
-    CATransition *transition = [CATransition animation];
-    transition.duration = 1.0f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = @"cube";
-    transition.subtype = kCATransitionFromRight;
-    transition.delegate = self;
-    [self.navigationController.view.layer addAnimation:transition forKey:nil];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [Settings cityWillModifiedWithCityID:selectedCityCode andCityName:selectedCityName];
     
     [Settings setWhatToDoAfterLoading:@"updateByID"];
-
+    
+    [SVProgressHUD showSuccessWithStatus:@"正在更新" maskType:SVProgressHUDMaskTypeGradient];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [WeatherData requestDataFromHEserverWithWhat:@"byID"];
+        });
+    });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.navigationController popViewControllerAnimated:YES];
+    });
+    
+    
 }
 
 - (void)backClick{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)popOK{
     
-    CATransition *transition = [CATransition animation];
-    transition.duration = 1.0f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = @"cube";
-    transition.subtype = kCATransitionFromRight;
-    transition.delegate = self;
-    [self.navigationController.view.layer addAnimation:transition forKey:nil];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+
 }
 @end

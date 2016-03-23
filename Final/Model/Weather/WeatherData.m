@@ -19,8 +19,6 @@
 #import "SVProgressHUD.h"
 #import "AFNetworking.h"
 
-//Json
-#define path [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"weather.json"]
 //Plist
 #define plistPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"settings.plist"]
 //baidu api keys
@@ -64,7 +62,7 @@
 
 + (void)requestDataFromHEserverWithWhat:(NSString *)requestType{
     
-
+    HeWeather *tmp = [YYTool localJSONToModel];
     
     NSString *finalURL = [[NSString alloc] init];
 
@@ -95,7 +93,7 @@
         finalURL = [NSString stringWithFormat:@"%@?%@%@&%@",http1,http2,valueOfCityID,http3];
         
     }else if([requestType isEqualToString:@"byRefresh"]){
-        HeWeather *tmp = [YYTool jsonToModel];
+        
         NSString *preCityID = tmp.weather[0].basic.cityID;
         
         NSLog(@"向服务器刷新JSON");
@@ -124,13 +122,11 @@
                }else {
                    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                    NSLog(@"%s----->%@",__func__,responseString);
-                   NSData *jsonData = [responseString dataUsingEncoding:NSUTF8StringEncoding];
-                   [jsonData writeToFile:path atomically:YES];
-                   NSLog(@"%s----->新的JSON数据已经写入",__func__);
                    
-                   [Settings isLocalJSONSavedWillChange:@"1"];
+                   [YYTool saveJSONToLocal:responseString];
                    
-                  [[NSNotificationCenter defaultCenter] postNotificationName:@"JSONCOMPLETE" object:@"yes"];
+                  [[NSNotificationCenter defaultCenter] postNotificationName:@"JSON GET" object:@"yes"];
+                   [[NSNotificationCenter defaultCenter] removeObserver:self];
 
                }
             }];

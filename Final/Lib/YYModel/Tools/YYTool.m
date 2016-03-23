@@ -11,6 +11,7 @@
 #import "HeWeather.h"
 #import "WeatherData.h"
 #import "CitiesModel.h"
+#import "Settings.h"
 
 #import <CoreLocation/CoreLocation.h>
 //codelist
@@ -21,7 +22,29 @@
 
 @implementation YYTool
 
-+ (HeWeather *)jsonToModel{
++ (void)saveJSONToLocal:(NSString *)JSON{
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:jsonPath]) {
+        NSData *jsonData = [JSON dataUsingEncoding:NSUTF8StringEncoding];
+        [jsonData writeToFile:jsonPath atomically:YES];
+        NSLog(@"YYTool--->保存新的JSON");
+
+    }else{
+        HeWeather *locModel = [YYTool localJSONToModel];
+        HeWeather *newModel = [HeWeather modelWithJSON:JSON];
+        
+        if ([locModel.weather[0].basic.update.loc isEqualToString:newModel.weather[0].basic.update.loc] && [locModel.weather[0].basic.cityID isEqualToString:newModel.weather[0].basic.cityID]) {
+            NSLog(@"本地数据已经是最新");
+            return;
+        }else{
+            NSData *jsonData = [JSON dataUsingEncoding:NSUTF8StringEncoding];
+            [jsonData writeToFile:jsonPath atomically:YES];
+            NSLog(@"本地JSON已更新");
+        }
+    }
+}
+
++ (HeWeather *)localJSONToModel{
     if ([[NSFileManager defaultManager] fileExistsAtPath:jsonPath]) {
         NSLog(@"本地存在JSON，开始返回转模型");
         NSData *data = [[NSData alloc] initWithContentsOfFile:jsonPath];
@@ -54,7 +77,6 @@
 //    
 //    NSLog(@"%@", strWithoutSpaces);
 //    return strWithoutSpaces;
-//    
 //    
 //}
 
