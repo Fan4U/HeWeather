@@ -53,8 +53,6 @@
 @property (nonatomic, weak)YYLabel *sunSetLabel;
 //on top left
 @property (nonatomic, weak)YYLabel *lastUpdTimeLabel;
-//on top right
-@property (nonatomic, weak)YYLabel *changeCity;
 //view of 7days
 @property (nonatomic, weak)DailyView *dailyView;
 //ImgV
@@ -75,16 +73,41 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
 //    主界面
     [self setupImage];
     [self becomeFirstResponder];
+}
 
+- (void)viewWillAppear:(BOOL)animated{
+    self.navigationController.navigationBarHidden = YES;
+    [self initInterface];
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:YES];
+    [self removeInterface];
+}
+
+- (void)removeInterface{
+    _weatherDataInMain = nil;
+    [_cityLabel removeFromSuperview];
+    [_tempLabel removeFromSuperview];
+    [_condIcon removeFromSuperview];
+    [_nowWindDir removeFromSuperview];
+    [_humidityLabel removeFromSuperview];
+    [_sunRiseLabel removeFromSuperview];
+    [_sunSetLabel removeFromSuperview];
+    [_ssIcon removeFromSuperview];
+    [_srIcon removeFromSuperview];
+    [_dailyView removeFromSuperview];
+    [_myRoundView removeFromSuperview];
 }
 
 - (void)initInterface{
-    
-    _weatherDataInMain = [YYTool localJSONToModel];
     NSLog(@"开始显示界面");
     //labels
     [self setupWelcomLabel];
@@ -113,29 +136,15 @@
 
 }
 
-//- (HeWeather *)weatherDataInMain{
-//    if (!_weatherDataInMain) {
-//        _weatherDataInMain = [YYTool localJSONToModel];
-//    }
-//    return _weatherDataInMain;
-//}
+- (HeWeather *)weatherDataInMain{
+    if (!_weatherDataInMain) {
+        _weatherDataInMain = [YYTool localJSONToModel];
+    }
+    return _weatherDataInMain;
+}
 
 - (BOOL)canBecomeFirstResponder{
     return YES;
-}
-
-- (void)viewWillAppear:(BOOL)animated{
-    [self.navigationController setNavigationBarHidden:YES];
-    [self initInterface];
-
-}
-
-- (void)viewDidAppear:(BOOL)animated{
-
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"JSONCOMPLETE" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -654,7 +663,6 @@
 - (void)switchToSettings{
     
     SettingsViewController *settings = [[SettingsViewController alloc] init];
-    
     [self.navigationController pushViewController:settings animated:YES];
 
 }
@@ -672,6 +680,7 @@
 - (void)popForRefresh{
     
     [Settings setWhatToDoAfterLoading:@"updateByRefresh"];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 

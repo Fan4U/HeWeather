@@ -36,8 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
+    self.navigationController.navigationBarHidden = YES;
 #pragma mark - 初始化GIF播放view
     FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:gifPath]];
     FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];

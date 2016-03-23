@@ -17,6 +17,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -26,13 +27,15 @@
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
     
+    self.navigationBarHidden = YES;
+    
     CATransition *transition = [CATransition animation];
     transition.duration = 0.9f;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     transition.type = @"cube";
     transition.subtype = kCATransitionFromRight;
     transition.delegate = self;
-    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [self.view.layer addAnimation:transition forKey:nil];
     
     [super pushViewController:viewController animated:YES];
 
@@ -47,24 +50,10 @@
     transition.type = @"cube";
     transition.subtype = kCATransitionFromLeft;
     transition.delegate = self;
-    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [self.view.layer addAnimation:transition forKey:nil];
     
     return [super popViewControllerAnimated:YES];
 }
 
-- (NSArray<UIViewController *> *)popToRootViewControllerAnimated:(BOOL)animated{
-    
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.9f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = @"cube";
-    transition.subtype = kCATransitionFromLeft;
-    transition.delegate = self;
-    [self.navigationController.view.layer addAnimation:transition forKey:nil];
-    
-    self.navigationBarHidden = YES;
-    
-    return [super popToRootViewControllerAnimated:YES];
-}
 
 @end

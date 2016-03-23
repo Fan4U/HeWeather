@@ -21,36 +21,20 @@
     [super viewDidLoad];
     
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    self.view.backgroundColor  = [UIColor grayColor];
+    self.navigationItem.title  = @"设置";
     self.navigationController.navigationBarHidden = NO;
     
-    self.navigationItem.title = @"设置";
-    
 //    tableView
-    UITableView *tmp = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
-    tmp.backgroundColor = [UIColor whiteColor];
-    self.tableView = tmp;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    UITableView *tmp           = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    tmp.backgroundColor        = [UIColor whiteColor];
+    self.tableView             = tmp;
+    self.tableView.delegate    = self;
+    self.tableView.dataSource  = self;
+    
     [self.view addSubview:_tableView];
-    
-    
-    UIButton* backViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    backViewBtn.frame = CGRectMake(0, 0, 17, 17);
-    UIImage *backHighLighted = [UIImage imageNamed:@"navigationbar_back_highlighted"];
-    UIImage *back            = [UIImage imageNamed:@"navigationbar_back"];
-    [backViewBtn setImage:backHighLighted forState:UIControlStateHighlighted];
-    [backViewBtn setImage:back forState:UIControlStateNormal];
-    [backViewBtn addTarget:self action:@selector(backView)forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backViewBtn];
-    self.navigationItem.leftBarButtonItem = backItem;
-}
 
-- (void)backView{
-    [self.navigationController popToRootViewControllerAnimated:YES];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -58,6 +42,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    [self.tableView reloadData];
     [super viewWillAppear:YES];
 
     
