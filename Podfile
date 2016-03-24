@@ -8,6 +8,7 @@ pod ‘YYKit’
 pod ‘AFNetworking’
 pod ‘Masonry’
 pod 'FLAnimatedImage'
+pod "FSLineChart"
 
 target 'Final' do
 

@@ -10,9 +10,12 @@
 #import "SelectLocController.h"
 #import "YYTool.h"
 #import "Settings.h"
-
+#import "Masonry.h"
+#define ScreenW [UIScreen mainScreen].bounds.size.width
+#define ScreenH [UIScreen mainScreen].bounds.size.height
 @interface SettingsViewController () <UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
+@property (nonatomic, weak)UISwitch *styleSwitch;
 @end
 
 @implementation SettingsViewController
@@ -57,10 +60,8 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0 || section == 2) {
-        return 3;
-    }
-    return 2;
+
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -71,17 +72,35 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
     }
-    // Configure the cell...
-    
-    cell.textLabel.text = [NSString stringWithFormat:@"第%ld组--第%ld行",(long)indexPath.section,(long)indexPath.row];
+    cell.textLabel.text = [NSString stringWithFormat:@"待定"];
     if (indexPath.section == 0 && indexPath.row == 0) {
         cell.textLabel.text = @"当前城市";
-        NSString *currentCityInLocal = [Settings cityName];
-        cell.detailTextLabel.text = currentCityInLocal;
+        cell.imageView.frame = CGRectMake(0, 5, 31, 31);
+        cell.imageView.contentMode = UIViewContentModeScaleToFill;
+        cell.imageView.image = [UIImage imageNamed:@"locIcon"];
+        cell.detailTextLabel.text = [Settings cityName];
     }
-    
     if (indexPath.section == 1 && indexPath.row == 0) {
-        cell.textLabel.text = @"本地化存储的四种方法";
+        cell.textLabel.text = @"显示图表";
+        cell.imageView.frame = CGRectMake(0, 5, 31, 31);
+        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        cell.imageView.image = [UIImage imageNamed:@"InMonth"];
+        cell.imageView.tintColor = [UIColor grayColor];
+        UISwitch *switcher = [[UISwitch alloc]init];//WithFrame:CGRectMake(ScreenW - 80 , 2, 60, 40)
+        if ([[Settings styleOfDailyView] isEqualToString:@"chart"]) {
+            [switcher setOn:YES animated:YES];
+        }else{
+            [switcher setOn:NO animated:YES];
+        }
+        [switcher addTarget:self action:@selector(switchStyleOfDailyView) forControlEvents:UIControlEventValueChanged];
+        _styleSwitch = switcher;
+        [cell.contentView addSubview:_styleSwitch];
+        [_styleSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(80, 40));
+            make.right.equalTo(cell.contentView).offset(25);
+            make.centerY.equalTo(cell.contentView).offset(4);
+        }];
+        
     }
     
     
@@ -101,11 +120,14 @@
         
     }
     
-    if (indexPath.section == 1 && indexPath.row == 0) {
-        
+}
+
+- (void)switchStyleOfDailyView{
+    if (_styleSwitch.isOn) {
+        [Settings styleOfDailyViewWillChange:@"chart"];
+    }else{
+        [Settings styleOfDailyViewWillChange:@"cond"];
     }
     
 }
-
-
 @end

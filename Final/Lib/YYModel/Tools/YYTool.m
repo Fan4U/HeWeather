@@ -65,21 +65,59 @@
     }
 }
 
-//
-//+ (NSString *)transform:(NSString *)chinese
-//{
-//    NSMutableString *pinyin = [chinese mutableCopy];
-//    CFStringTransform((__bridge CFMutableStringRef)pinyin, NULL, kCFStringTransformMandarinLatin, NO);
-//    CFStringTransform((__bridge CFMutableStringRef)pinyin, NULL, kCFStringTransformStripCombiningMarks, NO);
-//    
-//    NSString *str = [NSString stringWithString:pinyin];
-//    NSString *strWithoutSpaces = [str stringByReplacingOccurrencesOfString:@" " withString:@""];
-//    
-//    NSLog(@"%@", strWithoutSpaces);
-//    return strWithoutSpaces;
-//    
-//}
 
++ (NSArray *)getAverageTemperatureOfWeek:(HeWeather *)heweather{
+    //day1
+    int min1 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[0].tmpDLY.min] intValue];
+    int max1 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[0].tmpDLY.max] intValue];
+    NSString *avr1 = [NSString stringWithFormat:@"%d",(min1 + max1) / 2];
+    
+    //day2
+    int min2 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[1].tmpDLY.min] intValue];
+    int max2 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[1].tmpDLY.max] intValue];
+    NSString *avr2 = [NSString stringWithFormat:@"%d",(min2 + max2) / 2];
+    
+    //day3
+    int min3 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[2].tmpDLY.min] intValue];
+    int max3 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[2].tmpDLY.max] intValue];
+    NSString *avr3 = [NSString stringWithFormat:@"%d",(min3 + max3) / 2];
+    
+    //day4
+    int min4 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[3].tmpDLY.min] intValue];
+    int max4 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[3].tmpDLY.max] intValue];
+    NSString *avr4 = [NSString stringWithFormat:@"%d",(min4 + max4) / 2];
+    
+    //day5
+    int min5 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[4].tmpDLY.min] intValue];
+    int max5 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[4].tmpDLY.max] intValue];
+    NSString *avr5 = [NSString stringWithFormat:@"%d",(min5 + max5) / 2];
+    
+    //day6
+    int min6 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[5].tmpDLY.min] intValue];
+    int max6 = [[NSString stringWithFormat:@"%@",heweather.weather[0].dailyForecast[5].tmpDLY.max] intValue];
+    NSString *avr6 = [NSString stringWithFormat:@"%d",(min6 + max6) / 2];
+    
+    NSArray *avrTemperatureOfWeek = @[avr1,avr2,avr3,avr4,avr5,avr6];
+    
+    return avrTemperatureOfWeek;
+}
 
++ (NSArray *)getDateNameOfWeek:(HeWeather *)heWeather{
+    
+    NSMutableArray *tmpArr = [NSMutableArray array];
+    
+    for (int i = 0; i < 6; i++) {
+        NSString *titleDay;
+        NSString *tmpTitleDate = heWeather.weather[0].dailyForecast[i].dateDLY;
+        NSInteger isZero1 = (NSInteger)[tmpTitleDate characterAtIndex:5];
+        if (isZero1 != 0) {
+            titleDay = [tmpTitleDate substringFromIndex:6];
+        }else{
+            titleDay = [tmpTitleDate substringFromIndex:5];
+        }
+        [tmpArr addObject:titleDay];
+    }
+    return [NSArray arrayWithArray:tmpArr];
 
+}
 @end

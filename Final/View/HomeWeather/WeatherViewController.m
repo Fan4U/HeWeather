@@ -27,6 +27,7 @@
 #import "RoundView.h"
 #import "Masonry.h"
 #import "SVProgressHUD.h"
+#import "FSLineChart.h"
 
 //JSON Path
 #define jsonPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"weather.json"]
@@ -53,16 +54,18 @@
 @property (nonatomic, weak)YYLabel *sunSetLabel;
 //on top left
 @property (nonatomic, weak)YYLabel *lastUpdTimeLabel;
-//view of 7days
-@property (nonatomic, weak)DailyView *dailyView;
 //ImgV
 @property (nonatomic, weak)UIImageView *backgroundImage;
 @property (nonatomic, weak)UIImageView *srIcon;
 @property (nonatomic, weak)UIImageView *ssIcon;
 //weather data
 @property (nonatomic, strong)HeWeather *weatherDataInMain;
+//view of 7days
+@property (nonatomic, weak)DailyView *dailyView;
 //round View
 @property (nonatomic, weak)RoundView *myRoundView;
+//PNChat
+@property (nonatomic, strong)FSLineChart *avrTemperatureChart;
 //swipe
 @property (nonatomic, strong)UISwipeGestureRecognizer *left;
 @property (nonatomic, strong)UISwipeGestureRecognizer *right;
@@ -76,6 +79,8 @@
 //    主界面
     [self setupImage];
     [self becomeFirstResponder];
+    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -103,8 +108,12 @@
     [_sunSetLabel removeFromSuperview];
     [_ssIcon removeFromSuperview];
     [_srIcon removeFromSuperview];
-    [_dailyView removeFromSuperview];
     [_myRoundView removeFromSuperview];
+    if ([[Settings styleOfDailyView] isEqualToString:@"cond"]) {
+        [_dailyView removeFromSuperview];
+    }else{
+        [_avrTemperatureChart removeFromSuperview];
+    }
 }
 
 - (void)initInterface{
@@ -249,7 +258,7 @@
     [self.view addSubview:_cityLabel];
     
     [tmpCityLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(180, 60));//如果有四个字的城市 所以宽点
+        make.size.mas_equalTo(CGSizeMake(200, 60));//如果有四个字的城市
         make.centerX.equalTo(_tempLabel);//中心对齐
         make.centerY.equalTo(_tempLabel).with.offset(-60); //往上挪动50
     }];
@@ -273,80 +282,120 @@
     }];
     
     
-#pragma mark - 7days Label
+#pragma mark - DailyView (状态)
     
-    DailyView *tmpDailyView = [DailyView loadFromNib];
-    tmpDailyView.myWeather = self.weatherDataInMain;
-    
-    _dailyView = tmpDailyView;
-    _dailyView.translatesAutoresizingMaskIntoConstraints = NO;
+    if ([[Settings styleOfDailyView] isEqualToString:@"cond"]){
+        DailyView *tmpDailyView = [DailyView loadFromNib];
+        tmpDailyView.myWeather = self.weatherDataInMain;
+        
+        _dailyView = tmpDailyView;
+        _dailyView.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        [self.view addSubview:_dailyView];
+        
+        [_dailyView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(ScreenW, ScreenH / 4));
+            make.bottom.equalTo(self.view).offset(- 55);
+            make.left.equalTo(self.view);
+        }];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:1.2 animations:^{
+                    _dailyView.titleDay1.alpha = 1;
+                    _dailyView.minDay1.alpha = 1;
+                    _dailyView.maxDay1.alpha = 1;
+                    _dailyView.condDay1.alpha = 1;
+                }];
+            });
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:1.2 animations:^{
+                    _dailyView.titleDay2.alpha = 1;
+                    _dailyView.minDay2.alpha = 1;
+                    _dailyView.maxDay2.alpha = 1;
+                    _dailyView.condDay2.alpha = 1;
+                }];
+            });
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:1.2 animations:^{
+                    _dailyView.titleDay3.alpha = 1;
+                    _dailyView.minDay3.alpha = 1;
+                    _dailyView.maxDay3.alpha = 1;
+                    _dailyView.condDay3.alpha = 1;
+                }];
+            });
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:1.2 animations:^{
+                    _dailyView.titleDay4.alpha = 1;
+                    _dailyView.minDay4.alpha = 1;
+                    _dailyView.maxDay4.alpha = 1;
+                    _dailyView.condDay4.alpha = 1;
+                }];
+            });
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:1.2 animations:^{
+                    _dailyView.titleDay5.alpha = 1;
+                    _dailyView.minDay5.alpha = 1;
+                    _dailyView.maxDay5.alpha = 1;
+                    _dailyView.condDay5.alpha = 1;
+                }];
+            });
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.7 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:1.2 animations:^{
+                    _dailyView.titleDay6.alpha = 1;
+                    _dailyView.minDay6.alpha = 1;
+                    _dailyView.maxDay6.alpha = 1;
+                    _dailyView.condDay6.alpha = 1;
+                }];
+            });
+        });
 
-    [self.view addSubview:_dailyView];
-    
-    [_dailyView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(ScreenW, ScreenH / 4));
-        make.bottom.equalTo(self.view).offset(- 55);
-        make.left.equalTo(self.view);
-    }];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:1.2 animations:^{
-                _dailyView.titleDay1.alpha = 1;
-                _dailyView.minDay1.alpha = 1;
-                _dailyView.maxDay1.alpha = 1;
-                _dailyView.condDay1.alpha = 1;
-            }];
-        });
+    }else{
+#pragma mark - DailyView (平均温度图表)
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:1.2 animations:^{
-                _dailyView.titleDay2.alpha = 1;
-                _dailyView.minDay2.alpha = 1;
-                _dailyView.maxDay2.alpha = 1;
-                _dailyView.condDay2.alpha = 1;
-            }];
-        });
+        NSArray *labelsX = [YYTool getDateNameOfWeek:_weatherDataInMain];
+        NSArray *avrTempData = [YYTool getAverageTemperatureOfWeek:_weatherDataInMain];
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:1.2 animations:^{
-                _dailyView.titleDay3.alpha = 1;
-                _dailyView.minDay3.alpha = 1;
-                _dailyView.maxDay3.alpha = 1;
-                _dailyView.condDay3.alpha = 1;
-            }];
-        });
+        _avrTemperatureChart = [[FSLineChart alloc] initWithFrame:CGRectMake(ScreenW / 20, ScreenH * 2 / 3 - 35, ScreenW * 9 / 10, ScreenH / 3 - 25)];//
+        _avrTemperatureChart.backgroundColor = [UIColor clearColor];
+        [self.view addSubview:_avrTemperatureChart];
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:1.2 animations:^{
-                _dailyView.titleDay4.alpha = 1;
-                _dailyView.minDay4.alpha = 1;
-                _dailyView.maxDay4.alpha = 1;
-                _dailyView.condDay4.alpha = 1;
-            }];
-        });
+        // Setting up the line chart
+        _avrTemperatureChart.verticalGridStep = 5;
+        _avrTemperatureChart.horizontalGridStep = 6;
+        _avrTemperatureChart.fillColor = nil;
+        _avrTemperatureChart.displayDataPoint = YES;
+        _avrTemperatureChart.dataPointColor = [UIColor orangeColor];
+        _avrTemperatureChart.dataPointBackgroundColor = [UIColor whiteColor];
+        _avrTemperatureChart.dataPointRadius = 2;
+        _avrTemperatureChart.color = [[UIColor orangeColor] colorWithAlphaComponent:0.3];
+        _avrTemperatureChart.valueLabelPosition = ValueLabelLeftMirrored;
+        _avrTemperatureChart.alpha = 0;
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:1.2 animations:^{
-                _dailyView.titleDay5.alpha = 1;
-                _dailyView.minDay5.alpha = 1;
-                _dailyView.maxDay5.alpha = 1;
-                _dailyView.condDay5.alpha = 1;
-            }];
-        });
+        _avrTemperatureChart.labelForIndex = ^(NSUInteger item) {
+            return labelsX[item];
+        };
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.7 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:1.2 animations:^{
-                _dailyView.titleDay6.alpha = 1;
-                _dailyView.minDay6.alpha = 1;
-                _dailyView.maxDay6.alpha = 1;
-                _dailyView.condDay6.alpha = 1;
-            }];
-        });
-});
-    
+        _avrTemperatureChart.labelForValue = ^(CGFloat value) {
+            return [NSString stringWithFormat:@"%.0f°C", value];
+        };
+        
+        [_avrTemperatureChart setChartData:avrTempData];
+        
 
+        [UIView animateWithDuration:1.2 animations:^{
+            _avrTemperatureChart.alpha = 1;
+        } completion:^(BOOL finished) {
+        }];
 
+    }
+    
+    
 #pragma mark - 风向Label
     NSMutableAttributedString *textofNowWindDir = [NSMutableAttributedString new];
     {

@@ -36,5 +36,7 @@
 + (NSString *)whatToDoAfterLoading;
 + (void)setWhatToDoAfterLoading:(NSString *)action;
 
-
+//dailyView的风格
++ (void)styleOfDailyViewWillChange:(NSString *)style;
++ (NSString *)styleOfDailyView;
 @end

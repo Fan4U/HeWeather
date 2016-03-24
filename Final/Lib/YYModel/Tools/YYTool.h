@@ -15,4 +15,8 @@
 + (CitiesModel *)listToModel:(NSString *)file;
 
 + (void)saveJSONToLocal:(NSString *)JSON;
+
++ (NSArray *)getAverageTemperatureOfWeek:(HeWeather *)heweather;
+
++ (NSArray *)getDateNameOfWeek:(HeWeather *)heWeather;
 @end

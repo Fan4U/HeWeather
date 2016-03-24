@@ -49,7 +49,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = NO;
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = Color(248, 248, 248);
 
     [self setupPickerView];
     [self setupBtns];
@@ -207,7 +207,7 @@
     
     [Settings setWhatToDoAfterLoading:@"updateByID"];
     
-    [SVProgressHUD showSuccessWithStatus:@"正在更新" maskType:SVProgressHUDMaskTypeGradient];
+    [SVProgressHUD showSuccessWithStatus:@"正在更新"];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

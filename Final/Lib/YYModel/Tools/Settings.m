@@ -39,6 +39,8 @@
         [settings setObject:@"0" forKey:@"isJSONSavedToLocal"];//是否需要GPS定位
         
         [settings setObject:@"1st" forKey:@"whatToDoAfterLoading"];//updateByRefresh, updateByID, 1st 首次登陆
+        
+        [settings setObject:@"cond" forKey:@"styleOfDailyView"];//cond,chart
         //设置属性值
         
         [dictplist setObject:settings forKey:@"cityOfWeather"];
@@ -195,6 +197,24 @@
     NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
     NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
     NSString *value = [cityOfWeather objectForKey:@"whatToDoAfterLoading"];
+    return value;
+}
+
++ (void)styleOfDailyViewWillChange:(NSString *)style{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
+    
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    
+    [cityOfWeather setValue:style forKey:@"styleOfDailyView"];
+    [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
+    [infolist writeToFile:plistPath atomically:YES];
+    NSLog(@"保存完毕 styleOfDailyView--->%@",style);
+}
+
++ (NSString *)styleOfDailyView{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    NSString *value = [cityOfWeather objectForKey:@"styleOfDailyView"];
     return value;
 }
 @end

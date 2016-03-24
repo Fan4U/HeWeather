@@ -26,30 +26,20 @@
     return self;
 }
 
-#warning 待改进
+
 - (void)setMyWeather:(HeWeather *)myWeather{
      _myWeather = myWeather;
     
-
-
+    NSArray *dateOfWeekArr = [YYTool getDateNameOfWeek:myWeather];//取出日期名称数组
     CGFloat cellCenterX = [UIScreen mainScreen].bounds.size.width / 6;
     CGFloat cellCenterY = self.frame.size.height / 5;
+    
 #pragma mark - Day 1
-    //去掉年份“2016-”
-    NSString *tmpTitleDate1 = myWeather.weather[0].dailyForecast[0].dateDLY;
-    
-    NSInteger isZero1 = (NSInteger)[tmpTitleDate1 characterAtIndex:5];
-    
-    if (isZero1 != 0) {
-        self.titleDay1.text = [tmpTitleDate1 substringFromIndex:6];
-    }else{
-        self.titleDay1.text = [tmpTitleDate1 substringFromIndex:5];
-    }
+
+    self.titleDay1.text = dateOfWeekArr[0];
     self.titleDay1.font = [UIFont systemFontOfSize:13.0];
     self.titleDay1.alpha = 0;
     self.titleDay1.textAlignment = NSTextAlignmentCenter;
-//    self.titleDay1.backgroundColor = [UIColor greenColor];
-//    self.titleDay1.transform = CGAffineTransformMakeScale(1.6, 1.6);
 
     //拼接度数
     NSString *tmpMin1 = [NSString stringWithFormat:@"%@°",myWeather.weather[0].dailyForecast[0].tmpDLY.min];
@@ -73,16 +63,7 @@
     
     
 #pragma mark - Day 2
-    //去掉年份“2016-”
-    NSString *tmpTitleDate2 = myWeather.weather[0].dailyForecast[1].dateDLY;
-    
-    NSInteger isZero2 = (NSInteger)[tmpTitleDate2 characterAtIndex:5];
-    
-    if (isZero2 != 0) {
-        self.titleDay2.text = [tmpTitleDate2 substringFromIndex:6];
-    }else{
-        self.titleDay2.text = [tmpTitleDate2 substringFromIndex:5];
-    }
+    self.titleDay2.text = dateOfWeekArr[1];
     self.titleDay2.font = [UIFont systemFontOfSize:13.0];
     self.titleDay2.alpha = 0;
     self.titleDay2.textAlignment = NSTextAlignmentCenter;
@@ -104,16 +85,7 @@
     self.condDay2.contentMode = UIViewContentModeScaleAspectFit;
     
 #pragma mark - Day 3
-    //去掉年份“2016-”
-    NSString *tmpTitleDate3 = myWeather.weather[0].dailyForecast[2].dateDLY;
-    
-    NSInteger isZero3 = (NSInteger)[tmpTitleDate3 characterAtIndex:5];
-    
-    if (isZero3 != 0) {
-        self.titleDay3.text = [tmpTitleDate3 substringFromIndex:6];
-    }else{
-        self.titleDay3.text = [tmpTitleDate3 substringFromIndex:5];
-    }
+    self.titleDay3.text = dateOfWeekArr[2];
     self.titleDay3.font = [UIFont systemFontOfSize:13.0];
     self.titleDay3.alpha = 0;
     self.titleDay3.textAlignment = NSTextAlignmentCenter;
@@ -136,21 +108,8 @@
     self.condDay3.contentMode = UIViewContentModeScaleAspectFit;
     
 #pragma mark - Day 4
-    //去掉年份“2016-” 智能判断月份 把-改成月 后面加上日，
-    NSString *tmpTitleDate4 = myWeather.weather[0].dailyForecast[3].dateDLY;
     
-//    NSString *replaceTmpTitleDate4 = [tmpTitleDate4 stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-//    NSString *resultTmpTitleDate4 = [replaceTmpTitleDate4 stringByAppendingString:@"日"];
-    
-    NSInteger isZero4 = (NSInteger)[tmpTitleDate4 characterAtIndex:5];
-    
-    if (isZero4 != 0) {
-        NSLog(@"%s----->zero = 0",__func__);
-        self.titleDay4.text = [tmpTitleDate4 substringFromIndex:6];
-    }else{
-        NSLog(@"%s----->zero = 1",__func__);
-        self.titleDay4.text = [tmpTitleDate4 substringFromIndex:5];
-    }
+    self.titleDay4.text = dateOfWeekArr[3];
     self.titleDay4.font = [UIFont systemFontOfSize:13.0];
     self.titleDay4.alpha = 0;
     self.titleDay4.textAlignment = NSTextAlignmentCenter;
@@ -173,16 +132,8 @@
     self.condDay4.contentMode = UIViewContentModeScaleAspectFit;
     
 #pragma mark - Day 5
-    //去掉年份“2016-”
-    NSString *tmpTitleDate5 = myWeather.weather[0].dailyForecast[4].dateDLY;
     
-    NSInteger isZero5 = (NSInteger)[tmpTitleDate5 characterAtIndex:5];
-    
-    if (isZero5 != 0) {
-        self.titleDay5.text = [tmpTitleDate5 substringFromIndex:6];
-    }else{
-        self.titleDay5.text = [tmpTitleDate5 substringFromIndex:5];
-    }
+    self.titleDay5.text = dateOfWeekArr[4];
     self.titleDay5.font = [UIFont systemFontOfSize:13.0];
     self.titleDay5.alpha = 0;
     self.titleDay5.textAlignment = NSTextAlignmentCenter;
@@ -204,16 +155,8 @@
     self.condDay5.contentMode = UIViewContentModeScaleAspectFit;
     
 #pragma mark - Day 6
-    //去掉年份“2016-”
-    NSString *tmpTitleDate6 = myWeather.weather[0].dailyForecast[5].dateDLY;
-    
-    NSInteger isZero6 = (NSInteger)[tmpTitleDate3 characterAtIndex:5];
-    
-    if (isZero6 != 0) {
-        self.titleDay6.text = [tmpTitleDate6 substringFromIndex:6];
-    }else{
-        self.titleDay6.text = [tmpTitleDate6 substringFromIndex:5];
-    }
+
+    self.titleDay6.text = dateOfWeekArr[5];
     self.titleDay6.font = [UIFont systemFontOfSize:13.0];
     self.titleDay6.alpha = 0;
     self.titleDay6.textAlignment = NSTextAlignmentCenter;
