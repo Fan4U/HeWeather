@@ -76,11 +76,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    主界面
     [self setupImage];
     [self becomeFirstResponder];
-    
-
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -136,12 +133,12 @@
     
     
     //如果第一次登陆 在这里写入plist
-    if([Settings isFirstLogin]){
+    
         NSString *cityName = [NSString stringWithFormat:@"%@",self.weatherDataInMain.weather[0].basic.city];
         NSString *cityID   = [NSString stringWithFormat:@"%@",self.weatherDataInMain.weather[0].basic.cityID];
         [Settings cityWillModifiedWithCityID:cityID andCityName:cityName];
-        
-    }
+
+        [Settings setWhatToDoAfterLoading:@"byRefresh"];
 
 }
 
@@ -721,7 +718,6 @@
 {
     //如果是摇手机类型的事件
     if(motion == UIEventSubtypeMotionShake){
-        NSLog(@"%s----->摇一摇",__func__);
         [self popForRefresh];
     }
 }

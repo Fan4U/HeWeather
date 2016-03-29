@@ -44,9 +44,6 @@
     //    拿出保存城市名称的那个字典
     NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
     
-    //    取出其中settings的value并用参数pinyin来替换
-//    NSString *valueOfCityID = [cityOfWeather objectForKey:@"cityID"];
-//    NSString *valueOfNameFromGPS = [cityOfWeather objectForKey:@"nameFromGPS"];
     NSString *valueOfIsFirstLogin = [cityOfWeather objectForKey:@"isFirstLogin"];
     if ([valueOfIsFirstLogin isEqualToString:@"1"]) 
 
@@ -62,7 +59,7 @@
 
 + (void)requestDataFromHEserverWithWhat:(NSString *)requestType{
     
-    HeWeather *tmp = [YYTool localJSONToModel];
+    
     
     NSString *finalURL = [[NSString alloc] init];
 
@@ -94,6 +91,7 @@
         
     }else if([requestType isEqualToString:@"byRefresh"]){
         
+        HeWeather *tmp = [YYTool localJSONToModel];
         NSString *preCityID = tmp.weather[0].basic.cityID;
         
         NSLog(@"向服务器刷新JSON");
@@ -125,7 +123,9 @@
                    
                    [YYTool saveJSONToLocal:responseString];
                    
-                  [[NSNotificationCenter defaultCenter] postNotificationName:@"JSON GET" object:@"yes"];
+                   if ([Settings isFirstLogin]) {
+                       [[NSNotificationCenter defaultCenter] postNotificationName:@"JSON GET" object:@"yes"];
+                   }
                    [[NSNotificationCenter defaultCenter] removeObserver:self];
 
                }

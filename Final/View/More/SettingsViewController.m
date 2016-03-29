@@ -16,6 +16,7 @@
 @interface SettingsViewController () <UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, weak)UISwitch *styleSwitch;
+@property (nonatomic, weak)UISwitch *animationSwitch;
 @end
 
 @implementation SettingsViewController
@@ -24,7 +25,7 @@
     [super viewDidLoad];
     
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-    self.view.backgroundColor  = [UIColor grayColor];
+    self.tableView.backgroundColor  = [UIColor grayColor];
     self.navigationItem.title  = @"设置";
     self.navigationController.navigationBarHidden = NO;
     
@@ -61,6 +62,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
+    if (section == 1) {
+        return 2;
+    }
     return 1;
 }
 
@@ -73,13 +77,15 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
     }
     cell.textLabel.text = [NSString stringWithFormat:@"待定"];
+    
+    //选择城市
     if (indexPath.section == 0 && indexPath.row == 0) {
         cell.textLabel.text = @"当前城市";
         cell.imageView.frame = CGRectMake(0, 5, 31, 31);
-        cell.imageView.contentMode = UIViewContentModeScaleToFill;
-        cell.imageView.image = [UIImage imageNamed:@"locIcon"];
         cell.detailTextLabel.text = [Settings cityName];
     }
+    
+    //图表
     if (indexPath.section == 1 && indexPath.row == 0) {
         cell.textLabel.text = @"显示图表";
         cell.imageView.frame = CGRectMake(0, 5, 31, 31);
@@ -98,14 +104,32 @@
         [_styleSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(80, 40));
             make.right.equalTo(cell.contentView).offset(25);
-            make.centerY.equalTo(cell.contentView).offset(4);
+            make.centerY.equalTo(cell.contentView).offset(5);
         }];
-        
     }
     
+    //动画
+    if (indexPath.section == 1 && indexPath.row == 1) {
+        cell.textLabel.text = @"动画切换";
+        UISwitch *switcher = [[UISwitch alloc]init];//WithFrame:CGRectMake(ScreenW - 80 , 2, 60, 40)
+        if ([Settings useCoreAnimation]) {
+            [switcher setOn:YES animated:YES];
+        }else{
+            [switcher setOn:NO animated:YES];
+        }
+        [switcher addTarget:self action:@selector(switchWhetherUsingCoreAnimation) forControlEvents:UIControlEventValueChanged];
+        _animationSwitch = switcher;
+        [cell.contentView addSubview:_animationSwitch];
+        [_animationSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(80, 40));
+            make.right.equalTo(cell.contentView).offset(25);
+            make.centerY.equalTo(cell.contentView).offset(5);
+        }];
+    }
     
     return cell;
 }
+
 
 
 
@@ -128,6 +152,13 @@
     }else{
         [Settings styleOfDailyViewWillChange:@"cond"];
     }
-    
+}
+
+- (void)switchWhetherUsingCoreAnimation{
+    if (_animationSwitch.isOn) {
+        [Settings useCoreAnimationWillChange:@"1"];
+    }else{
+        [Settings useCoreAnimationWillChange:@"0"];
+    }
 }
 @end

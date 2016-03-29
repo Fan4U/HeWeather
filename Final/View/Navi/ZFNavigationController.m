@@ -7,7 +7,7 @@
 //
 
 #import "ZFNavigationController.h"
-
+#import "Settings.h"
 @interface ZFNavigationController ()
 
 @end
@@ -29,14 +29,16 @@
     
     self.navigationBarHidden = YES;
     
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.9f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = @"cube";
-    transition.subtype = kCATransitionFromRight;
-    transition.delegate = self;
-    [self.view.layer addAnimation:transition forKey:nil];
-    
+    if ([Settings useCoreAnimation]) {
+        CATransition *transition = [CATransition animation];
+        transition.duration = 0.9f;
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        transition.type = @"cube";
+        transition.subtype = kCATransitionFromRight;
+        transition.delegate = self;
+        [self.view.layer addAnimation:transition forKey:nil];
+    }
+
     [super pushViewController:viewController animated:YES];
 
 }
@@ -44,13 +46,15 @@
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated{
     
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.9f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = @"cube";
-    transition.subtype = kCATransitionFromLeft;
-    transition.delegate = self;
-    [self.view.layer addAnimation:transition forKey:nil];
+    if ([Settings useCoreAnimation]) {
+        CATransition *transition = [CATransition animation];
+        transition.duration = 0.9f;
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        transition.type = @"cube";
+        transition.subtype = kCATransitionFromLeft;
+        transition.delegate = self;
+        [self.view.layer addAnimation:transition forKey:nil];
+    }
     
     return [super popViewControllerAnimated:YES];
 }

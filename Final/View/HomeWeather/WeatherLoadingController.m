@@ -15,6 +15,8 @@
 #import "FLAnimatedImage.h"
 #import "YYKit.h"
 #import "Masonry.h"
+#import "SVProgressHUD.h"
+
 //GIF Path
 #define gifPath [[NSBundle mainBundle] pathForResource:@"loading.gif" ofType:nil]
 
@@ -61,32 +63,78 @@
     if ([valueOfIsFirstLogin isEqualToString:@"1"] || ([valueOfIsFirstLogin isEqualToString:@"0"] && [valueOfNeedSetGPS isEqualToString:@"1"])){
         NSLog(@"第一次登陆，或者设置了需要定位");
         [self initCLLocationManager];//开始定位--获得经纬度--发送给api换拼音--发送给setting来保存到plist
+        [Settings isFirstLoginWillChange:@"0"];
 
     }else{
         NSLog(@"直接读取本地的数据并跳转");
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"JSONCOMPLETE" object:@"yes" userInfo:nil];
-        NSLog(@"已发送通知");
-        });
+
+        [self switch2Main];
     }
 }
 
 - (void)initCLLocationManager{
+    /*
+    ALAuthorizationStatusNotDetermined NS_ENUM_DEPRECATED_IOS(6_0, 9_0) = 0, // User has not yet made a choice with regards to this application
+    ALAuthorizationStatusRestricted NS_ENUM_DEPRECATED_IOS(6_0, 9_0),        // This application is not authorized to access photo data.
+    // The user cannot change this application’s status, possibly due to active restrictions
+    //  such as parental controls being in place.
+    ALAuthorizationStatusDenied NS_ENUM_DEPRECATED_IOS(6_0, 9_0),            // User has explicitly denied this application access to photos data.
+    ALAuthorizationStatusAuthorized NS_ENUM_DEPRECATED_IOS(6_0, 9_0)        // User has authorized this application to access photos data.
+     */
+
     
     _locManager = [[CLLocationManager alloc] init];
-    _locManager.delegate = self;
+    
     
     //iOS 8
-    if ([_locManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [_locManager requestWhenInUseAuthorization];
+    if (![CLLocationManager locationServicesEnabled]) {//如果没有开启系统定位服务
+        NSLog(@"定位服务没有开启");
+        [_locManager requestWhenInUseAuthorization];//那就申请alert让用户去设置开启
+        
+        //10s后检查如果没有授权则请求用户授权
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){
+                NSLog(@"向用户申请定位权限");
+                [_locManager requestWhenInUseAuthorization];
+            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse) {
+                    _locManager.delegate = self;
+                    _locManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+                    [_locManager startUpdatingLocation];
+                    
+                }else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied){
+                    [SVProgressHUD setAnimationDuration:1.0];
+                    [SVProgressHUD showErrorWithStatus:@"未能获取定位"];
+                    [Settings setWhatToDoAfterLoading:@"updateByID"];
+                    
+                    [self switch2Main];
+                }
+            });
+        });
+    }else{//如果系统定位服务已经开启
+            //判断是否得到权限 没有的话申请
+        NSLog(@"系统定位已开启，将申请定位权限");
+            if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){
+                [_locManager requestWhenInUseAuthorization];
+            }
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                //4s后判断用户是否授权使用定位
+                if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse){
+                    _locManager.delegate = self;
+                    _locManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+                    
+                    [_locManager startUpdatingLocation];
+                }else{//如果没有允许
+                    NSLog(@"用户没有通过定位权限");
+                    [Settings setWhatToDoAfterLoading:@"updateByID"];
+                    [self switch2Main];
+                }
+            });
     }
-    if ([_locManager respondsToSelector:@selector(requestAlwaysAuthorization)])
-        [_locManager requestAlwaysAuthorization];
-    
-    [_locManager startUpdatingLocation];
-    
-
-   }
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [self loadingLabels];
@@ -184,7 +232,7 @@
 }
 
 - (void)firstPush{
-    NSLog(@"%s----->接到通知后跳转",__func__);
+//    [SVProgressHUD showErrorWithStatus:@"获取定位信息失败，请在设置中选择城市"];
     WeatherViewController *weather = [[WeatherViewController alloc] init];
     [self.navigationController pushViewController:weather animated:YES];
 }

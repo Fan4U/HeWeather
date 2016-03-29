@@ -36,11 +36,12 @@
         
         [settings setObject:@"1" forKey:@"needSetWithGPS"];//是否需要GPS定位
         
-        [settings setObject:@"0" forKey:@"isJSONSavedToLocal"];//是否需要GPS定位
-        
         [settings setObject:@"1st" forKey:@"whatToDoAfterLoading"];//updateByRefresh, updateByID, 1st 首次登陆
         
         [settings setObject:@"cond" forKey:@"styleOfDailyView"];//cond,chart
+        
+        [settings setObject:@"1" forKey:@"useCoreAnimation"];//是否使用动画
+        
         //设置属性值
         
         [dictplist setObject:settings forKey:@"cityOfWeather"];
@@ -56,6 +57,7 @@
     
 }
 
+#pragma mark - 城市ID
 /**
  *  判断是否要修改plist里的城市
  *
@@ -65,14 +67,16 @@
  */
 + (BOOL)cityWillModifiedWithCityID:(NSString *)cityID andCityName:(NSString *)cityname{
   
+
     NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
     NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
     NSString *localValueOfCityID = [cityOfWeather objectForKey:@"cityID"];
-    [Settings isFirstLoginWillChange:@"0"];
+
     
     if ([localValueOfCityID isEqualToString:cityID]) {
         return NO;
     }else{
+        NSLog(@"将把ID:%@ 城市名:%@ 写入配置文件",cityID,cityname);
         [cityOfWeather setValue:cityID forKey:@"cityID"];
         [cityOfWeather setValue:cityname forKey:@"cityName"];//顺便把ID对应的中文城市名也保存到plist
         [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
@@ -83,18 +87,14 @@
     }
 
 }
-
+#pragma mark - 城市名称
 + (NSString *)cityName{
     NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
     NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
     return [cityOfWeather objectForKey:@"cityName"];
 }
 
-/**
- *  修改拼音名称
- *
- *  @param cityNamePY 传进来的城市拼音
- */
+
 + (void)cityWillModifiedWithNameFromGPS:(NSString *)cityNamePY{
 
     NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
@@ -117,7 +117,7 @@
     }
 }
 
-
+#pragma mark - 是否首次登陆
 + (void)isFirstLoginWillChange:(NSString *)yesOrNo{
     
     NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
@@ -141,21 +141,7 @@
     }
 }
 
-
-
-+ (void)isLocalJSONSavedWillChange:(NSString *)yesOrNo{
-    
-    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
-    
-    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
-    
-    [cityOfWeather setValue:yesOrNo forKey:@"isJSONSavedToLocal"];
-    [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
-    [infolist writeToFile:plistPath atomically:YES];
-    NSLog(@"Settings--->isJSONSavedToLocal--->%@",yesOrNo);
-    
-}
-
+#pragma mark - 是否要定位
 + (void)isNeedSetWithGPSWillChange:(NSString *)yesOrNo{
     
     NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
@@ -180,7 +166,7 @@
     }
 }
 
-
+#pragma mark - 跳转逻辑
 + (void)setWhatToDoAfterLoading:(NSString *)action{
     
     NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
@@ -200,6 +186,7 @@
     return value;
 }
 
+#pragma mark - dailyView界面
 + (void)styleOfDailyViewWillChange:(NSString *)style{
     NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
     
@@ -216,5 +203,27 @@
     NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
     NSString *value = [cityOfWeather objectForKey:@"styleOfDailyView"];
     return value;
+}
+
+#pragma mark - 是否开启动画
++ (BOOL)useCoreAnimation{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    NSString *value = [cityOfWeather objectForKey:@"useCoreAnimation"];
+    if ([value isEqualToString:@"1"]) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
++ (void)useCoreAnimationWillChange:(NSString *)yesOrNo{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
+    
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    
+    [cityOfWeather setValue:yesOrNo forKey:@"useCoreAnimation"];
+    [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
+    [infolist writeToFile:plistPath atomically:YES];
 }
 @end

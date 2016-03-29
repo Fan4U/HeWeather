@@ -25,9 +25,6 @@
 + (void)isFirstLoginWillChange:(NSString *)yesOrNo;
 + (BOOL)isFirstLogin;
 
-//修改本地是否保存了Json
-+ (void)isLocalJSONSavedWillChange:(NSString *)yesOrNo;
-
 //是否需要定位
 + (void)isNeedSetWithGPSWillChange:(NSString *)yesOrNo;
 + (BOOL)isNeedSetWithGPS;
@@ -39,4 +36,8 @@
 //dailyView的风格
 + (void)styleOfDailyViewWillChange:(NSString *)style;
 + (NSString *)styleOfDailyView;
+
+//是否开启动画
++ (void)useCoreAnimationWillChange:(NSString *)yesOrNo;
++ (BOOL)useCoreAnimation;
 @end

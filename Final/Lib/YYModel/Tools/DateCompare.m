@@ -43,7 +43,7 @@
 
     
     if (ITime > 10800.0 && ITime <= 86400.0) {
-        return [NSString stringWithFormat:@"%d",iMinutes];//返回的数值大于3 也就是超过3小时候 dataWeather就会选择刷新数据
+        return [NSString stringWithFormat:@"%d",iMinutes];//返回的数值大于3 也就是超过3小时候 就会选择刷新数据
     }else{
         return [NSString stringWithFormat:@"%ld",(long)iDays];//这个是纪念日与现在差了多少天
     }
