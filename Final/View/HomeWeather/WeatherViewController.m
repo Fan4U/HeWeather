@@ -92,6 +92,7 @@
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:YES];
     [self removeInterface];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)removeInterface{
@@ -724,8 +725,12 @@
 - (void)popForRefresh{
     
     [Settings setWhatToDoAfterLoading:@"updateByRefresh"];
-    
+
+    NSLog(@"发送通知“RefreshWeatherOfCurrentCity”");
     [self.navigationController popViewControllerAnimated:YES];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"RefreshWeatherOfCurrentCity" object:nil];
+    });
 }
 
 //不播放声音

@@ -60,6 +60,7 @@
     NSString *valueOfNeedSetGPS = [cityOfWeather objectForKey:@"needSetWithGPS"];
     NSString *valueOfIsFirstLogin = [cityOfWeather objectForKey:@"isFirstLogin"];
 
+    //首次登陆
     if ([valueOfIsFirstLogin isEqualToString:@"1"] || ([valueOfIsFirstLogin isEqualToString:@"0"] && [valueOfNeedSetGPS isEqualToString:@"1"])){
         NSLog(@"第一次登陆，或者设置了需要定位");
         [self initCLLocationManager];//开始定位--获得经纬度--发送给api换拼音--发送给setting来保存到plist
@@ -67,7 +68,6 @@
 
     }else{
         NSLog(@"直接读取本地的数据并跳转");
-
         [self switch2Main];
     }
 }
@@ -138,6 +138,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [self loadingLabels];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switch2Main) name:@"RefreshWeatherOfCurrentCity" object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

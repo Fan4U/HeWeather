@@ -11,12 +11,19 @@
 #import "YYTool.h"
 #import "Settings.h"
 #import "Masonry.h"
+
 #define ScreenW [UIScreen mainScreen].bounds.size.width
 #define ScreenH [UIScreen mainScreen].bounds.size.height
+#define Blue [UIColor colorWithRed:20/255.0 green:155/255.0 blue:213/255.0 alpha:1.0]
+
 @interface SettingsViewController () <UITableViewDataSource,UITableViewDelegate>
+
 @property (nonatomic, strong)UITableView *tableView;
-@property (nonatomic, weak)UISwitch *styleSwitch;
+
+@property (nonatomic, weak)UISegmentedControl *styleSwitch;
 @property (nonatomic, weak)UISwitch *animationSwitch;
+@property (nonatomic, weak)UISwitch *warnOfRainSwitch;
+//城市选择
 @property (nonatomic, strong)SelectLocController *selectCityPicker;
 @end
 
@@ -101,24 +108,25 @@
     
     //图表
     if (indexPath.section == 1 && indexPath.row == 0) {
-        cell.textLabel.text = @"显示图表";
-//        cell.imageView.frame = CGRectMake(0, 5, 31, 31);
-//        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
-//        cell.imageView.image = [UIImage imageNamed:@"InMonth"];
-//        cell.imageView.tintColor = [UIColor grayColor];
-        UISwitch *switcher = [[UISwitch alloc]init];//WithFrame:CGRectMake(ScreenW - 80 , 2, 60, 40)
-        if ([[Settings styleOfDailyView] isEqualToString:@"chart"]) {
-            [switcher setOn:YES animated:YES];
+        cell.textLabel.text = @"一周视图";
+        NSArray *styleArray = @[@"高低温度",@"平均气温"];
+        UISegmentedControl *segOfDailyViewStyle = [[UISegmentedControl alloc] initWithItems:styleArray];
+        if ([[Settings styleOfDailyView] isEqualToString:@"cond"]) {
+            segOfDailyViewStyle.selectedSegmentIndex = 0;
         }else{
-            [switcher setOn:NO animated:YES];
+            segOfDailyViewStyle.selectedSegmentIndex = 1;
         }
-        [switcher addTarget:self action:@selector(switchWhichStyleOfDailyView) forControlEvents:UIControlEventValueChanged];
-        _styleSwitch = switcher;
+//        segOfDailyViewStyle.frame = CGRectMake(ScreenW - 130, 5, 120, 30);
+        segOfDailyViewStyle.tintColor = Blue;
+        [segOfDailyViewStyle addTarget:self action:@selector(switchWhichStyleOfDailyView:) forControlEvents:UIControlEventValueChanged];
+
+        _styleSwitch = segOfDailyViewStyle;
+        
         [cell.contentView addSubview:_styleSwitch];
         [_styleSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(80, 40));
-            make.right.equalTo(cell.contentView).offset(25);
-            make.centerY.equalTo(cell.contentView).offset(5);
+            make.size.mas_equalTo(CGSizeMake(120, 30));
+            make.right.equalTo(cell.contentView).offset(- 10);
+            make.centerY.equalTo(cell.contentView);
         }];
     }
     
@@ -126,6 +134,7 @@
     if (indexPath.section == 1 && indexPath.row == 1) {
         cell.textLabel.text = @"动画切换";
         UISwitch *switcher = [[UISwitch alloc]init];//WithFrame:CGRectMake(ScreenW - 80 , 2, 60, 40)
+        switcher.onTintColor = Blue;
         if ([Settings useCoreAnimation]) {
             [switcher setOn:YES animated:YES];
         }else{
@@ -145,15 +154,17 @@
     if (indexPath.section == 1 && indexPath.row == 2) {
         cell.textLabel.text = @"雨天提醒";
         UISwitch *switcher = [[UISwitch alloc]init];//WithFrame:CGRectMake(ScreenW - 80 , 2, 60, 40)
+        switcher.onTintColor = Blue;
         if ([Settings warnOfRain]) {
             [switcher setOn:YES animated:YES];
         }else{
             [switcher setOn:NO animated:YES];
         }
-        [switcher addTarget:self action:@selector(switchWhetherUsingCoreAnimation) forControlEvents:UIControlEventValueChanged];
-        _animationSwitch = switcher;
-        [cell.contentView addSubview:_animationSwitch];
-        [_animationSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+        [switcher addTarget:self action:@selector(switchWhetherWarnOfRain) forControlEvents:UIControlEventValueChanged];
+        _warnOfRainSwitch = switcher;
+
+        [cell.contentView addSubview:_warnOfRainSwitch];
+        [_warnOfRainSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(80, 40));
             make.right.equalTo(cell.contentView).offset(25);
             make.centerY.equalTo(cell.contentView).offset(5);
@@ -183,11 +194,17 @@
     }
 }
 
-- (void)switchWhichStyleOfDailyView{
-    if (_styleSwitch.isOn) {
-        [Settings styleOfDailyViewWillChange:@"chart"];
-    }else{
-        [Settings styleOfDailyViewWillChange:@"cond"];
+- (void)switchWhichStyleOfDailyView:(UISegmentedControl *)segmentControl{
+    NSInteger styleID = segmentControl.selectedSegmentIndex;
+    switch (styleID) {
+        case 0:
+            [Settings styleOfDailyViewWillChange:@"cond"];
+            break;
+        case 1:
+            [Settings styleOfDailyViewWillChange:@"chart"];
+            break;
+        default:
+            break;
     }
 }
 
@@ -200,7 +217,7 @@
 }
 
 - (void)switchWhetherWarnOfRain{
-    if (_animationSwitch.isOn) {
+    if (_warnOfRainSwitch.isOn) {
         [Settings warnOfRainWillChange:@"1"];
     }else{
         [Settings warnOfRainWillChange:@"0"];
