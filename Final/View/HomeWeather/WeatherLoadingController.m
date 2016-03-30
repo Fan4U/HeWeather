@@ -138,13 +138,6 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [self loadingLabels];
-    
-    BOOL isNeedGPS = [Settings isNeedSetWithGPS];
-    if (!isNeedGPS) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self switch2Main];
-        });
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -163,8 +156,10 @@
     NSString *action = [Settings whatToDoAfterLoading];
     if (![action isEqualToString:@"1st"]) {
         if ([action isEqualToString:@"updateByRefresh"]) {
+            NSLog(@"byRefresh");
             [WeatherData requestDataFromHEserverWithWhat:@"byRefresh"];
         }else if([action isEqualToString:@"updateByID"]){
+            NSLog(@"byId");
             [WeatherData requestDataFromHEserverWithWhat:@"byID"];
         }
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

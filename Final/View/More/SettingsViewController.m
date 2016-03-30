@@ -63,7 +63,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
     if (section == 1) {
-        return 2;
+        return 3;
     }
     return 1;
 }
@@ -75,6 +75,8 @@
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
+    }else{
+        [cell removeFromSuperview];
     }
     cell.textLabel.text = [NSString stringWithFormat:@"待定"];
     
@@ -88,17 +90,17 @@
     //图表
     if (indexPath.section == 1 && indexPath.row == 0) {
         cell.textLabel.text = @"显示图表";
-        cell.imageView.frame = CGRectMake(0, 5, 31, 31);
-        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
-        cell.imageView.image = [UIImage imageNamed:@"InMonth"];
-        cell.imageView.tintColor = [UIColor grayColor];
+//        cell.imageView.frame = CGRectMake(0, 5, 31, 31);
+//        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+//        cell.imageView.image = [UIImage imageNamed:@"InMonth"];
+//        cell.imageView.tintColor = [UIColor grayColor];
         UISwitch *switcher = [[UISwitch alloc]init];//WithFrame:CGRectMake(ScreenW - 80 , 2, 60, 40)
         if ([[Settings styleOfDailyView] isEqualToString:@"chart"]) {
             [switcher setOn:YES animated:YES];
         }else{
             [switcher setOn:NO animated:YES];
         }
-        [switcher addTarget:self action:@selector(switchStyleOfDailyView) forControlEvents:UIControlEventValueChanged];
+        [switcher addTarget:self action:@selector(switchWhichStyleOfDailyView) forControlEvents:UIControlEventValueChanged];
         _styleSwitch = switcher;
         [cell.contentView addSubview:_styleSwitch];
         [_styleSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -113,6 +115,25 @@
         cell.textLabel.text = @"动画切换";
         UISwitch *switcher = [[UISwitch alloc]init];//WithFrame:CGRectMake(ScreenW - 80 , 2, 60, 40)
         if ([Settings useCoreAnimation]) {
+            [switcher setOn:YES animated:YES];
+        }else{
+            [switcher setOn:NO animated:YES];
+        }
+        [switcher addTarget:self action:@selector(switchWhetherUsingCoreAnimation) forControlEvents:UIControlEventValueChanged];
+        _animationSwitch = switcher;
+        [cell.contentView addSubview:_animationSwitch];
+        [_animationSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(80, 40));
+            make.right.equalTo(cell.contentView).offset(25);
+            make.centerY.equalTo(cell.contentView).offset(5);
+        }];
+    }
+    
+    //雨天提醒
+    if (indexPath.section == 1 && indexPath.row == 2) {
+        cell.textLabel.text = @"雨天提醒";
+        UISwitch *switcher = [[UISwitch alloc]init];//WithFrame:CGRectMake(ScreenW - 80 , 2, 60, 40)
+        if ([Settings warnOfRain]) {
             [switcher setOn:YES animated:YES];
         }else{
             [switcher setOn:NO animated:YES];
@@ -146,7 +167,7 @@
     
 }
 
-- (void)switchStyleOfDailyView{
+- (void)switchWhichStyleOfDailyView{
     if (_styleSwitch.isOn) {
         [Settings styleOfDailyViewWillChange:@"chart"];
     }else{
@@ -161,4 +182,13 @@
         [Settings useCoreAnimationWillChange:@"0"];
     }
 }
+
+- (void)switchWhetherWarnOfRain{
+    if (_animationSwitch.isOn) {
+        [Settings warnOfRainWillChange:@"1"];
+    }else{
+        [Settings warnOfRainWillChange:@"0"];
+    }
+}
+
 @end

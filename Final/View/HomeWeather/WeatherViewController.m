@@ -106,6 +106,8 @@
     [_ssIcon removeFromSuperview];
     [_srIcon removeFromSuperview];
     [_myRoundView removeFromSuperview];
+    [_lastUpdTimeLabel removeFromSuperview];
+    
     if ([[Settings styleOfDailyView] isEqualToString:@"cond"]) {
         [_dailyView removeFromSuperview];
     }else{

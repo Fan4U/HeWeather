@@ -48,6 +48,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = @"选择城市";
     self.navigationController.navigationBarHidden = NO;
     self.view.backgroundColor = Color(248, 248, 248);
 
@@ -74,7 +75,7 @@
 }
 
 -(BOOL)prefersStatusBarHidden{
-    return YES;
+    return NO;
 }
 
 #pragma mark - Picker

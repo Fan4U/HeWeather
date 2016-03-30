@@ -40,12 +40,13 @@
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
     
-    if ([[UIApplication sharedApplication] currentUserNotificationSettings].types != UIUserNotificationTypeNone) {
-        [self addLocalNotification];
-    }else{
-        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil]];
-    }
-    
+    if ([Settings warnOfRain]) {
+        if ([[UIApplication sharedApplication] currentUserNotificationSettings].types != UIUserNotificationTypeNone) {
+            [self addLocalNotification];
+        }else{
+            [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil]];
+        }
+    } 
     return YES;
 }
 

@@ -40,4 +40,8 @@
 //是否开启动画
 + (void)useCoreAnimationWillChange:(NSString *)yesOrNo;
 + (BOOL)useCoreAnimation;
+
+//是否开启雨天提醒
++ (void)warnOfRainWillChange:(NSString *)yesOrNo;
++ (BOOL)warnOfRain;
 @end

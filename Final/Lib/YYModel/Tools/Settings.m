@@ -42,6 +42,8 @@
         
         [settings setObject:@"1" forKey:@"useCoreAnimation"];//是否使用动画
         
+        [settings setObject:@"1" forKey:@"warnOfRain"];//是否使用动画
+        
         //设置属性值
         
         [dictplist setObject:settings forKey:@"cityOfWeather"];
@@ -223,6 +225,28 @@
     NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
     
     [cityOfWeather setValue:yesOrNo forKey:@"useCoreAnimation"];
+    [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
+    [infolist writeToFile:plistPath atomically:YES];
+}
+
+#pragma mark - 是否提醒下雨
++ (BOOL)warnOfRain{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    NSString *value = [cityOfWeather objectForKey:@"warnOfRain"];
+    if ([value isEqualToString:@"1"]) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
++ (void)warnOfRainWillChange:(NSString *)yesOrNo{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
+    
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    
+    [cityOfWeather setValue:yesOrNo forKey:@"warnOfRain"];
     [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
     [infolist writeToFile:plistPath atomically:YES];
 }
