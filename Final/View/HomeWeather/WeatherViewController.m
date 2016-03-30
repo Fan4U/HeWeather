@@ -639,7 +639,7 @@
         round.delegate = self;
         
         NSMutableArray *tmpTitles = [NSMutableArray array];
-        //  有多少加多少
+         // 有多少加多少 待寻找更好的办法
         if (self.weatherDataInMain.weather[0].suggestion.drsg.txt != nil) {
             [tmpTitles addObject:self.weatherDataInMain.weather[0].suggestion.drsg.txt];
         }
@@ -661,6 +661,8 @@
         if (self.weatherDataInMain.weather[0].suggestion.uv.txt != nil) {
             [tmpTitles addObject:self.weatherDataInMain.weather[0].suggestion.uv.txt];
         }
+
+        
         NSArray *titlesArr = [tmpTitles copy];
         
         round.titles = titlesArr;
@@ -683,16 +685,11 @@
     
     
 }
-#pragma mark - roundView
+#pragma mark - roundView Click
 - (void)RoundViewClickTheTitleWithNumber:(NSInteger)number
 {
     NSLog(@"我点击了第%ld个标签",(long)number);
-    if (number == 0) {
-    }
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:@"%@",self.myRoundView.titles[0]]];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [SVProgressHUD dismiss];
-    });
+
 }
 
 - (BOOL)prefersStatusBarHidden{

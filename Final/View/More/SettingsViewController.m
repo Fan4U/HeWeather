@@ -76,7 +76,9 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
     }else{
-        [cell removeFromSuperview];
+        while ([cell.contentView.subviews lastObject] != nil) {
+            [(UIView*)[cell.contentView.subviews lastObject] removeFromSuperview];  //删除并进行重新分配
+        }
     }
     cell.textLabel.text = [NSString stringWithFormat:@"待定"];
     
@@ -147,6 +149,8 @@
             make.centerY.equalTo(cell.contentView).offset(5);
         }];
     }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }
