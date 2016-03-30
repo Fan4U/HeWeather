@@ -17,6 +17,7 @@
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, weak)UISwitch *styleSwitch;
 @property (nonatomic, weak)UISwitch *animationSwitch;
+@property (nonatomic, strong)SelectLocController *selectCityPicker;
 @end
 
 @implementation SettingsViewController
@@ -37,7 +38,11 @@
     self.tableView.dataSource  = self;
     
     [self.view addSubview:_tableView];
-
+    
+    SelectLocController *select = [[SelectLocController alloc] init];
+    select.view.frame = CGRectMake(0, ScreenH, ScreenW, ScreenH / 2);
+    _selectCityPicker = select;
+    [self.view addSubview:_selectCityPicker.view];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,13 +53,18 @@
 - (void)viewWillAppear:(BOOL)animated{
     [self.tableView reloadData];
     [super viewWillAppear:YES];
-
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadData)
+                                                 name:@"NeedReload" object:nil];
 }
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:YES];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"NeedReload"
+                                                  object:nil];
+}
 #pragma mark - Table view data source
-
-
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 3;
@@ -164,11 +174,13 @@
     
     
     if (indexPath.section == 0 && indexPath.row == 0) {
-        SelectLocController *select = [[SelectLocController alloc] init];
-        [self.navigationController pushViewController:select animated:YES];
         
+        [UIView animateWithDuration:1.0 animations:^{
+            _selectCityPicker.view.transform = CGAffineTransformMakeTranslation(0, - ScreenH / 2);
+        } completion:^(BOOL finished) {
+        
+        }];
     }
-    
 }
 
 - (void)switchWhichStyleOfDailyView{
@@ -195,4 +207,7 @@
     }
 }
 
+- (void)reloadData{
+    [self.tableView reloadData];
+}
 @end

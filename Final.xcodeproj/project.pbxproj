@@ -31,6 +31,7 @@
 		15C685DA1CA26ED100A36212 /* ZFNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C685D91CA26ED100A36212 /* ZFNavigationController.m */; };
 		15C685E01CA27BCA00A36212 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C685DF1CA27BCA00A36212 /* SettingsViewController.m */; };
 		15D538601C9FEAF3005817B2 /* OpenWeatherModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D5385F1C9FEAF3005817B2 /* OpenWeatherModel.m */; };
+		15D9EE0F1CAC3C4C003A02BF /* testView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D9EE0E1CAC3C4C003A02BF /* testView.m */; };
 		15D9FC0C1C9A6725005EF128 /* DailyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D9FC0B1C9A6725005EF128 /* DailyView.m */; };
 		15D9FC0E1C9A6745005EF128 /* DailyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15D9FC0D1C9A6745005EF128 /* DailyView.xib */; };
 		15D9FC111C9A74EF005EF128 /* FileOwner.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D9FC101C9A74EF005EF128 /* FileOwner.m */; };
@@ -83,6 +84,8 @@
 		15C685DF1CA27BCA00A36212 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		15D5385E1C9FEAF3005817B2 /* OpenWeatherModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenWeatherModel.h; sourceTree = "<group>"; };
 		15D5385F1C9FEAF3005817B2 /* OpenWeatherModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenWeatherModel.m; sourceTree = "<group>"; };
+		15D9EE0D1CAC3C4C003A02BF /* testView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testView.h; sourceTree = "<group>"; };
+		15D9EE0E1CAC3C4C003A02BF /* testView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = testView.m; sourceTree = "<group>"; };
 		15D9FC0A1C9A6725005EF128 /* DailyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailyView.h; sourceTree = "<group>"; };
 		15D9FC0B1C9A6725005EF128 /* DailyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DailyView.m; sourceTree = "<group>"; };
 		15D9FC0D1C9A6745005EF128 /* DailyView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DailyView.xib; sourceTree = "<group>"; };
@@ -133,6 +136,8 @@
 			children = (
 				15C685DE1CA27BCA00A36212 /* SettingsViewController.h */,
 				15C685DF1CA27BCA00A36212 /* SettingsViewController.m */,
+				15D9EE0D1CAC3C4C003A02BF /* testView.h */,
+				15D9EE0E1CAC3C4C003A02BF /* testView.m */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -488,6 +493,7 @@
 				155C024C1C9573EB002A2694 /* RoundView.m in Sources */,
 				15D9FC0C1C9A6725005EF128 /* DailyView.m in Sources */,
 				15C374221C95281000881255 /* ViewController.m in Sources */,
+				15D9EE0F1CAC3C4C003A02BF /* testView.m in Sources */,
 				15D538601C9FEAF3005817B2 /* OpenWeatherModel.m in Sources */,
 				15C3741F1C95281000881255 /* AppDelegate.m in Sources */,
 				15C3741C1C95281000881255 /* main.m in Sources */,

@@ -9,6 +9,7 @@
 #import "SelectLocController.h"
 #import "Settings.h"
 #import "WeatherLoadingController.h"
+#import "SettingsViewController.h"
 
 
 //citiesModel
@@ -29,6 +30,8 @@
 // RGB颜色
 #define Color(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
 
+#define ScreenW [UIScreen mainScreen].bounds.size.width
+#define ScreenH [UIScreen mainScreen].bounds.size.height
 
 @interface SelectLocController () <UIPickerViewDelegate,UIPickerViewDataSource>
 
@@ -46,11 +49,12 @@
 
 @implementation SelectLocController
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"选择城市";
-    self.navigationController.navigationBarHidden = NO;
     self.view.backgroundColor = Color(248, 248, 248);
+    self.view.frame = CGRectMake(0, 0, ScreenW, ScreenH / 2);
 
     [self setupPickerView];
     [self setupBtns];
@@ -97,8 +101,9 @@
     [self.view addSubview:_locPicker];
     
     [_locPicker mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(320, 180));
-        make.center.equalTo(self.view);
+        make.size.mas_equalTo(CGSizeMake(ScreenW, ScreenH / 3));
+        make.centerX.equalTo(self.view);
+        make.top.equalTo(self.view);
     }];
     
 }
@@ -180,14 +185,14 @@
 #pragma mark - Masonry
     [_ok mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(70, 44));
-        make.centerY.equalTo(_locPicker).offset(150);
+        make.centerY.equalTo(_locPicker).offset(110);
         make.centerX.equalTo(self.view).offset(-80);
 
     }];
     
     [_back mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(70, 44));
-        make.centerY.mas_equalTo(_locPicker).offset(150);
+        make.centerY.mas_equalTo(_locPicker).offset(110);
         make.centerX.equalTo(self.view).offset(80);
     }];
   
@@ -216,15 +221,21 @@
         });
     });
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.navigationController popViewControllerAnimated:YES];
-    });
-    
-    
+        [UIView animateWithDuration:1.0 animations:^{
+            self.view.transform = CGAffineTransformMakeTranslation(0, ScreenH / 2);
+        } completion:^(BOOL finished) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"NeedReload" object:nil];
+        }];
 }
 
 - (void)backClick{
-    [self.navigationController popViewControllerAnimated:YES];
+    [UIView animateWithDuration:1.0 animations:^{
+        self.view.transform = CGAffineTransformMakeTranslation(0, ScreenH / 2);
+    } completion:^(BOOL finished) {
+
+    }];
+    
+    
 }
 
 - (void)popOK{
