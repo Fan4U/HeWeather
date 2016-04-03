@@ -44,4 +44,8 @@
 //是否开启雨天提醒
 + (void)warnOfRainWillChange:(NSString *)yesOrNo;
 + (BOOL)warnOfRain;
+
+//最近选择的城市 
++ (void)setRecentChoicedCityName:(NSString *)cityName andCityCode:(NSString *)cityCode;
++ (NSArray *)getRecentChoicedCityInfo;
 @end

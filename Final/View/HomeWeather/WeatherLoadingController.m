@@ -43,14 +43,13 @@
     FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:gifPath]];
     FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
     imageView.animatedImage = image;
-    imageView.frame = CGRectMake(0.0, 0.0, ScreenW, ScreenH);
+    imageView.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height);
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     
     _loadingImgV = imageView;
     
     [self.view addSubview:_loadingImgV];
 
-    [self.navigationController setNavigationBarHidden:YES];
 
 #pragma mark - 判断是否需要申请开启定位
     [Settings initializePlist];
@@ -74,14 +73,31 @@
 
 - (void)initCLLocationManager{
     /*
-    ALAuthorizationStatusNotDetermined NS_ENUM_DEPRECATED_IOS(6_0, 9_0) = 0, // User has not yet made a choice with regards to this application
-    ALAuthorizationStatusRestricted NS_ENUM_DEPRECATED_IOS(6_0, 9_0),        // This application is not authorized to access photo data.
-    // The user cannot change this application’s status, possibly due to active restrictions
-    //  such as parental controls being in place.
-    ALAuthorizationStatusDenied NS_ENUM_DEPRECATED_IOS(6_0, 9_0),            // User has explicitly denied this application access to photos data.
-    ALAuthorizationStatusAuthorized NS_ENUM_DEPRECATED_IOS(6_0, 9_0)        // User has authorized this application to access photos data.
-     */
-
+    // User has not yet made a choice with regards to this application
+    kCLAuthorizationStatusNotDetermined = 0,
+    
+    // This application is not authorized to use location services.  Due
+    // to active restrictions on location services, the user cannot change
+    // this status, and may not have personally denied authorization
+    kCLAuthorizationStatusRestricted,
+    
+    // User has explicitly denied authorization for this application, or
+    // location services are disabled in Settings.
+    kCLAuthorizationStatusDenied,
+    
+    // User has granted authorization to use their location at any time,
+    // including monitoring for regions, visits, or significant location changes.
+    kCLAuthorizationStatusAuthorizedAlways NS_ENUM_AVAILABLE(NA, 8_0),
+    
+    // User has granted authorization to use their location only when your app
+    // is visible to them (it will be made visible to them if you continue to
+    // receive location updates while in the background).  Authorization to use
+    // launch APIs has not been granted.
+    kCLAuthorizationStatusAuthorizedWhenInUse NS_ENUM_AVAILABLE(NA, 8_0),
+    
+    // This value is deprecated, but was equivalent to the new -Always value.
+    kCLAuthorizationStatusAuthorized NS_ENUM_DEPRECATED(10_6, NA, 2_0, 8_0, "Use kCLAuthorizationStatusAuthorizedAlways") __WATCHOS_PROHIBITED = kCLAuthorizationStatusAuthorizedAlways
+*/
     
     _locManager = [[CLLocationManager alloc] init];
     
@@ -196,17 +212,14 @@
     }
     
     //init tmp YYlabel
-    YYLabel *loading = [[YYLabel alloc] initWithFrame:CGRectMake(110, 120, 180, 60)];
-    loading.textAlignment = NSTextAlignmentCenter;
+    YYLabel *loading = [[YYLabel alloc] initWithFrame:CGRectMake(ScreenW / 2 - 60, ScreenH / 2 - 30, 180, 60)];
+    loading.textAlignment = NSTextAlignmentLeft;
     loading.translatesAutoresizingMaskIntoConstraints = NO;
     loading.attributedText = text;
     
     _loadingLabel = loading;
     
     [self.loadingImgV addSubview:_loadingLabel];
-    
-    
-
 }
 
 #pragma mark - 更新位置

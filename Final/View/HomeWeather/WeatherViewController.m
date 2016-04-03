@@ -203,7 +203,7 @@
     NSMutableAttributedString *text = [NSMutableAttributedString new];
     //设置富文本 ----温度
     {
-        NSMutableAttributedString *one = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@°C %@",self.weatherDataInMain.weather[0].nowWeather.tmpInNow,self.weatherDataInMain.weather[0].nowWeather.condInNow.txtInNow]];
+        NSMutableAttributedString *one = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@°  %@",self.weatherDataInMain.weather[0].nowWeather.tmpInNow,self.weatherDataInMain.weather[0].nowWeather.condInNow.txtInNow]];
         one.font = [UIFont systemFontOfSize:30.0];
         one.color = [UIColor blackColor];
         YYTextShadow *shadow = [YYTextShadow new];
@@ -382,7 +382,7 @@
         };
         
         _avrTemperatureChart.labelForValue = ^(CGFloat value) {
-            return [NSString stringWithFormat:@"%.0f°C", value];
+            return [NSString stringWithFormat:@"%.0f°", value];
         };
         
         [_avrTemperatureChart setChartData:avrTempData];
@@ -726,9 +726,10 @@
     
     [Settings setWhatToDoAfterLoading:@"updateByRefresh"];
 
-    NSLog(@"发送通知“RefreshWeatherOfCurrentCity”");
+    
     [self.navigationController popViewControllerAnimated:YES];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSLog(@"发送通知“RefreshWeatherOfCurrentCity”");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"RefreshWeatherOfCurrentCity" object:nil];
     });
 }

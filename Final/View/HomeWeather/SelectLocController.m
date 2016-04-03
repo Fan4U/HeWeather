@@ -18,6 +18,7 @@
 //weather data
 #import "WeatherData.h"
 
+//tool
 #import "Masonry.h"
 #import "YYTool.h"
 #import "SVProgressHUD.h"
@@ -32,19 +33,24 @@
 
 #define ScreenW [UIScreen mainScreen].bounds.size.width
 #define ScreenH [UIScreen mainScreen].bounds.size.height
+#define RecentChoiceButtonW ([UIScreen mainScreen].bounds.size.width - 25) / 4
+#define choicePath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"recent.plist"]
 
 @interface SelectLocController () <UIPickerViewDelegate,UIPickerViewDataSource>
 
 //picker for choose location
-@property (nonatomic, strong)UIPickerView *locPicker;
+@property (nonatomic, weak)UIPickerView *locPicker;
 @property (nonatomic, assign)int provinceIndex;
-//@property (nonatomic, strong)CitiesModel *cityModel;
-
 //buttons
-@property (nonatomic, strong)UIButton *ok;
-@property (nonatomic, strong)UIButton *back;
-
+@property (nonatomic, weak)UIButton *ok;
+@property (nonatomic, weak)UIButton *back;
+//model
 @property (nonatomic, strong)CitiesModel *citiesModelInSel;
+//recentChoiceButton
+@property (nonatomic, weak)UIButton *recentChoiceButton;
+@property (nonatomic, weak)UIButton *recentChoiceButton1;
+@property (nonatomic, strong)NSArray *recentChoicesArr;
+
 @end
 
 @implementation SelectLocController
@@ -55,6 +61,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = Color(248, 248, 248);
     self.view.frame = CGRectMake(0, 0, ScreenW, ScreenH / 2);
+    self.view.alpha = 0.95;
 
     [self setupPickerView];
     [self setupBtns];
@@ -64,6 +71,7 @@
 -(void)viewDidDisappear:(BOOL)animated{
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
+
 
 - (CitiesModel *)citiesModelInSel{
     if (!_citiesModelInSel) {
@@ -94,7 +102,6 @@
     UIPickerView *tmpPicker = [[UIPickerView alloc] init];
     tmpPicker.delegate = self;
     tmpPicker.dataSource = self;
-//    [tmpPicker setBackgroundColor:[UIColor blackColor]];
  
     _locPicker = tmpPicker;
     
@@ -103,7 +110,7 @@
     [_locPicker mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(ScreenW, ScreenH / 3));
         make.centerX.equalTo(self.view);
-        make.top.equalTo(self.view);
+        make.top.equalTo(self.view).offset(40);
     }];
     
 }
@@ -140,7 +147,7 @@
     if (component == 0) {
 //        Province *province = model.province[row];
         
-        self.provinceIndex = row;
+        self.provinceIndex = (int)row;
         //        刷新右边数据
         [pickerView reloadComponent:1];
         [pickerView selectRow:0 inComponent:1 animated:YES];
@@ -151,56 +158,127 @@
 - (void)setupBtns{
     
 #pragma mark - OK
-    UIButton *tmpOK = [[UIButton alloc] init];
+    UIButton *tmpOK = [UIButton buttonWithType:UIButtonTypeCustom];
+
+    tmpOK.layer.cornerRadius  = 5.0f;
+    tmpOK.layer.borderColor = Color(20, 155, 213).CGColor;
+    tmpOK.layer.borderWidth = 1.5f;
+    tmpOK.titleLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightBold];
+    
     [tmpOK setTitle:@"确定" forState:UIControlStateNormal];
-    [tmpOK setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [tmpOK setTitleColor:Color(20, 155, 213) forState:UIControlStateNormal];
     [tmpOK setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     
-    UIEdgeInsets insets = UIEdgeInsetsMake(6, 6, 6, 6);
-    UIImage *btnImg = [[UIImage imageNamed:@"btn"] resizableImageWithCapInsets:insets resizingMode:UIImageResizingModeStretch];
-    
-    [tmpOK addTarget:self action:@selector(okClick) forControlEvents:UIControlEventTouchUpInside];
-    [tmpOK setBackgroundImage:btnImg forState:UIControlStateNormal];
-    
+    [tmpOK addTarget:self action:@selector(okClick:) forControlEvents:UIControlEventTouchUpInside];
+    [tmpOK addTarget:self action:@selector(changeColorTouchDown:) forControlEvents:UIControlEventTouchDown];
+    [tmpOK addTarget:self action:@selector(changeColorTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
     _ok = tmpOK;
     [self.view addSubview:_ok];
     
 
 #pragma mark - Back
-    UIButton *tmpBack = [[UIButton alloc] init];
+    UIButton *tmpBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    tmpBack.backgroundColor = Color(248, 248, 248);
+    tmpBack.layer.cornerRadius  = 5.0f;
+    tmpBack.layer.borderColor = Color(20, 155, 213).CGColor;
+    tmpBack.layer.borderWidth = 1.5f;
+    tmpBack.titleLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightBold];
+    
     [tmpBack setTitle:@"返回" forState:UIControlStateNormal];
-    [tmpBack setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [tmpBack setTitleColor:Color(20, 155, 213) forState:UIControlStateNormal];
     [tmpBack setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+
     
-    UIEdgeInsets insets2 = UIEdgeInsetsMake(6, 6, 6, 6);
-    UIImage *btnImg2 = [[UIImage imageNamed:@"btn"] resizableImageWithCapInsets:insets2 resizingMode:UIImageResizingModeStretch];
-    
-    [tmpBack addTarget:self action:@selector(backClick) forControlEvents:UIControlEventTouchUpInside];
-    [tmpBack setBackgroundImage:btnImg2 forState:UIControlStateNormal];
-    
+    [tmpBack addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
+    [tmpBack addTarget:self action:@selector(changeColorTouchDown:) forControlEvents:UIControlEventTouchDown];
+    [tmpBack addTarget:self action:@selector(changeColorTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
     _back = tmpBack;
     [self.view addSubview:_back];
     
+#pragma mark - recent
 
+    {
+
+        if (![[Settings getRecentChoicedCityInfo][0] isEqualToString:@"0"]) {
+            UIButton *recent = [UIButton buttonWithType:UIButtonTypeCustom];
+            recent.backgroundColor = Color(248, 248, 248);
+            recent.layer.cornerRadius  = 5.0f;
+            recent.layer.borderColor = Color(20, 155, 213).CGColor;
+            recent.layer.borderWidth = 1.5f;
+            recent.titleLabel.font = [UIFont systemFontOfSize:11 weight:UIFontWeightLight];
+            
+            NSString *cityName = [Settings getRecentChoicedCityInfo][0];
+            [recent setTitle:cityName forState:UIControlStateNormal];
+            [recent setTitleColor:Color(20, 155, 213) forState:UIControlStateNormal];
+            [recent setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+            recent.tag = 1;
+            
+            [recent addTarget:self action:@selector(recentCityButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            [recent addTarget:self action:@selector(changeColorTouchDown:) forControlEvents:UIControlEventTouchDown];
+            [recent addTarget:self action:@selector(changeColorTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
+            _recentChoiceButton = recent;
+            [self.view addSubview:_recentChoiceButton];
+            
+            [_recentChoiceButton mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(RecentChoiceButtonW, 25));
+                make.centerX.equalTo(self.view).offset(- RecentChoiceButtonW / 2 - 5);
+                make.centerY.equalTo(_ok);
+            }];
+        }
+
+    }
+    
+    {
+        if (![[Settings getRecentChoicedCityInfo][2] isEqualToString:@"0"]) {
+            UIButton *recent = [UIButton buttonWithType:UIButtonTypeCustom];
+            recent.backgroundColor = Color(248, 248, 248);
+            recent.layer.cornerRadius  = 5.0f;
+            recent.layer.borderColor = Color(20, 155, 213).CGColor;
+            recent.layer.borderWidth = 1.5f;
+            recent.titleLabel.font = [UIFont systemFontOfSize:11 weight:UIFontWeightLight];
+            
+            NSString *cityName = [Settings getRecentChoicedCityInfo][2];
+            [recent setTitle:cityName forState:UIControlStateNormal];
+            [recent setTitleColor:Color(20, 155, 213) forState:UIControlStateNormal];
+            [recent setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+            recent.tag = 2;
+            
+            
+            [recent addTarget:self action:@selector(recentCityButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            [recent addTarget:self action:@selector(changeColorTouchDown:) forControlEvents:UIControlEventTouchDown];
+            [recent addTarget:self action:@selector(changeColorTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
+            _recentChoiceButton1 = recent;
+            [self.view addSubview:_recentChoiceButton1];
+            
+            [_recentChoiceButton1 mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(RecentChoiceButtonW, 25));
+                make.centerX.equalTo(self.view).offset(RecentChoiceButtonW / 2 + 5);
+                make.centerY.equalTo(_ok);
+            }];
+        }
+
+    }
+    
 #pragma mark - Masonry
     [_ok mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(70, 44));
-        make.centerY.equalTo(_locPicker).offset(110);
-        make.centerX.equalTo(self.view).offset(-80);
+        make.size.mas_equalTo(CGSizeMake(60, 30));
+        make.right.equalTo(self.view).offset(-5);
+        make.top.equalTo(self.view).offset(5);
 
     }];
     
     [_back mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(70, 44));
-        make.centerY.mas_equalTo(_locPicker).offset(110);
-        make.centerX.equalTo(self.view).offset(80);
+        make.size.mas_equalTo(CGSizeMake(60, 30));
+        make.left.equalTo(self.view).offset(5);
+        make.top.equalTo(self.view).offset(5);
     }];
-  
+    
+
 }
 
 #pragma mark - 点击方法
-- (void)okClick{
-
+- (void)okClick:(UIButton *)sender{
+    sender.backgroundColor = [UIColor whiteColor];
     CitiesModel *model = [YYTool listToModel:codeList];
     NSInteger proNum = [_locPicker selectedRowInComponent:0];  //左边的编号
     NSInteger cityNum = [_locPicker selectedRowInComponent:1];  //右边的编号
@@ -209,38 +287,52 @@
     NSString *selectedCityCode = [NSString stringWithFormat:@"%@",model.province[proNum].cities[cityNum].cityCode];
     NSString *selectedCityName = [NSString stringWithFormat:@"%@",model.province[proNum].cities[cityNum].cityName];
 
-    [Settings cityWillModifiedWithCityID:selectedCityCode andCityName:selectedCityName];
+    [self doSomethingWithChoicedCityName:selectedCityName andCityCode:selectedCityCode];
+}
+
+//主要的确定方法
+- (void)doSomethingWithChoicedCityName:(NSString*)cityName andCityCode:(NSString *)cityCode{
+    
+    [Settings cityWillModifiedWithCityID:cityCode andCityName:cityName];
+    [Settings setRecentChoicedCityName:cityName andCityCode:cityCode];
     
     [Settings setWhatToDoAfterLoading:@"updateByID"];
-    
-//    [SVProgressHUD showSuccessWithStatus:@"正在更新"];
-    
+  
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [WeatherData requestDataFromHEserverWithWhat:@"byID"];
         });
     });
     
-        [UIView animateWithDuration:1.0 animations:^{
-            self.view.transform = CGAffineTransformMakeTranslation(0, ScreenH / 2);
-        } completion:^(BOOL finished) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"NeedReload" object:nil];
-        }];
-}
-
-- (void)backClick{
-    [UIView animateWithDuration:1.0 animations:^{
+    [UIView animateWithDuration:0.5 animations:^{
         self.view.transform = CGAffineTransformMakeTranslation(0, ScreenH / 2);
     } completion:^(BOOL finished) {
-
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"NeedReload" object:nil];
     }];
-    
-    
 }
 
-- (void)popOK{
-    
-    
+- (void)backClick:(UIButton *)sender{
+    sender.backgroundColor = [UIColor whiteColor];
+    [UIView animateWithDuration:0.5 animations:^{
+        self.view.transform = CGAffineTransformMakeTranslation(0, ScreenH / 2);
+    } completion:^(BOOL finished) {
+    }];
+}
 
+- (void)recentCityButtonClick:(UIButton *)sender{
+
+    if (sender.tag == 1) {
+        [self doSomethingWithChoicedCityName:[Settings getRecentChoicedCityInfo][0] andCityCode:[Settings getRecentChoicedCityInfo][1]];
+    }else if (sender.tag == 2){
+        [self doSomethingWithChoicedCityName:[Settings getRecentChoicedCityInfo][2] andCityCode:[Settings getRecentChoicedCityInfo][3]];
+    }
+}
+
+- (void)changeColorTouchDown:(UIButton *)sender{
+    sender.backgroundColor = Color(20, 155, 213);
+}
+
+- (void)changeColorTouchUp:(UIButton *)sender{
+    sender.backgroundColor = [UIColor whiteColor];
 }
 @end

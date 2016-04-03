@@ -15,6 +15,8 @@
 #define ScreenW [UIScreen mainScreen].bounds.size.width
 #define ScreenH [UIScreen mainScreen].bounds.size.height
 #define Blue [UIColor colorWithRed:20/255.0 green:155/255.0 blue:213/255.0 alpha:1.0]
+// RGB颜色
+#define Color(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
 
 @interface SettingsViewController () <UITableViewDataSource,UITableViewDelegate>
 
@@ -23,6 +25,7 @@
 @property (nonatomic, weak)UISegmentedControl *styleSwitch;
 @property (nonatomic, weak)UISwitch *animationSwitch;
 @property (nonatomic, weak)UISwitch *warnOfRainSwitch;
+
 //城市选择
 @property (nonatomic, strong)SelectLocController *selectCityPicker;
 @end
@@ -38,19 +41,23 @@
     self.navigationController.navigationBarHidden = NO;
     
 //    tableView
-    UITableView *tmp           = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
-    tmp.backgroundColor        = [UIColor whiteColor];
-    self.tableView             = tmp;
-    self.tableView.delegate    = self;
-    self.tableView.dataSource  = self;
+    UITableView *tmp               = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    tmp.backgroundColor            = [UIColor whiteColor];
+    self.tableView                 = tmp;
+    self.tableView.delegate        = self;
+    self.tableView.dataSource      = self;
+    self.tableView.backgroundColor = Color(248, 248, 248);
     
     [self.view addSubview:_tableView];
     
     SelectLocController *select = [[SelectLocController alloc] init];
     select.view.frame = CGRectMake(0, ScreenH, ScreenW, ScreenH / 2);
     _selectCityPicker = select;
+
     [self.view addSubview:_selectCityPicker.view];
+
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -186,8 +193,8 @@
     
     if (indexPath.section == 0 && indexPath.row == 0) {
         
-        [UIView animateWithDuration:1.0 animations:^{
-            _selectCityPicker.view.transform = CGAffineTransformMakeTranslation(0, - ScreenH / 2);
+        [UIView animateWithDuration:0.5 animations:^{
+            _selectCityPicker.view.transform = CGAffineTransformMakeTranslation(0, - ScreenH /2);
         } completion:^(BOOL finished) {
         
         }];
@@ -227,4 +234,7 @@
 - (void)reloadData{
     [self.tableView reloadData];
 }
+
+
+
 @end

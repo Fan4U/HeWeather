@@ -14,6 +14,7 @@
 #import "Settings.h"
 
 #import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
 //codelist
 #define codeList [[NSBundle mainBundle] pathForResource:@"cityID.json" ofType:nil]
 //OpenWeatherlist
@@ -120,4 +121,18 @@
     return [NSArray arrayWithArray:tmpArr];
 
 }
+
++ (UIImage *)getImageWithColorRed:(float)red Grenn:(float)green Blue:(float)blue andButtonSize:(CGSize)size{
+    
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [[UIColor colorWithRed:(red)/255.0 green:(green)/255.0 blue:(blue)/255.0 alpha:1.0] CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *imageWithColorFilled = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return imageWithColorFilled;
+}
+
 @end

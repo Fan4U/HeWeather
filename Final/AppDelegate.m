@@ -108,7 +108,6 @@
             localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:secondsToNotify];
             
             localNotification.alertBody = tomorrowText;
-            localNotification.applicationIconBadgeNumber++;
             localNotification.alertAction = @"查看详情";
             localNotification.alertLaunchImage = @"Default";
             localNotification.soundName = @"msg.caf"; //通知声音 系统的

@@ -11,6 +11,7 @@
 #import "WeatherData.h"
 //Macro
 #define plistPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"settings.plist"]
+#define choicePath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"recent.plist"]
 
 @interface Settings()
 //@property (nonatomic, strong)NSArray *settingsModel;
@@ -43,6 +44,13 @@
         [settings setObject:@"1" forKey:@"useCoreAnimation"];//是否使用动画
         
         [settings setObject:@"1" forKey:@"warnOfRain"];//是否使用动画
+        
+        //两个最近选择的城市名称和id
+        [settings setObject:@"0" forKey:@"recentChoicedCityName1"];
+        [settings setObject:@"0" forKey:@"recentChoicedCityCode1"];
+        
+        [settings setObject:@"0" forKey:@"recentChoicedCityName2"];
+        [settings setObject:@"0" forKey:@"recentChoicedCityCode2"];
         
         //设置属性值
         
@@ -249,5 +257,45 @@
     [cityOfWeather setValue:yesOrNo forKey:@"warnOfRain"];
     [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
     [infolist writeToFile:plistPath atomically:YES];
+}
+
++ (void)setRecentChoicedCityName:(NSString *)cityName andCityCode:(NSString *)cityCode{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
+    
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    
+    NSString *cityName1 = [cityOfWeather objectForKey:@"recentChoicedCityName1"];
+    NSString *cityName2 = [cityOfWeather objectForKey:@"recentChoicedCityName2"];
+    NSString *cityCode2 = [cityOfWeather objectForKey:@"recentChoicedCityCode2"];
+    
+    if ([cityName1 isEqualToString:@"0"] && [cityName2 isEqualToString:@"0"]) {//如果第一次写入
+        [cityOfWeather setValue:cityName forKey:@"recentChoicedCityName1"];
+        [cityOfWeather setValue:cityCode forKey:@"recentChoicedCityCode1"];
+    }else if (![cityName1 isEqualToString:@"0"] && [cityName2 isEqualToString:@"0"]){//第二次写入
+        [cityOfWeather setValue:cityName forKey:@"recentChoicedCityName2"];
+        [cityOfWeather setValue:cityCode forKey:@"recentChoicedCityCode2"];
+    }else if ([cityName isEqualToString:cityName2] || [cityName isEqualToString:cityName2]){
+        //如果和已有的两个城市之一名字相同什么都不做
+    }else{
+        [cityOfWeather setValue:cityName2 forKey:@"recentChoicedCityName1"];
+        [cityOfWeather setValue:cityCode2 forKey:@"recentChoicedCityCode1"];
+        
+        [cityOfWeather setValue:cityName forKey:@"recentChoicedCityName2"];
+        [cityOfWeather setValue:cityCode forKey:@"recentChoicedCityCode2"];
+    }
+    
+    [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
+    [infolist writeToFile:plistPath atomically:YES];
+}
+/**返回格式：城市名称1，城市代码1，城市名称2，城市代码2*/
++ (NSArray *)getRecentChoicedCityInfo{
+    NSMutableDictionary *infolist= [[[NSMutableDictionary alloc] initWithContentsOfFile:plistPath] mutableCopy];
+    NSMutableDictionary *cityOfWeather = [infolist objectForKey:@"cityOfWeather"];
+    NSString *cityName1 = [cityOfWeather objectForKey:@"recentChoicedCityName1"];
+    NSString *cityCode1 = [cityOfWeather objectForKey:@"recentChoicedCityCode1"];
+    NSString *cityName2 = [cityOfWeather objectForKey:@"recentChoicedCityName2"];
+    NSString *cityCode2 = [cityOfWeather objectForKey:@"recentChoicedCityCode2"];
+    NSArray *array = @[cityName1,cityCode1,cityName2,cityCode2];
+    return array;
 }
 @end
