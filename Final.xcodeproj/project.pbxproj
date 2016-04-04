@@ -19,7 +19,6 @@
 		157B40EE1C97B6E00063752A /* SelectLocController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157B40ED1C97B6E00063752A /* SelectLocController.m */; };
 		157B411F1C98174D0063752A /* settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 157B411E1C98174D0063752A /* settings.plist */; };
 		157B41221C9818B00063752A /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 157B41211C9818B00063752A /* Settings.m */; };
-		157B41261C9819A70063752A /* CodeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 157B41251C9819A70063752A /* CodeModel.m */; };
 		159124C71C9677970000B351 /* CitiesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 159124C61C9677970000B351 /* CitiesModel.m */; };
 		159124C91C969B570000B351 /* cityID.json in Resources */ = {isa = PBXBuildFile; fileRef = 159124C81C969B570000B351 /* cityID.json */; };
 		15BF9DF61C9E7D0600C252C6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15BF9DF41C9E7D0600C252C6 /* LaunchScreen.xib */; };
@@ -62,8 +61,6 @@
 		157B411E1C98174D0063752A /* settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = settings.plist; sourceTree = "<group>"; };
 		157B41201C9818B00063752A /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		157B41211C9818B00063752A /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
-		157B41241C9819A70063752A /* CodeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodeModel.h; sourceTree = "<group>"; };
-		157B41251C9819A70063752A /* CodeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodeModel.m; sourceTree = "<group>"; };
 		159124C51C9677970000B351 /* CitiesModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CitiesModel.h; sourceTree = "<group>"; };
 		159124C61C9677970000B351 /* CitiesModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CitiesModel.m; sourceTree = "<group>"; };
 		159124C81C969B570000B351 /* cityID.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cityID.json; sourceTree = "<group>"; };
@@ -161,7 +158,6 @@
 			isa = PBXGroup;
 			children = (
 				15D5385D1C9FEAC4005817B2 /* OpenWeatherModel */,
-				157B41231C9819970063752A /* CodeModel */,
 				159124C41C9677870000B351 /* City */,
 				155C01C61C9535BD002A2694 /* Weather */,
 			);
@@ -219,15 +215,6 @@
 				155C024B1C9573EB002A2694 /* RoundView.m */,
 			);
 			path = Others;
-			sourceTree = "<group>";
-		};
-		157B41231C9819970063752A /* CodeModel */ = {
-			isa = PBXGroup;
-			children = (
-				157B41241C9819A70063752A /* CodeModel.h */,
-				157B41251C9819A70063752A /* CodeModel.m */,
-			);
-			name = CodeModel;
 			sourceTree = "<group>";
 		};
 		159124C41C9677870000B351 /* City */ = {
@@ -499,7 +486,6 @@
 				15C3741C1C95281000881255 /* main.m in Sources */,
 				1566FC031C9912BA0039195F /* WeatherLoadingController.m in Sources */,
 				155C01B71C952D99002A2694 /* Foundation+Log.m in Sources */,
-				157B41261C9819A70063752A /* CodeModel.m in Sources */,
 				15C685E01CA27BCA00A36212 /* SettingsViewController.m in Sources */,
 				155C020B1C9535BD002A2694 /* HeWeather.m in Sources */,
 				155C02361C95375C002A2694 /* YYTool.m in Sources */,

@@ -34,7 +34,7 @@
 #define ScreenW [UIScreen mainScreen].bounds.size.width
 #define ScreenH [UIScreen mainScreen].bounds.size.height
 #define RecentChoiceButtonW ([UIScreen mainScreen].bounds.size.width - 25) / 4
-#define choicePath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"recent.plist"]
+
 
 @interface SelectLocController () <UIPickerViewDelegate,UIPickerViewDataSource>
 
@@ -50,6 +50,8 @@
 @property (nonatomic, weak)UIButton *recentChoiceButton;
 @property (nonatomic, weak)UIButton *recentChoiceButton1;
 @property (nonatomic, strong)NSArray *recentChoicesArr;
+//topBorderV
+@property (nonatomic, weak)UIView *borderOnTop;
 
 @end
 
@@ -65,6 +67,11 @@
 
     [self setupPickerView];
     [self setupBtns];
+    
+    UIView *tmpBorder = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenW, 1)];
+    tmpBorder.backgroundColor = Color(20, 155, 213);
+    _borderOnTop = tmpBorder;
+    [self.view addSubview:_borderOnTop];
 
 }
 
@@ -102,15 +109,15 @@
     UIPickerView *tmpPicker = [[UIPickerView alloc] init];
     tmpPicker.delegate = self;
     tmpPicker.dataSource = self;
- 
+    [[UIPickerView appearance]setBackgroundColor:Color(108, 207, 247)];
     _locPicker = tmpPicker;
     
     [self.view addSubview:_locPicker];
     
     [_locPicker mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(ScreenW, ScreenH / 3));
+        make.size.mas_equalTo(CGSizeMake(ScreenW, ScreenH / 2 - 20));
         make.centerX.equalTo(self.view);
-        make.top.equalTo(self.view).offset(40);
+        make.top.equalTo(self.view).offset(39);
     }];
     
 }
@@ -120,7 +127,6 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
     
-//    CitiesModel *model = [YYTool listToModel:codeList];
     if (component == 0 ) {
         return self.citiesModelInSel.province.count;
     }else{
@@ -131,8 +137,6 @@
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
 
-
-//    CitiesModel *model = [YYTool listToModel:codeList];
     if (component == 0) {
         return self.citiesModelInSel.province[row].proName;
     }else{
@@ -142,10 +146,8 @@
 
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-//    CitiesModel *model = [YYTool listToModel:codeList];
     
     if (component == 0) {
-//        Province *province = model.province[row];
         
         self.provinceIndex = (int)row;
         //        刷新右边数据
@@ -159,19 +161,13 @@
     
 #pragma mark - OK
     UIButton *tmpOK = [UIButton buttonWithType:UIButtonTypeCustom];
-
-    tmpOK.layer.cornerRadius  = 5.0f;
-    tmpOK.layer.borderColor = Color(20, 155, 213).CGColor;
-    tmpOK.layer.borderWidth = 1.5f;
-    tmpOK.titleLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightBold];
+    tmpOK.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
     
     [tmpOK setTitle:@"确定" forState:UIControlStateNormal];
     [tmpOK setTitleColor:Color(20, 155, 213) forState:UIControlStateNormal];
     [tmpOK setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     
     [tmpOK addTarget:self action:@selector(okClick:) forControlEvents:UIControlEventTouchUpInside];
-    [tmpOK addTarget:self action:@selector(changeColorTouchDown:) forControlEvents:UIControlEventTouchDown];
-    [tmpOK addTarget:self action:@selector(changeColorTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
     _ok = tmpOK;
     [self.view addSubview:_ok];
     
@@ -179,19 +175,13 @@
 #pragma mark - Back
     UIButton *tmpBack = [UIButton buttonWithType:UIButtonTypeCustom];
     tmpBack.backgroundColor = Color(248, 248, 248);
-    tmpBack.layer.cornerRadius  = 5.0f;
-    tmpBack.layer.borderColor = Color(20, 155, 213).CGColor;
-    tmpBack.layer.borderWidth = 1.5f;
-    tmpBack.titleLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightBold];
+    tmpBack.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
     
     [tmpBack setTitle:@"返回" forState:UIControlStateNormal];
     [tmpBack setTitleColor:Color(20, 155, 213) forState:UIControlStateNormal];
     [tmpBack setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
 
-    
     [tmpBack addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
-    [tmpBack addTarget:self action:@selector(changeColorTouchDown:) forControlEvents:UIControlEventTouchDown];
-    [tmpBack addTarget:self action:@selector(changeColorTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
     _back = tmpBack;
     [self.view addSubview:_back];
     

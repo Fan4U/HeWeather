@@ -42,8 +42,9 @@
     UIButton* Tempbutton=[[UIButton alloc]initWithFrame:button.frame];
     [Tempbutton setCenter:CGPointMake(button.center.x+button.bounds.size.width, button.center.y)];
     [Tempbutton addTarget:self action:@selector(ButtonHadClick) forControlEvents:UIControlEventTouchUpInside];
-//    Tempbutton.titleLabel.lineBreakMode = UILineBreakModeWordWrap;
-    //左上角对齐
+    Tempbutton.titleLabel.lineBreakMode = UILineBreakModeWordWrap;
+//    Tempbutton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+
     Tempbutton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     Tempbutton.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
     _Tempbutton=Tempbutton;

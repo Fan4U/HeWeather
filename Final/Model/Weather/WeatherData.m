@@ -9,7 +9,6 @@
 #import "WeatherData.h"
 #import "HeWeather.h"
 #import "Settings.h"
-#import "CodeModel.h"
 #import "OpenWeatherModel.h"
 
 //工具

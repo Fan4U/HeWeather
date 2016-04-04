@@ -7,11 +7,10 @@
 //
 
 #import "Settings.h"
-#import "CodeModel.h"
 #import "WeatherData.h"
 //Macro
 #define plistPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"settings.plist"]
-#define choicePath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"recent.plist"]
+
 
 @interface Settings()
 //@property (nonatomic, strong)NSArray *settingsModel;
@@ -91,8 +90,7 @@
         [cityOfWeather setValue:cityname forKey:@"cityName"];//顺便把ID对应的中文城市名也保存到plist
         [infolist setValue:cityOfWeather forKey:@"cityOfWeather"];
         [infolist writeToFile:plistPath atomically:YES];
-        
-        
+
         return YES;
     }
 
