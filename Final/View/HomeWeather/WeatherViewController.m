@@ -78,6 +78,7 @@
     [super viewDidLoad];
     [self setupImage];
     [self becomeFirstResponder];
+//    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -119,7 +120,7 @@
 - (void)initInterface{
     NSLog(@"开始显示界面");
     //labels
-    [self setupWelcomLabel];
+//    [self setupWelcomLabel];
     [self setLabels];
     [self SetupRoundView];
     
@@ -176,7 +177,7 @@
 //    NSString *today = [formatter stringFromDate:currentDate];//今天的字符串 备用
     NSString *SinceThatDay = [DateCompare intervalSinceNow:@"2015-08-27 20:00"];
     
-    welcome.text = [NSString stringWithFormat:@"%@天了,加油！！",SinceThatDay];
+    welcome.text = @"已分手，历时231天";//[NSString stringWithFormat:@"%@天了,加油！！",SinceThatDay];
     welcome.textColor = [UIColor whiteColor];
     
     [self.view addSubview:welcome];

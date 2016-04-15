@@ -11,7 +11,6 @@
 #import "WeatherLoadingController.h"
 #import "SettingsViewController.h"
 
-
 //citiesModel
 #import "CitiesModel.h"
 
@@ -30,6 +29,8 @@
 #define codeList [[NSBundle mainBundle] pathForResource:@"cityID.json" ofType:nil]
 // RGB颜色
 #define Color(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+//系统判断
+#define SYSVer [[[UIDevice currentDevice] systemVersion] floatValue]
 
 #define ScreenW [UIScreen mainScreen].bounds.size.width
 #define ScreenH [UIScreen mainScreen].bounds.size.height
@@ -49,30 +50,57 @@
 //recentChoiceButton
 @property (nonatomic, weak)UIButton *recentChoiceButton;
 @property (nonatomic, weak)UIButton *recentChoiceButton1;
-@property (nonatomic, strong)NSArray *recentChoicesArr;
 //topBorderV
 @property (nonatomic, weak)UIView *borderOnTop;
+//maskView
+@property (nonatomic, weak)UIView *backView;
+////gesture
+//@property (nonatomic, weak)UITapGestureRecognizer *tapG;
 
 @end
 
 @implementation SelectLocController
 
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = Color(248, 248, 248);
-    self.view.frame = CGRectMake(0, 0, ScreenW, ScreenH / 2);
-    self.view.alpha = 0.95;
-
-    [self setupPickerView];
-    [self setupBtns];
+    self.view.backgroundColor = [UIColor clearColor];//Color(248, 248, 248)
+    self.view.frame = CGRectMake(0, 0, ScreenW, ScreenH);
+    self.view.alpha = 1;
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backPop)];
+    [self.view addGestureRecognizer:tap];
+
+    
+    [self setupPickerView];
+    [self setupBackView];
+    [self setupBtns];
+    [self setupBorders];
+}
+
+- (void)setupBackView{
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = Color(248, 248, 248);//[UIColor blackColor];//Color(248, 248, 248);
+//    view.frame = CGRectMake(0, 0, ScreenW, 40);
+    _backView = view;
+    [self.view addSubview:_backView];
+    [_backView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(ScreenW, 40));
+        make.centerX.equalTo(self.view);
+        make.bottom.equalTo(self.locPicker.mas_top).offset(2);
+    }];
+
+}
+
+- (void)setupBorders{
     UIView *tmpBorder = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenW, 1)];
     tmpBorder.backgroundColor = Color(20, 155, 213);
     _borderOnTop = tmpBorder;
-    [self.view addSubview:_borderOnTop];
-
+    [self.backView addSubview:_borderOnTop];
+    
+//    [_borderOnTop mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self.backView);
+//        make.centerX.equalTo(self.view);
+//    }];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -106,6 +134,7 @@
  *  PickerView
  */
 - (void)setupPickerView{
+    
     UIPickerView *tmpPicker = [[UIPickerView alloc] init];
     tmpPicker.delegate = self;
     tmpPicker.dataSource = self;
@@ -117,7 +146,7 @@
     [_locPicker mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(ScreenW, ScreenH / 2 - 20));
         make.centerX.equalTo(self.view);
-        make.top.equalTo(self.view).offset(39);
+        make.bottom.equalTo(self.view.mas_bottom).offset(2);
     }];
     
 }
@@ -165,25 +194,25 @@
     
     [tmpOK setTitle:@"确定" forState:UIControlStateNormal];
     [tmpOK setTitleColor:Color(20, 155, 213) forState:UIControlStateNormal];
-    [tmpOK setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+//    [tmpOK setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     
     [tmpOK addTarget:self action:@selector(okClick:) forControlEvents:UIControlEventTouchUpInside];
     _ok = tmpOK;
-    [self.view addSubview:_ok];
+    [self.backView addSubview:_ok];
     
 
 #pragma mark - Back
     UIButton *tmpBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    tmpBack.backgroundColor = Color(248, 248, 248);
+//    tmpBack.backgroundColor = Color(248, 248, 248);
     tmpBack.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
     
     [tmpBack setTitle:@"返回" forState:UIControlStateNormal];
     [tmpBack setTitleColor:Color(20, 155, 213) forState:UIControlStateNormal];
-    [tmpBack setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+//    [tmpBack setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
 
     [tmpBack addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
     _back = tmpBack;
-    [self.view addSubview:_back];
+    [self.backView addSubview:_back];
     
 #pragma mark - recent
 
@@ -207,7 +236,7 @@
             [recent addTarget:self action:@selector(changeColorTouchDown:) forControlEvents:UIControlEventTouchDown];
             [recent addTarget:self action:@selector(changeColorTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
             _recentChoiceButton = recent;
-            [self.view addSubview:_recentChoiceButton];
+            [self.backView addSubview:_recentChoiceButton];
             
             [_recentChoiceButton mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(RecentChoiceButtonW, 25));
@@ -238,7 +267,7 @@
             [recent addTarget:self action:@selector(changeColorTouchDown:) forControlEvents:UIControlEventTouchDown];
             [recent addTarget:self action:@selector(changeColorTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
             _recentChoiceButton1 = recent;
-            [self.view addSubview:_recentChoiceButton1];
+            [self.backView addSubview:_recentChoiceButton1];
             
             [_recentChoiceButton1 mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(RecentChoiceButtonW, 25));
@@ -246,23 +275,20 @@
                 make.centerY.equalTo(_ok);
             }];
         }
-
     }
     
 #pragma mark - Masonry
     [_ok mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(60, 30));
         make.right.equalTo(self.view).offset(-5);
-        make.top.equalTo(self.view).offset(5);
-
+        make.centerY.equalTo(self.backView);
     }];
     
     [_back mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(60, 30));
         make.left.equalTo(self.view).offset(5);
-        make.top.equalTo(self.view).offset(5);
+        make.centerY.equalTo(self.backView);
     }];
-    
 
 }
 
@@ -309,8 +335,15 @@
     }];
 }
 
-- (void)recentCityButtonClick:(UIButton *)sender{
+- (void)backPop{
+    [UIView animateWithDuration:0.5 animations:^{
+        self.view.transform = CGAffineTransformMakeTranslation(0, ScreenH / 2);
+    } completion:^(BOOL finished) {
+    }];
+}
 
+- (void)recentCityButtonClick:(UIButton *)sender{
+    sender.backgroundColor = [UIColor whiteColor];
     if (sender.tag == 1) {
         [self doSomethingWithChoicedCityName:[Settings getRecentChoicedCityInfo][0] andCityCode:[Settings getRecentChoicedCityInfo][1]];
     }else if (sender.tag == 2){

@@ -272,7 +272,7 @@
     }else if (![cityName1 isEqualToString:@"0"] && [cityName2 isEqualToString:@"0"]){//第二次写入
         [cityOfWeather setValue:cityName forKey:@"recentChoicedCityName2"];
         [cityOfWeather setValue:cityCode forKey:@"recentChoicedCityCode2"];
-    }else if ([cityName isEqualToString:cityName2] || [cityName isEqualToString:cityName2]){
+    }else if ([cityName isEqualToString:cityName1] || [cityName isEqualToString:cityName2]){
         //如果和已有的两个城市之一名字相同什么都不做
     }else{
         [cityOfWeather setValue:cityName2 forKey:@"recentChoicedCityName1"];
